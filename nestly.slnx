@@ -1,0 +1,11 @@
+﻿<Solution>
+  <Folder Name="/Backend/" />
+  <Folder Name="/Frontend/" />
+  <Folder Name="/Solution/">
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="nestly.slnx" />
+    <File Path=".gitignore" />
+    <File Path=".editorconfig" />
+  </Folder>
+</Solution>
