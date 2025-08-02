@@ -1,0 +1,20 @@
+﻿<Solution>
+  <Folder Name="/Backend/">
+    <Project Path="source\AccountService\AccountService.csproj" Type="Classic C#" />
+    <Project Path="source\FinanceService\FinanceService.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Clients/" />
+  <Folder Name="/Frontend/">
+    <Project Path="source\WebApp\WebApp.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Solution/">
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="nestly.slnx" />
+    <File Path=".gitignore" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="source\UnitTests\UnitTests.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>

@@ -58,3 +58,6 @@ nunit-*.xml
 
 # JetBrains
 .idea/
+
+# development appsettings
+appsettings.Development.json
