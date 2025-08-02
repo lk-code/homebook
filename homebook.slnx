@@ -1,11 +1,13 @@
 ﻿<Solution>
   <Folder Name="/Backend/">
-    <Project Path="source\AccountService\AccountService.csproj" Type="Classic C#" />
-    <Project Path="source\FinanceService\FinanceService.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Backend.Abstractions\HomeBook.Backend.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Backend.Data\HomeBook.Backend.Data.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Backend\HomeBook.Backend.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/Clients/" />
   <Folder Name="/Frontend/">
-    <Project Path="source\WebApp\WebApp.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Client\HomeBook.Client.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Frontend.Abstractions\HomeBook.Frontend.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Frontend\HomeBook.Frontend.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Solution/">
     <File Path="LICENSE" />
@@ -13,8 +15,16 @@
     <File Path=".gitignore" />
     <File Path=".editorconfig" />
     <File Path="homebook.slnx" />
+    <File Path=".dockerignore" />
+    <File Path="Dockerfile" />
+    <File Path="nginx.conf" />
+    <File Path="icon_128.png" />
+  </Folder>
+  <Folder Name="/Solution/workflows/">
+    <File Path=".github\workflows\build.yml" />
+    <File Path=".github\workflows\pull-request.yml" />
   </Folder>
   <Folder Name="/Tests/">
-    <Project Path="source\UnitTests\UnitTests.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.UnitTests\HomeBook.UnitTests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

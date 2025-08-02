@@ -1,0 +1,234 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  VERSION: "1.0.${{ github.run_number }}"
+  DOTNET_VERSION: "9.0.x"
+  DOCKER_IMAGE: "docker.io/lkcode/homebook"
+  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
+  WEBAPP_APPSETTINGS_FILE: "./source/WebApp/wwwroot/appsettings.json"
+  ACCOUNTSERVICE_APPSETTINGS_FILE: "./source/AccountService/appsettings.json"
+  FINANCESERVICE_APPSETTINGS_FILE: "./source/FinanceService/appsettings.json"
+  OPENAPI_FILE: "./source/RegistryLookup.Backend/RegistryLookup.Backend.json"
+  CLIENT_CSPROJ: "./source/BackendClient/BackendClient.csproj"
+  CLIENT_OUTPUT_DIR: "./source/BackendClient"
+  CLIENT_NAMESPACE: "de.keysoftware.HomeBook.BackendClient"
+  PLAYWRIGHT_INSTALL: "./source/RegistryLookup.Tests.System/bin/Release/net9.0/playwright.ps1 install"
+
+jobs:
+
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore
+
+      - name: Build
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Install Kiota CLI
+        run: |
+          dotnet tool install --global Microsoft.OpenApi.Kiota
+
+      - name: Generate Client
+        shell: bash
+        run: |
+          kiota generate \
+            --language csharp \
+            --class-name RestClient \
+            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+            --openapi ${{ env.OPENAPI_FILE }} \
+            --output ${{ env.CLIENT_OUTPUT_DIR }} \
+
+      - name: Build Client
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Install Playwright
+        shell: pwsh
+        run: |
+          ${{ env.PLAYWRIGHT_INSTALL }}
+
+      - name: Test
+        run: |
+          dotnet test --configuration Release
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            --file ./Dockerfile \
+            --build-arg WEBAPP_APPSETTINGS_FILE=${{ env.WEBAPP_APPSETTINGS_FILE }} \
+            --build-arg ACCOUNTSERVICE_APPSETTINGS_FILE=${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }} \
+            --build-arg FINANCESERVICE_APPSETTINGS_FILE=${{ env.FINANCESERVICE_APPSETTINGS_FILE }} \
+            --tag test-image .
+
+  post-build:
+    runs-on: ubuntu-latest
+    needs:
+      - build-test
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git User and Auth
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+
+      - name: Set Version Git Tag
+        run: |
+          git tag ${{ env.VERSION }}
+
+      - name: update WebApp appsettings.json
+        run: |
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.WEBAPP_APPSETTINGS_FILE }}
+          git add ${{ env.WEBAPP_APPSETTINGS_FILE }}
+
+      - name: cat WebApp appsettings.json
+        run: |
+          cat ${{ env.WEBAPP_APPSETTINGS_FILE }}
+
+      - name: update AccountService appsettings.json
+        run: |
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
+          git add ${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
+
+      - name: cat AccountService appsettings.json
+        run: |
+          cat ${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
+
+      - name: update FinanceService appsettings.json
+        run: |
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
+          git add ${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
+
+      - name: cat FinanceService appsettings.json
+        run: |
+          cat ${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
+
+      - name: Create and push deploy branch
+        run: |
+          git push origin ${{ env.VERSION }}
+          git checkout -b deploy
+          git commit -m "Release version ${{ env.VERSION }}"
+          git push origin deploy --force
+
+  client-deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - post-build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: deploy
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore
+
+      - name: Build
+        shell: pwsh
+        run: |
+          dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
+
+      - name: Install Kiota CLI
+        run: |
+          dotnet tool install --global Microsoft.OpenApi.Kiota
+
+      - name: Generate Client
+        shell: bash
+        run: |
+          kiota generate \
+            --language csharp \
+            --class-name RestClient \
+            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+            --openapi ${{ env.OPENAPI_FILE }} \
+            --output ${{ env.CLIENT_OUTPUT_DIR }} \
+
+      - name: Build Client
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ${{ env.VERSION }}
+          path: "**/*.${{ env.VERSION }}.nupkg"
+
+      - name: Publish
+        run: dotnet nuget push "**/*.${{ env.VERSION }}.nupkg" --no-symbols --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} --source "nuget.org"
+
+  docker-deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - post-build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: deploy
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3.4.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.7.0
+        with:
+          images: ${{ env.DOCKER_IMAGE }}
+          tags: |
+            type=raw,value=${{ env.VERSION }}
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6.18.0
+        with:
+          context: ./
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: ${{ env.DOCKER_PLATFORMS }}
+          build-args: |
+            WEBAPP_APPSETTINGS_FILE=${{ env.WEBAPP_APPSETTINGS_FILE }}
+            ACCOUNTSERVICE_APPSETTINGS_FILE=${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
+            FINANCESERVICE_APPSETTINGS_FILE=${{ env.FINANCESERVICE_APPSETTINGS_FILE }}

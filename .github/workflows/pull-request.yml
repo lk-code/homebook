@@ -1,0 +1,77 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  DOTNET_VERSION: "9.0.x"
+  WEBAPP_APPSETTINGS_FILE: "./source/WebApp/wwwroot/appsettings.json"
+  ACCOUNTSERVICE_APPSETTINGS_FILE: "./source/AccountService/appsettings.json"
+  FINANCESERVICE_APPSETTINGS_FILE: "./source/FinanceService/appsettings.json"
+  OPENAPI_FILE: "./source/RegistryLookup.Backend/RegistryLookup.Backend.json"
+  CLIENT_CSPROJ: "./source/BackendClient/BackendClient.csproj"
+  CLIENT_OUTPUT_DIR: "./source/BackendClient"
+  CLIENT_NAMESPACE: "de.keysoftware.HomeBook.BackendClient"
+  PLAYWRIGHT_INSTALL: "./source/RegistryLookup.Tests.System/bin/Release/net9.0/playwright.ps1 install"
+
+jobs:
+
+  pull-request-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore
+
+      - name: Build
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Install Kiota CLI
+        run: |
+          dotnet tool install --global Microsoft.OpenApi.Kiota
+
+      - name: Generate Client
+        shell: bash
+        run: |
+          kiota generate \
+            --language csharp \
+            --class-name RestClient \
+            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+            --openapi ${{ env.OPENAPI_FILE }} \
+            --output ${{ env.CLIENT_OUTPUT_DIR }} \
+
+      - name: Build Client
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Install Playwright
+        shell: pwsh
+        run: |
+          ${{ env.PLAYWRIGHT_INSTALL }}
+
+      - name: Test
+        run: |
+          dotnet test --configuration Release
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build \
+            --file ./Dockerfile \
+            --build-arg WEBAPP_APPSETTINGS_FILE=${{ env.WEBAPP_APPSETTINGS_FILE }} \
+            --build-arg ACCOUNTSERVICE_APPSETTINGS_FILE=${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }} \
+            --build-arg FINANCESERVICE_APPSETTINGS_FILE=${{ env.FINANCESERVICE_APPSETTINGS_FILE }} \
+            --tag test-image .
