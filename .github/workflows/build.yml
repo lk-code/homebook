@@ -21,6 +21,7 @@ env:
   CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
   CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
   CLIENT_NAMESPACE: "HomeBook.Client"
+  CLIENT_CLASS: "BackendClient"
 
 jobs:
 
@@ -53,7 +54,7 @@ jobs:
         run: |
           kiota generate \
             --language csharp \
-            --class-name RestClient \
+            --class-name ${{ env.CLIENT_CLASS }} \
             --namespace-name ${{ env.CLIENT_NAMESPACE }} \
             --openapi ${{ env.OPENAPI_FILE }} \
             --output ${{ env.CLIENT_OUTPUT_DIR }} \
