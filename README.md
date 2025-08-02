@@ -6,16 +6,13 @@
 
 ---
 
-![Docker](https://img.shields.io/badge/Docker-ready-blue)
+[![Docker](https://img.shields.io/badge/Docker-alpha-blue)](https://hub.docker.com/r/lkcode/homebook)
 ![License](https://img.shields.io/github/license/lk-code/homebook)
-![Status](https://img.shields.io/badge/status-beta-yellow)
 
 
 [![Version](https://img.shields.io/docker/v/lkcode/homebook)](https://img.shields.io/docker/v/lkcode/homebook)
-[![Downloads](https://img.shields.io/docker/pulls/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
-[![Downloads](https://img.shields.io/docker/stars/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
-
-[![.NET Version](https://img.shields.io/badge/dotnet%20version-net9.0-blue)](https://hub.docker.com/r/lkcode/registry-lookup)
+[![Docker Pulls](https://img.shields.io/docker/pulls/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
+[![Docker Star](https://img.shields.io/docker/stars/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=lk-code_homebook&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=lk-code_homebook)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=lk-code_homebook&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=lk-code_homebook)
