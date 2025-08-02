@@ -6,14 +6,12 @@ on:
 
 env:
   DOTNET_VERSION: "9.0.x"
-  WEBAPP_APPSETTINGS_FILE: "./source/WebApp/wwwroot/appsettings.json"
-  ACCOUNTSERVICE_APPSETTINGS_FILE: "./source/AccountService/appsettings.json"
-  FINANCESERVICE_APPSETTINGS_FILE: "./source/FinanceService/appsettings.json"
-  OPENAPI_FILE: "./source/RegistryLookup.Backend/RegistryLookup.Backend.json"
-  CLIENT_CSPROJ: "./source/BackendClient/BackendClient.csproj"
-  CLIENT_OUTPUT_DIR: "./source/BackendClient"
-  CLIENT_NAMESPACE: "de.keysoftware.HomeBook.BackendClient"
-  PLAYWRIGHT_INSTALL: "./source/RegistryLookup.Tests.System/bin/Release/net9.0/playwright.ps1 install"
+  FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
+  BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
+  OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
+  CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
+  CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
+  CLIENT_NAMESPACE: "HomeBook.Client"
 
 jobs:
 
@@ -55,11 +53,6 @@ jobs:
         run: |
           dotnet build --configuration Release --no-restore
 
-      - name: Install Playwright
-        shell: pwsh
-        run: |
-          ${{ env.PLAYWRIGHT_INSTALL }}
-
       - name: Test
         run: |
           dotnet test --configuration Release
@@ -71,7 +64,6 @@ jobs:
         run: |
           docker build \
             --file ./Dockerfile \
-            --build-arg WEBAPP_APPSETTINGS_FILE=${{ env.WEBAPP_APPSETTINGS_FILE }} \
-            --build-arg ACCOUNTSERVICE_APPSETTINGS_FILE=${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }} \
-            --build-arg FINANCESERVICE_APPSETTINGS_FILE=${{ env.FINANCESERVICE_APPSETTINGS_FILE }} \
+            --build-arg FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }} \
+            --build-arg BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }} \
             --tag test-image .
