@@ -154,7 +154,7 @@ jobs:
         run: |
           kiota generate \
             --language csharp \
-            --class-name KiotaClient \
+            --class-name ${{ env.CLIENT_CLASS }} \
             --namespace-name ${{ env.CLIENT_NAMESPACE }} \
             --openapi ${{ env.OPENAPI_FILE }} \
             --output ${{ env.CLIENT_OUTPUT_DIR }} \
