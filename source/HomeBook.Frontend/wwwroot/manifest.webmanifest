@@ -1,6 +1,6 @@
 {
-  "name": "HomeBook.Frontend",
-  "short_name": "HomeBook.Frontend",
+  "name": "HomeBook",
+  "short_name": "HomeBook",
   "id": "./",
   "start_url": "./",
   "display": "standalone",
