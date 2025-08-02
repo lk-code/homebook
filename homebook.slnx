@@ -10,9 +10,9 @@
   <Folder Name="/Solution/">
     <File Path="LICENSE" />
     <File Path="README.md" />
-    <File Path="nestly.slnx" />
     <File Path=".gitignore" />
     <File Path=".editorconfig" />
+    <File Path="homebook.slnx" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="source\UnitTests\UnitTests.csproj" Type="Classic C#" />
