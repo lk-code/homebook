@@ -7,6 +7,7 @@
   <Folder Name="/Frontend/">
     <Project Path="source\HomeBook.Client\HomeBook.Client.csproj" Type="Classic C#" />
     <Project Path="source\HomeBook.Frontend.Abstractions\HomeBook.Frontend.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Frontend.Services\HomeBook.Frontend.Services.csproj" Type="Classic C#" />
     <Project Path="source\HomeBook.Frontend\HomeBook.Frontend.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Solution/">
