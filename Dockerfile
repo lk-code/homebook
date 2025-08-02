@@ -34,10 +34,10 @@ COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 COPY --from=build /backend_dist /app
 WORKDIR /app
 
-ARG FRONTEND_APPSETTINGS_FILE=./source/HomeBook.Frontend/wwwroot/appsettings.Docker.json
+ARG FRONTEND_APPSETTINGS_FILE
 COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/wwwroot/appsettings.json
 
-ARG BACKEND_APPSETTINGS_FILE=./source/HomeBook.Backend/appsettings.Docker.json
+ARG BACKEND_APPSETTINGS_FILE
 COPY $BACKEND_APPSETTINGS_FILE /app/appsettings.json
 
 CMD ["/bin/sh", "-c", "dotnet /app/HomeBook.Backend.dll & nginx -g \"daemon off;\""]
