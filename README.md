@@ -17,9 +17,9 @@
 
 [![.NET Version](https://img.shields.io/badge/dotnet%20version-net9.0-blue)](https://hub.docker.com/r/lkcode/registry-lookup)
 
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=lk-code_registry-lookup&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=lk-code_registry-lookup)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=lk-code_registry-lookup&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=lk-code_registry-lookup)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=lk-code_registry-lookup&metric=coverage)](https://sonarcloud.io/summary/new_code?id=lk-code_registry-lookup)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=lk-code_homebook&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=lk-code_homebook)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=lk-code_homebook&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=lk-code_homebook)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=lk-code_homebook&metric=coverage)](https://sonarcloud.io/summary/new_code?id=lk-code_homebook)
 
 [![buy me a coffe](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/lk.code)
 ---
