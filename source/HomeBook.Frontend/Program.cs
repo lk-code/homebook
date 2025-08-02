@@ -8,13 +8,23 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddMudServices();
-
-builder.Services.AddScoped(sp => new HttpClient
+builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
 {
-    BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+    { "Frontend:Host", builder.HostEnvironment.BaseAddress }
 });
 
+builder.Services.AddScoped(sp =>
+{
+    IConfiguration configuration = sp.GetRequiredService<IConfiguration>();
+    string? webAddress = configuration["Frontend:Host"];
+
+    if (string.IsNullOrEmpty(webAddress))
+        throw new ArgumentNullException($"Frontend:Host is not configured");
+
+    return new HttpClient { BaseAddress = new Uri(webAddress) };
+});
+
+builder.Services.AddMudServices();
 builder.Services.AddFrontendServices(builder.Configuration)
     .AddBackendClient(builder.Configuration);
 
