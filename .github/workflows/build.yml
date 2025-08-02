@@ -11,18 +11,16 @@ permissions:
   packages: write
 
 env:
-  VERSION: "1.0.${{ github.run_number }}"
-  DOTNET_VERSION: "9.0.x"
   DOCKER_IMAGE: "docker.io/lkcode/homebook"
   DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
-  WEBAPP_APPSETTINGS_FILE: "./source/WebApp/wwwroot/appsettings.json"
-  ACCOUNTSERVICE_APPSETTINGS_FILE: "./source/AccountService/appsettings.json"
-  FINANCESERVICE_APPSETTINGS_FILE: "./source/FinanceService/appsettings.json"
-  OPENAPI_FILE: "./source/RegistryLookup.Backend/RegistryLookup.Backend.json"
-  CLIENT_CSPROJ: "./source/BackendClient/BackendClient.csproj"
-  CLIENT_OUTPUT_DIR: "./source/BackendClient"
-  CLIENT_NAMESPACE: "de.keysoftware.HomeBook.BackendClient"
-  PLAYWRIGHT_INSTALL: "./source/RegistryLookup.Tests.System/bin/Release/net9.0/playwright.ps1 install"
+  VERSION: "1.0.${{ github.run_number }}"
+  DOTNET_VERSION: "9.0.x"
+  FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
+  BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
+  OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
+  CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
+  CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
+  CLIENT_NAMESPACE: "HomeBook.Client"
 
 jobs:
 
@@ -64,11 +62,6 @@ jobs:
         run: |
           dotnet build --configuration Release --no-restore
 
-      - name: Install Playwright
-        shell: pwsh
-        run: |
-          ${{ env.PLAYWRIGHT_INSTALL }}
-
       - name: Test
         run: |
           dotnet test --configuration Release
@@ -80,9 +73,8 @@ jobs:
         run: |
           docker build \
             --file ./Dockerfile \
-            --build-arg WEBAPP_APPSETTINGS_FILE=${{ env.WEBAPP_APPSETTINGS_FILE }} \
-            --build-arg ACCOUNTSERVICE_APPSETTINGS_FILE=${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }} \
-            --build-arg FINANCESERVICE_APPSETTINGS_FILE=${{ env.FINANCESERVICE_APPSETTINGS_FILE }} \
+            --build-arg FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }} \
+            --build-arg BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }} \
             --tag test-image .
 
   post-build:
@@ -104,32 +96,23 @@ jobs:
         run: |
           git tag ${{ env.VERSION }}
 
-      - name: update WebApp appsettings.json
+      - name: update Frontend appsettings.json
         run: |
-          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.WEBAPP_APPSETTINGS_FILE }}
-          git add ${{ env.WEBAPP_APPSETTINGS_FILE }}
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.FRONTEND_APPSETTINGS_FILE }}
+          git add ${{ env.FRONTEND_APPSETTINGS_FILE }}
 
-      - name: cat WebApp appsettings.json
+      - name: cat Frontend appsettings.json
         run: |
-          cat ${{ env.WEBAPP_APPSETTINGS_FILE }}
+          cat ${{ env.FRONTEND_APPSETTINGS_FILE }}
 
-      - name: update AccountService appsettings.json
+      - name: update Backend appsettings.json
         run: |
-          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
-          git add ${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
+          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.BACKEND_APPSETTINGS_FILE }}
+          git add ${{ env.BACKEND_APPSETTINGS_FILE }}
 
-      - name: cat AccountService appsettings.json
+      - name: cat Backend appsettings.json
         run: |
-          cat ${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
-
-      - name: update FinanceService appsettings.json
-        run: |
-          sed -i "s/\"Version\": \".*\"/\"Version\": \"$VERSION\"/" ${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
-          git add ${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
-
-      - name: cat FinanceService appsettings.json
-        run: |
-          cat ${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
+          cat ${{ env.BACKEND_APPSETTINGS_FILE }}
 
       - name: Create and push deploy branch
         run: |
@@ -229,6 +212,5 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ env.DOCKER_PLATFORMS }}
           build-args: |
-            WEBAPP_APPSETTINGS_FILE=${{ env.WEBAPP_APPSETTINGS_FILE }}
-            ACCOUNTSERVICE_APPSETTINGS_FILE=${{ env.ACCOUNTSERVICE_APPSETTINGS_FILE }}
-            FINANCESERVICE_APPSETTINGS_FILE=${{ env.FINANCESERVICE_APPSETTINGS_FILE }}
+            FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }}
+            BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }}
