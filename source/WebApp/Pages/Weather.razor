@@ -1,5 +1,8 @@
 ﻿@page "/weather"
+@using Microsoft.AspNetCore.Authorization
 @inject HttpClient Http
+
+@attribute [Authorize]
 
 <PageTitle>Weather</PageTitle>
 
