@@ -145,10 +145,6 @@ jobs:
         run: |
           dotnet build --configuration Release --no-restore
 
-      - name: Build Client
-        run: |
-          dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
-
       - name: Install Kiota CLI
         run: |
           dotnet tool install --global Microsoft.OpenApi.Kiota
@@ -164,9 +160,9 @@ jobs:
 
       - name: Build Client
         run: |
-          dotnet build --configuration Release --no-restore
+          dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
 
-      - name: Upload Build Artifact
+      - name: Upload NuGet Artifact
         uses: actions/upload-artifact@v4.6.2
         with:
           name: ${{ env.VERSION }}
