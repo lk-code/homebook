@@ -1,7 +1,21 @@
 ﻿@page "/"
+@using HomeBook.Client
+
+@inject BackendClient BackendClient
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@code
+{
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        var blub = await BackendClient.Weatherforecast.GetAsync();
+        int i = 0;
+    }
+}

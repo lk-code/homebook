@@ -1,8 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Backend with Frontend" type="CompoundRunConfigurationType">
-    <toRun name="AccountService: http" type="LaunchSettings" />
-    <toRun name="FinanceService: http" type="LaunchSettings" />
-    <toRun name="WebApp: https" type="LaunchSettings" />
+    <toRun name="HomeBook.Backend: http" type="LaunchSettings" />
+    <toRun name="HomeBook.Frontend: https" type="LaunchSettings" />
     <method v="2" />
   </configuration>
 </component>
