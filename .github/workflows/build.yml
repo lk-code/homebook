@@ -141,8 +141,11 @@ jobs:
         run: |
           dotnet restore
 
-      - name: Build
-        shell: pwsh
+      - name: Build Solution
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Build Client
         run: |
           dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
 
@@ -151,7 +154,6 @@ jobs:
           dotnet tool install --global Microsoft.OpenApi.Kiota
 
       - name: Generate Client
-        shell: bash
         run: |
           kiota generate \
             --language csharp \
@@ -171,7 +173,8 @@ jobs:
           path: "**/*.${{ env.VERSION }}.nupkg"
 
       - name: Publish
-        run: dotnet nuget push "**/*.${{ env.VERSION }}.nupkg" --no-symbols --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} --source "nuget.org"
+        run: |
+          dotnet nuget push "**/*.${{ env.VERSION }}.nupkg" --no-symbols --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} --source "nuget.org"
 
   docker-deploy:
     runs-on: ubuntu-latest
