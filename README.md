@@ -8,9 +8,9 @@
 
 [![Docker](https://img.shields.io/badge/Docker-alpha-blue)](https://hub.docker.com/r/lkcode/homebook)
 ![License](https://img.shields.io/github/license/lk-code/homebook)
+[![Build and Deploy](https://github.com/lk-code/homebook/actions/workflows/build.yml/badge.svg)](https://github.com/lk-code/homebook/actions/workflows/build.yml)
 
-
-[![Version](https://img.shields.io/docker/v/lkcode/homebook)](https://img.shields.io/docker/v/lkcode/homebook)
+[![Version](https://img.shields.io/docker/v/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
 [![Docker Star](https://img.shields.io/docker/stars/lkcode/homebook)](https://hub.docker.com/r/lkcode/homebook)
 
