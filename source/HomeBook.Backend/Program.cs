@@ -1,9 +1,33 @@
 using Scalar.AspNetCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using HomeBook.Backend.Data;
+using HomeBook.Backend.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+
+// Add Entity Framework and Identity
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseInMemoryDatabase("DefaultConnection")); // Für Development, später SQL Server verwenden
+
+builder.Services.AddIdentityCore<IdentityUser>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddApiEndpoints();
+
+builder.Services.AddAuthentication()
+    .AddBearerToken(IdentityConstants.BearerScheme);
+
+builder.Services.AddAuthorizationBuilder();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -15,9 +39,9 @@ if (builder.Environment.IsDevelopment())
     {
         options.AddDefaultPolicy(policy =>
         {
-            policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            policy.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
         });
     });
 }
@@ -31,6 +55,24 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Middleware um Register-Endpunkt zu blockieren
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.Equals("/register", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsync("Registrierung ist deaktiviert");
+        return;
+    }
+    await next();
+});
+
+// Map Identity API endpoints unter /account (Login/Logout/Register etc.)
+app.MapIdentityApi<IdentityUser>();
 
 var summaries = new[]
 {
@@ -58,6 +100,7 @@ app.MapGet("/weatherforecast", () =>
             .ToArray();
         return forecast;
     })
+    .RequireAuthorization() // Endpunkt erfordert Authentifizierung
     .WithName("GetWeatherForecast");
 
 
