@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using HomeBook.Frontend.Abstractions.Contracts;
 using HomeBook.Frontend.Models.Setup;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
@@ -26,9 +27,11 @@ public partial class UISetupStepper : ComponentBase, IDisposable
         SetupService.OnStepSuccessful += OnStepSuccessful;
         SetupService.OnStepFailed += OnStepFailed;
 
-        _setupSteps.Add(new SetupStepViewModel("Admin User"));
-        _setupSteps.Add(new SetupStepViewModel("Database"));
-        _setupSteps.Add(new SetupStepViewModel("Configuration"));
+        ISetupStep[] setupSteps = await SetupService.GetSetupStepsAsync();
+        foreach (ISetupStep setupStep in setupSteps)
+        {
+            _setupSteps.Add(new SetupStepViewModel(setupStep.Key, setupStep));
+        }
     }
 
     public void Dispose()
