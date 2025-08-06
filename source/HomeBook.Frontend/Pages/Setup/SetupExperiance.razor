@@ -33,8 +33,7 @@
                 <MudGrid Class="mt-4">
 
                     <MudItem xs="12">
-                        <UISetupStepper IsVertical="false"
-                                        ActiveIndex="_activeIndex"/>
+                        <UISetupStepper IsVertical="false"/>
                     </MudItem>
 
                     <MudItem xs="12">
@@ -42,8 +41,7 @@
                     </MudItem>
 
                     <MudItem xs="12">
-                        <UISetupStepper IsVertical="false"
-                                        ActiveIndex="_activeIndex"/>
+                        <UISetupStepper IsVertical="false"/>
                     </MudItem>
 
                 </MudGrid>
@@ -56,12 +54,23 @@
                 <MudGrid Class="mt-4">
 
                     <MudItem md="3">
-                        <UISetupStepper IsVertical="true"
-                                        ActiveIndex="_activeIndex"/>
+                        <UISetupStepper IsVertical="true"/>
                     </MudItem>
 
                     <MudItem md="9">
-                        <MudText>Rechte Spalte - Breiter Inhalt</MudText>
+
+                        <MudButton OnClick="Callback">
+                            Setup Finished
+                        </MudButton>
+
+                        <MudButton OnClick="() => SetupService.NextStepAsync(true)">
+                            Success
+                        </MudButton>
+
+                        <MudButton OnClick="() => SetupService.NextStepAsync(false)">
+                            Error
+                        </MudButton>
+
                     </MudItem>
 
                 </MudGrid>

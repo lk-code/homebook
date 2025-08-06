@@ -1,19 +1,23 @@
+@using HomeBook.Frontend.Abstractions.Contracts
+@using HomeBook.Frontend.Models.Setup
+
+@inject ISetupService SetupService
+
 <MudStepper @ref="_setupStepper"
-            @bind-ActiveIndex="ActiveIndex"
-            Vertical="IsVertical">
+            Vertical="IsVertical"
+            ShowResetButton="false"
+            Class="ui-setup-stepper">
 
     <ChildContent>
 
-        <MudStep Title="Select campaign settings"/>
-
-        <MudStep Title="Create an ad group"/>
-
-        <MudStep Title="Create an ad"/>
+        @foreach (SetupStepViewModel step in _setupSteps)
+        {
+            <MudStep @ref="step.StepRef"
+                     Title="@step.Title"
+                     Completed="@step.Completed"
+                     HasError="@step.HasError"/>
+        }
 
     </ChildContent>
-
-    <CompletedContent>
-        Thank you for wasting your money on clicks!
-    </CompletedContent>
 
 </MudStepper>

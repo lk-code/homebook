@@ -5,11 +5,19 @@ namespace HomeBook.Frontend.Pages.Setup;
 
 public partial class SetupExperiance : ComponentBase
 {
-    private int _activeIndex = 1;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+            return;
+
+        // load settings
+    }
 
     private void Callback(MouseEventArgs obj)
     {
-        SetupService.SetIsDone(true);
+        // SetupService.SetIsDone(true);
         NavigationManager.NavigateTo("/");
     }
 }
