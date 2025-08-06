@@ -1,0 +1,19 @@
+<MudStepper @ref="_setupStepper"
+            @bind-ActiveIndex="ActiveIndex"
+            Vertical="IsVertical">
+
+    <ChildContent>
+
+        <MudStep Title="Select campaign settings"/>
+
+        <MudStep Title="Create an ad group"/>
+
+        <MudStep Title="Create an ad"/>
+
+    </ChildContent>
+
+    <CompletedContent>
+        Thank you for wasting your money on clicks!
+    </CompletedContent>
+
+</MudStepper>

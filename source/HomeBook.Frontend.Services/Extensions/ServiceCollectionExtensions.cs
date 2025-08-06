@@ -1,4 +1,6 @@
 using HomeBook.Client;
+using HomeBook.Frontend.Abstractions.Contracts;
+using HomeBook.Frontend.Services.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Kiota.Abstractions;
@@ -12,6 +14,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddFrontendServices(this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddSingleton<ISetupService, SetupService>();
+
         return services;
     }
 
