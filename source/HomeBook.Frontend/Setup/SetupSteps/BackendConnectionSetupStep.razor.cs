@@ -1,4 +1,5 @@
 using HomeBook.Frontend.Abstractions.Contracts;
+using HomeBook.Frontend.Setup.Exceptions;
 using Microsoft.AspNetCore.Components;
 
 namespace HomeBook.Frontend.Setup.SetupSteps;
@@ -41,6 +42,11 @@ public partial class BackendConnectionSetupStep : ComponentBase, ISetupStep
             _errorMessage = "Unable to connect to the server. Make sure that the server is running and has been configured correctly, then try again.";
             await StepErrorAsync(cancellationToken);
         }
+        catch (SetupCheckException err)
+        {
+            _errorMessage = err.Message;
+            await StepErrorAsync(cancellationToken);
+        }
         catch (Exception err)
         {
             _errorMessage = "error while connecting to server: " + err.Message;
@@ -62,10 +68,19 @@ public partial class BackendConnectionSetupStep : ComponentBase, ISetupStep
     private async Task ConnectToServerAsync(CancellationToken cancellationToken)
     {
         var version = await BackendClient
-            .Weatherforecast
+            .Version
             .GetAsync((x) =>
             {
             }, cancellationToken);
+
+        if (string.IsNullOrEmpty(version))
+            // DE => Der Server hat keine gültige Version zurückgegeben.
+            throw new SetupCheckException("Server did not return a valid version.");
+
+        string appVersion = Configuration.GetSection("Version").Value ?? "";
+        if (appVersion != version)
+            // DE => Die Version des Servers stimmt nicht mit der Version der App überein. Bitte aktualisieren Sie die App oder den Server.
+            throw new SetupCheckException("The server version does not match the app version. Please update the app.");
     }
 
     private async Task StepErrorAsync(CancellationToken cancellationToken = default)
