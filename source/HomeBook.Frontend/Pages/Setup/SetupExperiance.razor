@@ -1,0 +1,68 @@
+@page "/Setup"
+
+@layout ContentOnlyLayout
+
+@using HomeBook.Frontend.Abstractions.Contracts
+
+@inject NavigationManager NavigationManager
+@inject ISetupService SetupService
+
+<UIWaveBackground/>
+
+<MudContainer Class="mt-16 hb-setup-container">
+
+    <MudCard Elevation="10" Class="hb-setup-card">
+
+        <MudCardHeader>
+
+            <CardHeaderContent>
+                <MudText Typo="Typo.h3">Setup</MudText>
+            </CardHeaderContent>
+
+        </MudCardHeader>
+
+        <MudCardContent>
+
+            <MudHidden Breakpoint="Breakpoint.SmAndDown"
+                       Invert="true">
+
+                <MudGrid Class="mt-4">
+
+                    <MudItem xs="12">
+                        <UISetupStepper IsVertical="false"/>
+                    </MudItem>
+
+                    <MudItem xs="12">
+                        <UISetupContent />
+                    </MudItem>
+
+                    <MudItem xs="12">
+                        <UISetupStepper IsVertical="false"/>
+                    </MudItem>
+
+                </MudGrid>
+
+            </MudHidden>
+
+            <MudHidden Breakpoint="Breakpoint.MdAndUp"
+                       Invert="true">
+
+                <MudGrid Class="mt-4">
+
+                    <MudItem md="3">
+                        <UISetupStepper IsVertical="true"/>
+                    </MudItem>
+
+                    <MudItem md="9">
+                        <UISetupContent />
+                    </MudItem>
+
+                </MudGrid>
+
+            </MudHidden>
+
+        </MudCardContent>
+
+    </MudCard>
+
+</MudContainer>

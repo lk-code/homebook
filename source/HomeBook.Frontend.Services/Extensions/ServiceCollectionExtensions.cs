@@ -12,6 +12,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddFrontendServices(this IServiceCollection services,
         IConfiguration configuration)
     {
+        // services.AddSingleton<ISetupService, SetupService>();
+
         return services;
     }
 
@@ -42,7 +44,10 @@ public static class ServiceCollectionExtensions
             }
 
             IAuthenticationProvider authProvider = sp.GetRequiredService<IAuthenticationProvider>();
-            return new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient { BaseAddress = new Uri(backendHost) });
+            return new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient
+            {
+                BaseAddress = new Uri(backendHost)
+            });
         });
 
         services.AddScoped<BackendClient>(sp =>

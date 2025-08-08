@@ -1,0 +1,40 @@
+@using HomeBook.Client
+@using HomeBook.Frontend.Abstractions.Contracts
+
+@inject ISetupService SetupService
+@inject BackendClient BackendClient
+
+<MudText Typo="Typo.h4">Check Server</MudText>
+
+<div class="relative d-flex flex-grow-1 flex-wrap flex-column justify-center align-center">
+
+    @if (_isChecking)
+    {
+        <MudProgressLinear Color="Color.Primary"
+                           Indeterminate="@_isChecking"
+                           Class="my-7"/>
+    }
+
+</div>
+
+@if (!_isChecking)
+{
+    @if (_serverIsOk)
+    {
+        <MudAlert Severity="Severity.Info">
+            Server is found and connected.
+        </MudAlert>
+    }
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <MudAlert Severity="Severity.Error">
+            @_errorMessage
+        </MudAlert>
+    }
+}
+
+<MudButton Color="Color.Info"
+           OnClick="async () => await StartAsync()">
+    Start
+</MudButton>

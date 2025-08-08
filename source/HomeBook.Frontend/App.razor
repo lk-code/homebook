@@ -1,12 +1,68 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using HomeBook.Frontend.Abstractions.Contracts
+@using NavigationContext = Microsoft.AspNetCore.Components.Routing.NavigationContext
+
+<Router AppAssembly="@typeof(App).Assembly"
+        OnNavigateAsync="HandleNavigationAsync">
+
     <Found Context="routeData">
+
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+
         <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+
     </Found>
+
     <NotFound>
+
         <PageTitle>Not found</PageTitle>
+
         <LayoutView Layout="@typeof(MainLayout)">
             <p role="alert">Sorry, there's nothing at this address.</p>
         </LayoutView>
+
     </NotFound>
+
 </Router>
+
+@code {
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
+    [Inject]
+    private ISetupService SetupService { get; set; }
+
+    private bool _isRedirecting;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        // initialize the setup service
+        await SetupService.InitializeAsync();
+    }
+
+    private async Task HandleNavigationAsync(NavigationContext context)
+    {
+        if (_isRedirecting)
+        {
+            _isRedirecting = false;
+            return;
+        }
+
+        bool isSetupDone = await SetupService.IsSetupDoneAsync();
+        bool isOnSetupPage = context.Path.StartsWith("setup", StringComparison.OrdinalIgnoreCase);
+
+        if (isSetupDone)
+        {
+            _isRedirecting = true;
+            NavigationManager.NavigateTo("/");
+        }
+        else if (!isSetupDone && !isOnSetupPage)
+        {
+            _isRedirecting = true;
+            NavigationManager.NavigateTo("/setup");
+        }
+    }
+
+}

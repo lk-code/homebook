@@ -1,0 +1,23 @@
+@using HomeBook.Frontend.Abstractions.Contracts
+@using HomeBook.Frontend.Models.Setup
+
+@inject ISetupService SetupService
+
+<MudStepper @ref="_setupStepper"
+            Vertical="IsVertical"
+            ShowResetButton="false"
+            Class="ui-setup-stepper">
+
+    <ChildContent>
+
+        @foreach (SetupStepViewModel step in _setupSteps)
+        {
+            <MudStep @ref="step.StepRef"
+                     Title="@step.Title"
+                     Completed="@step.Completed"
+                     HasError="@step.HasError"/>
+        }
+
+    </ChildContent>
+
+</MudStepper>
