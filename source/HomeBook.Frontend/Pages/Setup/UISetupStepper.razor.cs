@@ -149,8 +149,15 @@ public partial class UISetupStepper : ComponentBase, IAsyncDisposable
 
     private async Task OnStepSuccessful(ISetupStep step)
     {
-        var stepVM = _setupSteps.FirstOrDefault(x => x.SetupStep.Key == step.Key);
+        SetupStepViewModel? stepVM = _setupSteps.FirstOrDefault(x => x.SetupStep.Key == step.Key);
+        if (stepVM is null
+            || stepVM.StepRef is null)
+            return;
+
+#pragma warning disable BL0005
         stepVM.StepRef.Completed = true;
+#pragma warning restore BL0005
+
         // _setupStepper.ActiveStep.Completed = true;
         StateHasChanged();
 
