@@ -1,38 +1,42 @@
 using HomeBook.Frontend.Abstractions.Contracts;
-using HomeBook.Frontend.Services.SetupSteps;
+using HomeBook.Frontend.Setup.SetupSteps;
 
-namespace HomeBook.Frontend.Services.Services;
+namespace HomeBook.Frontend.Setup;
 
 public class SetupService : ISetupService
 {
     private bool _isDone = false;
     private List<ISetupStep> _setupSteps = [];
-
-    public Guid ServiceId { get; } = Guid.NewGuid();
     public Func<ISetupStep, Task>? OnStepSuccessful { get; set; }
     public Func<ISetupStep, Task>? OnStepFailed { get; set; }
-
+    public Func<Task>? OnSetupStepsInitialized { get; set; }
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         List<ISetupStep> setupSteps = [];
 
         setupSteps.Add(new BackendConnectionSetupStep());
-        setupSteps.Add(new AdminUserSetupStep());
-
-        bool hasDatabaseConnectionString = false;
-        if (hasDatabaseConnectionString)
-        {
-            setupSteps.Add(new DatabaseConnectionSetupStep());
-        }
-        else
-        {
-            setupSteps.Add(new DatabaseFormSetupStep());
-        }
-
-        setupSteps.Add(new ConfigurationSetupStep());
+        // setupSteps.Add(new AdminUserSetupStep());
+        //
+        // bool hasDatabaseConnectionString = false;
+        // if (hasDatabaseConnectionString)
+        // {
+        //     setupSteps.Add(new DatabaseConnectionSetupStep());
+        // }
+        // else
+        // {
+        //     setupSteps.Add(new DatabaseFormSetupStep());
+        // }
+        //
+        // setupSteps.Add(new ConfigurationSetupStep());
 
         _setupSteps = setupSteps;
+    }
+
+    public async Task TriggerOnMudStepInitialized(CancellationToken cancellationToken = default)
+    {
+        if (OnSetupStepsInitialized is not null)
+            await OnSetupStepsInitialized.Invoke();
     }
 
     private async Task CheckSetupSteps(CancellationToken cancellationToken)

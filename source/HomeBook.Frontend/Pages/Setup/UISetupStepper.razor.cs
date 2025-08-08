@@ -47,6 +47,7 @@ public partial class UISetupStepper : ComponentBase, IAsyncDisposable
     {
         CancellationToken cancellationToken = CancellationToken.None;
 
+        _ = SetupService.TriggerOnMudStepInitialized(cancellationToken);
         await LoadStepStatusAsync(cancellationToken);
     }
 

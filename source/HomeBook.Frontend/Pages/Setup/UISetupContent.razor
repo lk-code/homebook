@@ -1,7 +1,19 @@
 @using HomeBook.Frontend.Abstractions.Contracts
+@using Microsoft.AspNetCore.Components
 
 @inject NavigationManager NavigationManager
 @inject ISetupService SetupService
+
+<MudPaper>
+    @if (_activeSetupStep is not null)
+    {
+        <DynamicComponent Type="@_activeSetupStep.GetType()" />
+    }
+    else
+    {
+        <MudText>Kein Setup-Schritt aktiv.</MudText>
+    }
+</MudPaper>
 
 <MudButton OnClick="Callback">
     Setup Finished

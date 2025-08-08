@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using HomeBook.Frontend;
+using HomeBook.Frontend.Extensions;
 using HomeBook.Frontend.Services.Extensions;
 using MudBlazor.Services;
 
@@ -10,7 +11,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Configuration.AddInMemoryCollection(new Dictionary<string, string?>
 {
-    { "Frontend:Host", builder.HostEnvironment.BaseAddress }
+    {
+        "Frontend:Host", builder.HostEnvironment.BaseAddress
+    }
 });
 
 builder.Services.AddScoped(sp =>
@@ -21,11 +24,15 @@ builder.Services.AddScoped(sp =>
     if (string.IsNullOrEmpty(webAddress))
         throw new ArgumentNullException($"Frontend:Host is not configured");
 
-    return new HttpClient { BaseAddress = new Uri(webAddress) };
+    return new HttpClient
+    {
+        BaseAddress = new Uri(webAddress)
+    };
 });
 
 builder.Services.AddMudServices();
-builder.Services.AddFrontendServices(builder.Configuration)
+builder.Services.AddFrontendUiServices(builder.Configuration)
+    .AddFrontendServices(builder.Configuration)
     .AddBackendClient(builder.Configuration);
 
 await builder.Build().RunAsync();

@@ -1,6 +1,4 @@
 using HomeBook.Client;
-using HomeBook.Frontend.Abstractions.Contracts;
-using HomeBook.Frontend.Services.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Kiota.Abstractions;
@@ -14,7 +12,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddFrontendServices(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddSingleton<ISetupService, SetupService>();
+        // services.AddSingleton<ISetupService, SetupService>();
 
         return services;
     }
@@ -46,7 +44,10 @@ public static class ServiceCollectionExtensions
             }
 
             IAuthenticationProvider authProvider = sp.GetRequiredService<IAuthenticationProvider>();
-            return new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient { BaseAddress = new Uri(backendHost) });
+            return new HttpClientRequestAdapter(authProvider, httpClient: new HttpClient
+            {
+                BaseAddress = new Uri(backendHost)
+            });
         });
 
         services.AddScoped<BackendClient>(sp =>
