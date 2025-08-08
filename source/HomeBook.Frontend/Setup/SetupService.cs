@@ -16,19 +16,19 @@ public class SetupService : ISetupService
         List<ISetupStep> setupSteps = [];
 
         setupSteps.Add(new BackendConnectionSetupStep());
-        // setupSteps.Add(new AdminUserSetupStep());
-        //
-        // bool hasDatabaseConnectionString = false;
-        // if (hasDatabaseConnectionString)
-        // {
-        //     setupSteps.Add(new DatabaseConnectionSetupStep());
-        // }
-        // else
-        // {
-        //     setupSteps.Add(new DatabaseFormSetupStep());
-        // }
-        //
-        // setupSteps.Add(new ConfigurationSetupStep());
+        setupSteps.Add(new AdminUserSetupStep());
+
+        bool hasDatabaseConnectionString = false;
+        if (hasDatabaseConnectionString)
+        {
+            setupSteps.Add(new DatabaseConnectionSetupStep());
+        }
+        else
+        {
+            setupSteps.Add(new DatabaseFormSetupStep());
+        }
+
+        setupSteps.Add(new ConfigurationSetupStep());
 
         _setupSteps = setupSteps;
     }

@@ -11,11 +11,15 @@ public partial class UISetupContent : ComponentBase, IDisposable
     protected override async Task OnInitializedAsync()
     {
         SetupService.OnSetupStepsInitialized += OnSetupStepsInitialized;
+        SetupService.OnStepSuccessful += OnStepSuccessful;
+        SetupService.OnStepFailed += OnStepFailed;
     }
 
     public void Dispose()
     {
         SetupService.OnSetupStepsInitialized -= OnSetupStepsInitialized;
+        SetupService.OnStepSuccessful -= OnStepSuccessful;
+        SetupService.OnStepFailed -= OnStepFailed;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -32,8 +36,24 @@ public partial class UISetupContent : ComponentBase, IDisposable
     {
         CancellationToken cancellationToken = CancellationToken.None;
 
-        _activeSetupStep = await SetupService.GetActiveSetupStepAsync(cancellationToken);
+        await LoadActiveStepToUiAsync(cancellationToken);
+    }
 
+    private async Task OnStepFailed(ISetupStep arg)
+    {
+        // TODO: display error
+    }
+
+    private async Task OnStepSuccessful(ISetupStep arg)
+    {
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        await LoadActiveStepToUiAsync(cancellationToken);
+    }
+
+    private async Task LoadActiveStepToUiAsync(CancellationToken cancellationToken)
+    {
+        _activeSetupStep = await SetupService.GetActiveSetupStepAsync(cancellationToken);
         await InvokeAsync(StateHasChanged);
     }
 

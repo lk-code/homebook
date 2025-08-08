@@ -4,16 +4,12 @@
 @inject NavigationManager NavigationManager
 @inject ISetupService SetupService
 
-<MudPaper>
+<div class="ui-setup-step-container">
     @if (_activeSetupStep is not null)
     {
-        <DynamicComponent Type="@_activeSetupStep.GetType()" />
+        <DynamicComponent Type="@_activeSetupStep.GetType()"/>
     }
-    else
-    {
-        <MudText>Kein Setup-Schritt aktiv.</MudText>
-    }
-</MudPaper>
+</div>
 
 <MudButton OnClick="Callback">
     Setup Finished
