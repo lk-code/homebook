@@ -1,3 +1,4 @@
+using HomeBook.Backend.Endpoints;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,6 +60,8 @@ app.MapGet("/weatherforecast", () =>
         return forecast;
     })
     .WithName("GetWeatherForecast");
+
+app.MapVersionEndpoints();
 
 
 app.UseDefaultFiles();
