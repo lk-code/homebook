@@ -5,5 +5,8 @@ namespace HomeBook.Frontend.Services.SetupSteps;
 public class ConfigurationSetupStep : ISetupStep
 {
     public string Key { get; } = nameof(ConfigurationSetupStep);
-    public Task HandleStepAsync() => throw new NotImplementedException();
+    public bool HasError { get; set; }
+    public bool IsSuccessful { get; set; }
+    public async Task HandleStepAsync() => throw new NotImplementedException();
+    public async Task<bool> IsStepDoneAsync(CancellationToken cancellationToken) => false;
 }

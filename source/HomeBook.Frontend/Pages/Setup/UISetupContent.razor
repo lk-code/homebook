@@ -1,0 +1,16 @@
+@using HomeBook.Frontend.Abstractions.Contracts
+
+@inject NavigationManager NavigationManager
+@inject ISetupService SetupService
+
+<MudButton OnClick="Callback">
+    Setup Finished
+</MudButton>
+
+<MudButton OnClick="() => SetupService.FinishActiveStepAsync(true)">
+    Success
+</MudButton>
+
+<MudButton OnClick="() => SetupService.FinishActiveStepAsync(false)">
+    Error
+</MudButton>

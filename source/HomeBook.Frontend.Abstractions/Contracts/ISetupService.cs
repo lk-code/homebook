@@ -3,9 +3,12 @@ namespace HomeBook.Frontend.Abstractions.Contracts;
 public interface ISetupService
 {
     Guid ServiceId { get; }
-    Func<Task>? OnStepSuccessful { get; set; }
-    Func<Exception, Task>? OnStepFailed { get; set; }
+    Func<ISetupStep, Task>? OnStepSuccessful { get; set; }
+    Func<ISetupStep, Task>? OnStepFailed { get; set; }
+    Task InitializeAsync(CancellationToken cancellationToken = default);
     Task<ISetupStep[]> GetSetupStepsAsync(CancellationToken cancellationToken = default);
+    Task<ISetupStep?> GetActiveSetupStepAsync(CancellationToken cancellationToken = default);
     Task<bool> IsSetupDoneAsync(CancellationToken cancellationToken = default);
-    Task NextStepAsync(bool success, CancellationToken cancellationToken = default);
+    Task FinishActiveStepAsync(bool success,
+        CancellationToken cancellationToken = default);
 }

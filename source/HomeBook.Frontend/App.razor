@@ -34,6 +34,14 @@
 
     private bool _isRedirecting;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        // initialize the setup service
+        await SetupService.InitializeAsync();
+    }
+
     private async Task HandleNavigationAsync(NavigationContext context)
     {
         if (_isRedirecting)
@@ -42,8 +50,8 @@
             return;
         }
 
-        var isSetupDone = await SetupService.IsSetupDoneAsync();
-        var isOnSetupPage = context.Path.StartsWith("setup", StringComparison.OrdinalIgnoreCase);
+        bool isSetupDone = await SetupService.IsSetupDoneAsync();
+        bool isOnSetupPage = context.Path.StartsWith("setup", StringComparison.OrdinalIgnoreCase);
 
         if (isSetupDone)
         {

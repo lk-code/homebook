@@ -7,11 +7,7 @@
 @inject NavigationManager NavigationManager
 @inject ISetupService SetupService
 
-<div class="hb-bg-container">
-    <div class="wave"></div>
-    <div class="wave"></div>
-    <div class="wave"></div>
-</div>
+<UIWaveBackground/>
 
 <MudContainer Class="mt-16 hb-setup-container">
 
@@ -37,7 +33,7 @@
                     </MudItem>
 
                     <MudItem xs="12">
-                        <MudText>Zweiter Text - Mobile Vollbreite</MudText>
+                        <UISetupContent />
                     </MudItem>
 
                     <MudItem xs="12">
@@ -58,19 +54,7 @@
                     </MudItem>
 
                     <MudItem md="9">
-
-                        <MudButton OnClick="Callback">
-                            Setup Finished
-                        </MudButton>
-
-                        <MudButton OnClick="() => SetupService.NextStepAsync(true)">
-                            Success
-                        </MudButton>
-
-                        <MudButton OnClick="() => SetupService.NextStepAsync(false)">
-                            Error
-                        </MudButton>
-
+                        <UISetupContent />
                     </MudItem>
 
                 </MudGrid>
