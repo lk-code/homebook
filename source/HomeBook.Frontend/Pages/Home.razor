@@ -15,7 +15,7 @@ Welcome to your new app.
     {
         await base.OnAfterRenderAsync(firstRender);
 
-        var blub = await BackendClient.Weatherforecast.GetAsync();
+        var blub = await BackendClient.Version.GetAsync();
         int i = 0;
     }
 }

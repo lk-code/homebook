@@ -9,9 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="AspNetCore.SassCompiler" Version="1.89.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.7"/>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.7" PrivateAssets="all"/>
-    <PackageReference Include="MudBlazor" Version="8.10.0"/>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="9.0.8" PrivateAssets="all" />
+    <PackageReference Include="MudBlazor" Version="8.11.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +29,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HomeBook.Frontend.Services\HomeBook.Frontend.Services.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 
 </Project>
