@@ -11,14 +11,18 @@
     }
 </div>
 
-<MudButton OnClick="Callback">
-    Setup Finished
-</MudButton>
+<MudPaper Style="margin-top: 200px;">
 
-<MudButton OnClick="() => SetupService.FinishActiveStepAsync(true)">
-    Success
-</MudButton>
+    <MudButton OnClick="Callback">
+        Setup Finished
+    </MudButton>
 
-<MudButton OnClick="() => SetupService.FinishActiveStepAsync(false)">
-    Error
-</MudButton>
+    <MudButton OnClick="() => SetupService.SetStepStatusAsync(true, false)">
+        Success
+    </MudButton>
+
+    <MudButton OnClick="() => SetupService.SetStepStatusAsync(false, true)">
+        Error
+    </MudButton>
+
+</MudPaper>

@@ -39,7 +39,7 @@ public partial class UISetupContent : ComponentBase, IDisposable
         await LoadActiveStepToUiAsync(cancellationToken);
     }
 
-    private async Task OnStepFailed(ISetupStep arg)
+    private async Task OnStepFailed(ISetupStep arg, bool isError)
     {
         // TODO: display error
     }

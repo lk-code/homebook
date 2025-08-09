@@ -8,7 +8,7 @@ public class SetupService : ISetupService
     private bool _isDone = false;
     private List<ISetupStep> _setupSteps = [];
     public Func<ISetupStep, Task>? OnStepSuccessful { get; set; }
-    public Func<ISetupStep, Task>? OnStepFailed { get; set; }
+    public Func<ISetupStep, bool, Task>? OnStepFailed { get; set; }
     public Func<Task>? OnSetupStepsInitialized { get; set; }
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
@@ -39,18 +39,6 @@ public class SetupService : ISetupService
             await OnSetupStepsInitialized.Invoke();
     }
 
-    private async Task CheckSetupSteps(CancellationToken cancellationToken)
-    {
-        foreach (ISetupStep setupStep in _setupSteps)
-        {
-            bool isDone = await setupStep.IsStepDoneAsync(cancellationToken);
-
-            if (isDone)
-                await FinishActiveStepAsync(true,
-                    cancellationToken);
-        }
-    }
-
     public async Task<ISetupStep[]> GetSetupStepsAsync(CancellationToken cancellationToken = default)
     {
         await Task.CompletedTask;
@@ -74,26 +62,35 @@ public class SetupService : ISetupService
         return isSetupDone;
     }
 
-    public async Task FinishActiveStepAsync(bool success,
+    public async Task SetStepStatusAsync(bool success,
+        bool hasError,
         CancellationToken cancellationToken = default)
     {
         ISetupStep? activeStep = await GetActiveSetupStepAsync(cancellationToken);
         if (activeStep is null)
             throw new InvalidOperationException("No active setup step found.");
 
-        if (success)
+        if (hasError)
         {
-            activeStep.IsSuccessful = true;
-
-            if (OnStepSuccessful != null)
-                await OnStepSuccessful.Invoke(activeStep);
-        }
-        else
-        {
+            // set as failed
             activeStep.HasError = true;
 
             if (OnStepFailed != null)
-                await OnStepFailed.Invoke(activeStep);
+                await OnStepFailed.Invoke(activeStep, true);
+            return;
+        }
+
+        // reset failed status
+        activeStep.HasError = false;
+        if (OnStepFailed != null)
+            await OnStepFailed.Invoke(activeStep, false);
+
+        if (success)
+        {
+            // set as successful
+            activeStep.IsSuccessful = true;
+            if (OnStepSuccessful != null)
+                await OnStepSuccessful.Invoke(activeStep);
         }
     }
 }
