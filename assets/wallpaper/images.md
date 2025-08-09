@@ -1,0 +1,1 @@
+# images:* windows-server-2025.jpg*

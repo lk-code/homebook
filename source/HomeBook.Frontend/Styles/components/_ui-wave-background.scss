@@ -33,10 +33,6 @@ $wave3-duration: 60s;
     margin: auto;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     overflow: auto;
-    background: $gradient-background;
-    animation: gradient $gradient-duration ease infinite;
-    background-size: 400% 400%;
-    background-attachment: fixed;
 
     position: absolute;
     top: 0;
@@ -44,6 +40,28 @@ $wave3-duration: 60s;
     width: 100vw;
     height: 100vh;
     z-index: -1;
+
+    &.ui-bg-01 {
+        background: $gradient-background;
+        animation: gradient $gradient-duration ease infinite;
+        background-size: 400% 400%;
+        background-attachment: fixed;
+    }
+
+    &.ui-bg-02 {
+        background: url('/img/bg/ws25.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    &.ui-bg-03 {
+        background: url('/img/bg/wp12118355.webp') no-repeat center center fixed;
+        background-size: cover;
+    }
+
+    &.ui-bg-04 {
+        background: url('/img/bg/wp12118355-light.webp') no-repeat center center fixed;
+        background-size: cover;
+    }
 
     .wave {
         background: rgb(255 255 255 / 25%);

@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <Folder Include="Exceptions\" />
+    <Folder Include="wwwroot\img\bg\" />
   </ItemGroup>
 
   <ItemGroup>
