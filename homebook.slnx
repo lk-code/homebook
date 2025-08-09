@@ -3,6 +3,7 @@
     <Project Path="source\HomeBook.Backend.Abstractions\HomeBook.Backend.Abstractions.csproj" Type="Classic C#" />
     <Project Path="source\HomeBook.Backend.Data\HomeBook.Backend.Data.csproj" Type="Classic C#" />
     <Project Path="source\HomeBook.Backend\HomeBook.Backend.csproj" Type="Classic C#" />
+    <Project Path="source\HomeBook.Data.PostgreSQL\HomeBook.Data.PostgreSQL.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Frontend/">
     <Project Path="source\HomeBook.Client\HomeBook.Client.csproj" Type="Classic C#" />

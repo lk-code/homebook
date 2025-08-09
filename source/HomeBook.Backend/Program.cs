@@ -40,7 +40,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseDefaultFiles();
-app.UseStaticFiles();
+// app.UseStaticFiles();
 app.MapFallbackToFile("index.html"); // <- important for Blazor Routing
 
 app.MapVersionEndpoints()

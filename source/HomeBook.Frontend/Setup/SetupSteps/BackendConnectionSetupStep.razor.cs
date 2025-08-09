@@ -1,6 +1,7 @@
 using HomeBook.Frontend.Abstractions.Contracts;
 using HomeBook.Frontend.Setup.Exceptions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Kiota.Abstractions;
 
 namespace HomeBook.Frontend.Setup.SetupSteps;
 
@@ -91,6 +92,27 @@ public partial class BackendConnectionSetupStep : ComponentBase, ISetupStep
         if (appVersion != version)
             // DE => Die Version des Servers stimmt nicht mit der Version der App überein. Bitte aktualisieren Sie die App oder den Server.
             throw new SetupCheckException("The server version does not match the app version. Please update the app.");
+
+        try
+        {
+            await BackendClient.Setup.Availability.GetAsync(x =>
+                {
+                },
+                cancellationToken
+            );
+        }
+        catch (ApiException err) when (err.ResponseStatusCode == 409)
+        {
+            throw new SetupCheckException("Setup is already in progress. Please wait until the setup is finished or reset the setup.");
+        }
+        catch (ApiException err) when (err.ResponseStatusCode == 500)
+        {
+            throw new SetupCheckException("Unknown Server Error while checking Server Requirements.");
+        }
+        catch (Exception err)
+        {
+            throw new SetupCheckException(err.Message);
+        }
     }
 
     private async Task StepErrorAsync(CancellationToken cancellationToken = default)
