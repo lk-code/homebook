@@ -17,6 +17,16 @@ public partial class BackendConnectionSetupStep : ComponentBase, ISetupStep
 
     public Task<bool> IsStepDoneAsync(CancellationToken cancellationToken) => throw new NotImplementedException();
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+            return;
+
+        await StartAsync();
+    }
+
     private async Task StartAsync()
     {
         CancellationToken cancellationToken = CancellationToken.None;
@@ -30,7 +40,7 @@ public partial class BackendConnectionSetupStep : ComponentBase, ISetupStep
         try
         {
             await Task.WhenAll(
-                Task.Delay(5000, cancellationToken),
+                Task.Delay(8000, cancellationToken),
                 ConnectToServerAsync(cancellationToken));
 
             _serverIsOk = true;
@@ -85,12 +95,13 @@ public partial class BackendConnectionSetupStep : ComponentBase, ISetupStep
 
     private async Task StepErrorAsync(CancellationToken cancellationToken = default)
     {
-        await SetupService.FinishActiveStepAsync(false, cancellationToken);
+        await SetupService.SetStepStatusAsync(false, true, cancellationToken);
     }
 
     private async Task StepSuccessAsync(CancellationToken cancellationToken = default)
     {
+        await SetupService.SetStepStatusAsync(false, false, cancellationToken);
         await Task.Delay(5000, cancellationToken);
-        await SetupService.FinishActiveStepAsync(true, cancellationToken);
+        await SetupService.SetStepStatusAsync(true, false, cancellationToken);
     }
 }

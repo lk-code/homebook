@@ -5,7 +5,7 @@
 @inject ISetupService SetupService
 @inject BackendClient BackendClient
 
-<MudText Typo="Typo.h4">Check Server</MudText>
+<MudText Typo="Typo.h4">Check Server Connection</MudText>
 
 <div class="relative d-flex flex-grow-1 flex-wrap flex-column justify-center align-center">
 
@@ -22,20 +22,25 @@
 {
     @if (_serverIsOk)
     {
-        <MudAlert Severity="Severity.Info">
+        <MudAlert Class="mt-3"
+                  Severity="Severity.Info">
             Server is found and connected.
         </MudAlert>
     }
 
     @if (!string.IsNullOrEmpty(_errorMessage))
     {
-        <MudAlert Severity="Severity.Error">
+        <MudAlert Class="mt-3"
+                  Severity="Severity.Error">
             @_errorMessage
         </MudAlert>
+
+        <MudButton Color="Color.Primary"
+                   Variant="Variant.Filled"
+                   Class="mt-3"
+                   OnClick="async () => await StartAsync()">
+            Retry
+        </MudButton>
     }
 }
 
-<MudButton Color="Color.Info"
-           OnClick="async () => await StartAsync()">
-    Start
-</MudButton>

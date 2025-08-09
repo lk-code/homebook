@@ -135,14 +135,14 @@ public partial class UISetupStepper : ComponentBase, IAsyncDisposable
         await SetActiveStepAsync(stepVM, cancellationToken);
     }
 
-    private async Task OnStepFailed(ISetupStep step)
+    private async Task OnStepFailed(ISetupStep step, bool isError)
     {
         SetupStepViewModel? stepVM = _setupSteps.FirstOrDefault(x => x.SetupStep.Key == step.Key);
         if (stepVM is null
             || stepVM.StepRef is null)
             return;
 
-        await stepVM.StepRef.SetHasErrorAsync(true, true);
+        await stepVM.StepRef.SetHasErrorAsync(isError, true);
         // await _setupStepper.ActiveStep.SetHasErrorAsync(true, true);
         StateHasChanged();
     }
