@@ -66,16 +66,27 @@
   margin: auto;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   overflow: auto;
-  background: linear-gradient(315deg, rgb(24, 19, 89) 2%, rgb(1, 55, 125) 25%, rgb(50, 150, 200) 45%, rgb(164, 236, 248) 70%, rgb(66, 111, 160) 98%);
-  animation: gradient 150s ease infinite;
-  background-size: 400% 400%;
-  background-attachment: fixed;
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   z-index: -1;
+}
+.ui-wavebackground-container.ui-bg-01 {
+  background: linear-gradient(315deg, rgb(24, 19, 89) 2%, rgb(1, 55, 125) 25%, rgb(50, 150, 200) 45%, rgb(164, 236, 248) 70%, rgb(66, 111, 160) 98%);
+  animation: gradient 150s ease infinite;
+  background-size: 400% 400%;
+  background-attachment: fixed;
+}
+.ui-wavebackground-container.ui-bg-02 {
+  background: url("/img/bg/ws25.jpg") no-repeat center center fixed;
+}
+.ui-wavebackground-container.ui-bg-03 {
+  background: url("/img/bg/wp12118355.webp") no-repeat center center fixed;
+}
+.ui-wavebackground-container.ui-bg-04 {
+  background: url("/img/bg/wp12118355-light.webp") no-repeat center center fixed;
 }
 .ui-wavebackground-container .wave {
   background: rgba(255, 255, 255, 0.25);

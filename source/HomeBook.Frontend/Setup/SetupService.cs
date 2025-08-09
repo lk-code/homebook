@@ -16,7 +16,6 @@ public class SetupService : ISetupService
         List<ISetupStep> setupSteps = [];
 
         setupSteps.Add(new BackendConnectionSetupStep());
-        setupSteps.Add(new AdminUserSetupStep());
 
         bool hasDatabaseConnectionString = false;
         if (hasDatabaseConnectionString)
@@ -28,6 +27,8 @@ public class SetupService : ISetupService
             setupSteps.Add(new DatabaseFormSetupStep());
         }
 
+        setupSteps.Add(new DatabaseMigrationSetupStep());
+        setupSteps.Add(new AdminUserSetupStep());
         setupSteps.Add(new ConfigurationSetupStep());
 
         _setupSteps = setupSteps;

@@ -33,6 +33,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HomeBook.Backend.Abstractions\HomeBook.Backend.Abstractions.csproj" />
+    <ProjectReference Include="..\HomeBook.Data.PostgreSQL\HomeBook.Data.PostgreSQL.csproj" />
   </ItemGroup>
 
 </Project>
