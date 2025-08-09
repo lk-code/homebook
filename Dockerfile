@@ -36,6 +36,14 @@ RUN rm -rf /usr/share/nginx/html/*
 RUN rm /etc/nginx/sites-enabled/default
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Make nginx non-root friendly: ensure writable dirs, disable 'user' directive, move pid and temp paths
+RUN mkdir -p /var/cache/nginx /var/lib/nginx /var/log/nginx /var/run /usr/share/nginx/html \
+    && chown -R $APP_UID:$APP_GID /var/cache/nginx /var/lib/nginx /var/log/nginx /var/run /usr/share/nginx/html \
+    && sed -ri 's|^\s*user\s+.+;|# user disabled (running as non-root);|g' /etc/nginx/nginx.conf \
+    && sed -ri 's|^\s*pid\s+.+;|pid /tmp/nginx.pid;|g' /etc/nginx/nginx.conf || true \
+    && printf "client_body_temp_path /tmp/client_temp;\nproxy_temp_path /tmp/proxy_temp;\nfastcgi_temp_path /tmp/fastcgi_temp;\nuwsgi_temp_path /tmp/uwsgi_temp;\nscgi_temp_path /tmp/scgi_temp;\n" > /etc/nginx/conf.d/zz-temp-paths.conf \
+    && sed -ri 's|listen\s+80;|listen 8080;|g' /etc/nginx/conf.d/default.conf || true
+
 COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 
 COPY --from=build /backend_dist /app
