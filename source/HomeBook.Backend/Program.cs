@@ -1,14 +1,19 @@
 using HomeBook.Backend.Endpoints;
+using HomeBook.Backend.Extensions;
 using Scalar.AspNetCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
+// Serilog einrichten
+builder.Host.UseSerilog((ctx, services, cfg) =>
+    cfg.ReadFrom.Configuration(ctx.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext());
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddBackendServices(builder.Configuration);
 
 if (builder.Environment.IsDevelopment())
 {
@@ -25,7 +30,8 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseSerilogRequestLogging();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseCors();
@@ -37,6 +43,7 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 app.MapFallbackToFile("index.html"); // <- important for Blazor Routing
 
-app.MapVersionEndpoints();
+app.MapVersionEndpoints()
+    .MapSetupEndpoints();
 
 app.Run();
