@@ -1,9 +1,11 @@
+using HomeBook.Client;
+using HomeBook.Client.Models;
 using HomeBook.Frontend.Abstractions.Contracts;
 using HomeBook.Frontend.Setup.SetupSteps;
 
 namespace HomeBook.Frontend.Setup;
 
-public class SetupService : ISetupService
+public class SetupService(BackendClient backendClient) : ISetupService
 {
     private int SERVICE_ID = new Random().Next(1000, 9999);
     private bool _isDone = false;
@@ -17,22 +19,50 @@ public class SetupService : ISetupService
         List<ISetupStep> setupSteps = [];
 
         setupSteps.Add(new BackendConnectionSetupStep());
-
-        bool hasDatabaseConnectionString = false;
-        if (hasDatabaseConnectionString)
-        {
-            setupSteps.Add(new DatabaseConnectionSetupStep());
-        }
-        else
-        {
-            setupSteps.Add(new DatabaseFormSetupStep());
-        }
-
+        await CheckDatabaseAndAddStep(setupSteps, cancellationToken);
         setupSteps.Add(new DatabaseMigrationSetupStep());
         setupSteps.Add(new AdminUserSetupStep());
         setupSteps.Add(new ConfigurationSetupStep());
 
         _setupSteps = setupSteps;
+    }
+
+    private async Task CheckDatabaseAndAddStep(List<ISetupStep> setupSteps, CancellationToken cancellationToken)
+    {
+        try
+        {
+            GetDatabaseCheckResponse? databaseCheckResponse = await backendClient.Setup.Check.Database.GetAsync(x =>
+            {
+            }, cancellationToken);
+
+            if (databaseCheckResponse is not null)
+            {
+                // database configuration is set in environment variables
+                // => load into form and check connection
+                setupSteps.Add(new DatabaseConnectionSetupStep());
+
+                // Store parameters separately
+                var parameters = new Dictionary<string, object>
+                {
+                    ["DatabaseName"] = databaseCheckResponse.DatabaseName ?? string.Empty,
+                    ["DatabaseUserName"] = databaseCheckResponse.Username ?? string.Empty,
+                    ["DatabaseUserPassword"] = databaseCheckResponse.Password ?? string.Empty
+                };
+
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            // no config found or error while checking
+            // => do nothing and add form step after try catch
+        }
+
+        // no database configuration found in environment variables
+        //   OR
+        // error while checking database configuration
+        // => show form to enter database configuration
+        setupSteps.Add(new DatabaseFormSetupStep());
     }
 
     public async Task TriggerOnMudStepInitialized(CancellationToken cancellationToken = default)
