@@ -5,8 +5,6 @@ namespace HomeBook.Frontend.Setup.SetupSteps;
 
 public partial class DatabaseConnectionSetupStep : ComponentBase, ISetupStep
 {
-    private int SERVICE_ID = new Random().Next(1000, 9999);
-
     public string Key { get; } = nameof(DatabaseConnectionSetupStep);
     public bool HasError { get; set; }
     public bool IsSuccessful { get; set; }
@@ -14,15 +12,20 @@ public partial class DatabaseConnectionSetupStep : ComponentBase, ISetupStep
 
     public Task<bool> IsStepDoneAsync(CancellationToken cancellationToken) => throw new NotImplementedException();
 
-    [Parameter]
-    public string DatabaseName { get; set; } = string.Empty;
-    [Parameter]
-    public string DatabaseUserName { get; set; } = string.Empty;
-    [Parameter]
-    public string DatabaseUserPassword { get; set; } = string.Empty;
+    private string DatabaseName { get; set; } = string.Empty;
+    private string DatabaseUserName { get; set; } = string.Empty;
+    private string DatabaseUserPassword { get; set; } = string.Empty;
 
-    protected override async Task OnParametersSetAsync()
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+            return;
+
+        DatabaseName = SetupService.GetStoredConfigValue<string>("DatabaseName");
+        DatabaseUserName = SetupService.GetStoredConfigValue<string>("DatabaseUserName");
+        DatabaseUserPassword = SetupService.GetStoredConfigValue<string>("DatabaseUserPassword");
         await InvokeAsync(StateHasChanged);
     }
 }

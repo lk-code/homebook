@@ -40,4 +40,13 @@ public interface ISetupService
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task SetStepStatusAsync(bool success, bool hasError, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// returns a stored configuration value by key.
+    /// If the value is not found, it will return the default value of the type.
+    /// </summary>
+    /// <param name="key"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    T GetStoredConfigValue<T>(string key);
 }

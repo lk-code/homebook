@@ -115,7 +115,10 @@ public partial class UISetupStepper : ComponentBase, IAsyncDisposable
 
     private async Task LoadStepStatusAsync(CancellationToken cancellationToken)
     {
-        ISetupStep activeStatus = await SetupService.GetActiveSetupStepAsync(cancellationToken);
+        ISetupStep? activeStatus = await SetupService.GetActiveSetupStepAsync(cancellationToken);
+        if (activeStatus is null)
+            return;
+
         SetupStepViewModel? stepVM = _setupSteps.FirstOrDefault(x => x.SetupStep.Key == activeStatus.Key);
         await SetActiveStepAsync(stepVM, cancellationToken);
 

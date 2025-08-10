@@ -7,12 +7,23 @@ namespace HomeBook.Frontend.Setup;
 
 public class SetupService(BackendClient backendClient) : ISetupService
 {
-    private int SERVICE_ID = new Random().Next(1000, 9999);
     private bool _isDone = false;
     private List<ISetupStep> _setupSteps = [];
     public Func<ISetupStep, Task>? OnStepSuccessful { get; set; }
     public Func<ISetupStep, bool, Task>? OnStepFailed { get; set; }
     public Func<Task>? OnSetupStepsInitialized { get; set; }
+    private Dictionary<string, object?> _storedConfigValues = new();
+
+    public T GetStoredConfigValue<T>(string key)
+    {
+        if (_storedConfigValues.TryGetValue(key, out var value)
+            && value is T typedValue)
+        {
+            return typedValue;
+        }
+
+        throw new KeyNotFoundException($"No stored config value found for key: {key}");
+    }
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
@@ -42,12 +53,9 @@ public class SetupService(BackendClient backendClient) : ISetupService
                 setupSteps.Add(new DatabaseConnectionSetupStep());
 
                 // Store parameters separately
-                var parameters = new Dictionary<string, object>
-                {
-                    ["DatabaseName"] = databaseCheckResponse.DatabaseName ?? string.Empty,
-                    ["DatabaseUserName"] = databaseCheckResponse.Username ?? string.Empty,
-                    ["DatabaseUserPassword"] = databaseCheckResponse.Password ?? string.Empty
-                };
+                _storedConfigValues["DatabaseName"] = databaseCheckResponse.DatabaseName;
+                _storedConfigValues["DatabaseUserName"] = databaseCheckResponse.Username;
+                _storedConfigValues["DatabaseUserPassword"] = databaseCheckResponse.Password;
 
                 return;
             }
