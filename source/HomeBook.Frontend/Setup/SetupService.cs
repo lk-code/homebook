@@ -5,6 +5,7 @@ namespace HomeBook.Frontend.Setup;
 
 public class SetupService : ISetupService
 {
+    private int SERVICE_ID = new Random().Next(1000, 9999);
     private bool _isDone = false;
     private List<ISetupStep> _setupSteps = [];
     public Func<ISetupStep, Task>? OnStepSuccessful { get; set; }

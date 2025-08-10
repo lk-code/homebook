@@ -11,8 +11,4 @@ public partial class DatabaseFormSetupStep : ComponentBase, ISetupStep
     public Task HandleStepAsync() => throw new NotImplementedException();
 
     public Task<bool> IsStepDoneAsync(CancellationToken cancellationToken) => throw new NotImplementedException();
-    public void Initialize(ISetupService setupService)
-    {
-
-    }
 }

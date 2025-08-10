@@ -32,14 +32,20 @@
     [Inject]
     private ISetupService SetupService { get; set; }
 
+    private bool _setupServiceInitialized = false;
     private bool _isRedirecting;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
 
-        // initialize the setup service
-        await SetupService.InitializeAsync();
+        // initialize the setup service in background
+        _ = Task.Run(async () =>
+        {
+            await SetupService.InitializeAsync();
+            _setupServiceInitialized = true;
+            StateHasChanged();
+        });
     }
 
     private async Task HandleNavigationAsync(NavigationContext context)
@@ -48,6 +54,12 @@
         {
             _isRedirecting = false;
             return;
+        }
+
+        // wait until SetupService is initialized
+        while (!_setupServiceInitialized)
+        {
+            await Task.Delay(50);
         }
 
         bool isSetupDone = await SetupService.IsSetupDoneAsync();
@@ -64,5 +76,4 @@
             NavigationManager.NavigateTo("/setup");
         }
     }
-
 }

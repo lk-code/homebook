@@ -50,7 +50,7 @@ public static class ServiceCollectionExtensions
             });
         });
 
-        services.AddScoped<BackendClient>(sp =>
+        services.AddSingleton<BackendClient>(sp =>
         {
             IRequestAdapter adapter = sp.GetRequiredService<IRequestAdapter>();
             return new BackendClient(adapter);
