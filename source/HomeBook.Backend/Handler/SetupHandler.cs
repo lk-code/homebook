@@ -41,7 +41,7 @@ public static class SetupHandler
             GetDatabaseCheckResponse response = new("homebook-db", "dbadmin", "a-sample-password");
 
             bool databaseConfigurationFound = true;
-            if (!databaseConfigurationFound)
+            if (databaseConfigurationFound)
                 return TypedResults.Ok(response);
             else
                 return TypedResults.NotFound();

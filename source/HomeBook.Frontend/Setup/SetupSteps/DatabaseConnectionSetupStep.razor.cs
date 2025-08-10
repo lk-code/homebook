@@ -11,8 +11,21 @@ public partial class DatabaseConnectionSetupStep : ComponentBase, ISetupStep
     public Task HandleStepAsync() => throw new NotImplementedException();
 
     public Task<bool> IsStepDoneAsync(CancellationToken cancellationToken) => throw new NotImplementedException();
-    public void Initialize(ISetupService setupService)
-    {
 
+    private string DatabaseName { get; set; } = string.Empty;
+    private string DatabaseUserName { get; set; } = string.Empty;
+    private string DatabaseUserPassword { get; set; } = string.Empty;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+
+        if (!firstRender)
+            return;
+
+        DatabaseName = SetupService.GetStoredConfigValue<string>("DatabaseName");
+        DatabaseUserName = SetupService.GetStoredConfigValue<string>("DatabaseUserName");
+        DatabaseUserPassword = SetupService.GetStoredConfigValue<string>("DatabaseUserPassword");
+        await InvokeAsync(StateHasChanged);
     }
 }

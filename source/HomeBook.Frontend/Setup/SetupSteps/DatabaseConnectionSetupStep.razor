@@ -1,5 +1,11 @@
+@using HomeBook.Frontend.Abstractions.Contracts
+
+@inject ISetupService SetupService
+
 <h3>DatabaseConnectionSetupStep</h3>
 
-@code {
-    
-}
+<ul>
+    <li>DatabaseName: @DatabaseName</li>
+    <li>DatabaseUserName: @DatabaseUserName</li>
+    <li>DatabaseUserPassword: @DatabaseUserPassword</li>
+</ul>

@@ -1,37 +1,76 @@
+using HomeBook.Client;
+using HomeBook.Client.Models;
 using HomeBook.Frontend.Abstractions.Contracts;
 using HomeBook.Frontend.Setup.SetupSteps;
 
 namespace HomeBook.Frontend.Setup;
 
-public class SetupService : ISetupService
+public class SetupService(BackendClient backendClient) : ISetupService
 {
     private bool _isDone = false;
     private List<ISetupStep> _setupSteps = [];
     public Func<ISetupStep, Task>? OnStepSuccessful { get; set; }
     public Func<ISetupStep, bool, Task>? OnStepFailed { get; set; }
     public Func<Task>? OnSetupStepsInitialized { get; set; }
+    private Dictionary<string, object?> _storedConfigValues = new();
+
+    public T GetStoredConfigValue<T>(string key)
+    {
+        if (_storedConfigValues.TryGetValue(key, out var value)
+            && value is T typedValue)
+        {
+            return typedValue;
+        }
+
+        throw new KeyNotFoundException($"No stored config value found for key: {key}");
+    }
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
         List<ISetupStep> setupSteps = [];
 
         setupSteps.Add(new BackendConnectionSetupStep());
-
-        bool hasDatabaseConnectionString = false;
-        if (hasDatabaseConnectionString)
-        {
-            setupSteps.Add(new DatabaseConnectionSetupStep());
-        }
-        else
-        {
-            setupSteps.Add(new DatabaseFormSetupStep());
-        }
-
+        await CheckDatabaseAndAddStep(setupSteps, cancellationToken);
         setupSteps.Add(new DatabaseMigrationSetupStep());
         setupSteps.Add(new AdminUserSetupStep());
         setupSteps.Add(new ConfigurationSetupStep());
 
         _setupSteps = setupSteps;
+    }
+
+    private async Task CheckDatabaseAndAddStep(List<ISetupStep> setupSteps, CancellationToken cancellationToken)
+    {
+        try
+        {
+            GetDatabaseCheckResponse? databaseCheckResponse = await backendClient.Setup.Check.Database.GetAsync(x =>
+            {
+            }, cancellationToken);
+
+            if (databaseCheckResponse is not null)
+            {
+                // database configuration is set in environment variables
+                // => load into form and check connection
+                setupSteps.Add(new DatabaseConnectionSetupStep());
+
+                // Store parameters separately
+                _storedConfigValues["DatabaseName"] = databaseCheckResponse.DatabaseName;
+                _storedConfigValues["DatabaseUserName"] = databaseCheckResponse.Username;
+                _storedConfigValues["DatabaseUserPassword"] = databaseCheckResponse.Password;
+
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            // no config found or error while checking
+            // => do nothing and add form step after try catch
+        }
+
+        // no database configuration found in environment variables
+        //   OR
+        // error while checking database configuration
+        // => show form to enter database configuration
+        setupSteps.Add(new DatabaseFormSetupStep());
     }
 
     public async Task TriggerOnMudStepInitialized(CancellationToken cancellationToken = default)
