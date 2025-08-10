@@ -62,9 +62,8 @@ jobs:
 
       - name: Install SonarQube Cloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
         run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
+          mkdir -p ./.sonar/scanner
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
       - name: Install Kiota CLI
