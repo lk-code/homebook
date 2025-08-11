@@ -1,4 +1,5 @@
 using HomeBook.Backend.Abstractions;
+using Homebook.Backend.Core.Setup.Provider;
 using HomeBook.Backend.Services;
 
 namespace HomeBook.Backend.Extensions;
@@ -16,7 +17,7 @@ public static class ServiceCollectionExtensions
 #endif
 
         // Register other services as needed
-        // services.AddSingleton<IOtherService, OtherServiceImplementation>();
+        // services.AddSingleton<IOtherService, OtherServiceImplementation>();// Program.cs
 
         return services;
     }

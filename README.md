@@ -75,3 +75,17 @@ open your domain and you should see the HomeBook Setup.
 2. **Admin User** - create the first admin user with a username, password, and email address.
 3. **Database Setup** - configure the database connection and check the connection.
 4. **Configuration** - configure the application settings, such as the homebook instance name and language.
+
+## Environment Variables
+
+if all environment variables are set, correctly, the setup will be running automatically.
+
+| Variable                 | Description                                  |
+|--------------------------|----------------------------------------------|
+| `DATABASE_HOST`          | the database host (e.g., `my-db.server.com`) |
+| `DATABASE_PORT`          | the database port (e.g., `5432`)             |
+| `DATABASE_NAME`          | the database name (e.g., `homebook`)         |
+| `DATABASE_USER`          | the database user (e.g., `db_user`)          |
+| `DATABASE_PASSWORD`      | the database password (e.g., `db_password`)  |
+| `HOMEBOOK_USER_NAME`     | the admin username (e.g., `admin`)           |
+| `HOMEBOOK_USER_PASSWORD` | the admin password (e.g., `password`)        |
