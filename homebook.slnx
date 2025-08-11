@@ -26,8 +26,6 @@
   <Folder Name="/Solution/workflows/">
     <File Path=".github\workflows\build.yml" />
     <File Path=".github\workflows\pull-request.yml" />
-    <File Path=".github\workflows\deploy-dockerhub.yml" />
-    <File Path=".github\workflows\deploy-nuget-client.yml" />
   </Folder>
   <Folder Name="/Tests/">
     <Project Path="source\HomeBook.UnitTests\HomeBook.UnitTests.csproj" Type="Classic C#" />
