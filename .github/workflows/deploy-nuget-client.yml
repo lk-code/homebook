@@ -1,0 +1,83 @@
+name: Deploy NuGet Client
+
+on:
+  #  push:
+  #    branches:
+  #      - deploy
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  DOCKER_IMAGE: "docker.io/lkcode/homebook"
+  DOCKER_PLATFORMS: "linux/amd64,linux/arm64"
+  VERSION: "1.0.${{ github.run_number }}"
+  DOTNET_VERSION: "9.0.x"
+  FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
+  BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
+  OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
+  CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
+  CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
+  CLIENT_NAMESPACE: "HomeBook.Client"
+  CLIENT_CLASS: "BackendClient"
+
+jobs:
+
+  client-deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - post-build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: deploy
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore
+
+      - name: Build Solution
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Install Kiota CLI
+        run: |
+          dotnet tool install --global Microsoft.OpenApi.Kiota
+
+      - name: Generate Client
+        run: |
+          kiota generate \
+            --language csharp \
+            --class-name ${{ env.CLIENT_CLASS }} \
+            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+            --openapi ${{ env.OPENAPI_FILE }} \
+            --output ${{ env.CLIENT_OUTPUT_DIR }} \
+
+      - name: Build Client
+        run: |
+          dotnet build ${{ env.CLIENT_CSPROJ }} --configuration Release --no-restore -p:PackageVersion=${{ env.VERSION }}
+
+      - name: Upload NuGet Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: ${{ env.VERSION }}
+          path: "**/*.${{ env.VERSION }}.nupkg"
+
+      - name: Upload Client Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: client-output
+          path: ${{ env.CLIENT_OUTPUT_DIR }}
+
+      - name: Publish
+        run: |
+          dotnet nuget push "**/*.${{ env.VERSION }}.nupkg" --no-symbols --skip-duplicate --api-key ${{ secrets.NUGET_API_KEY }} --source "nuget.org"

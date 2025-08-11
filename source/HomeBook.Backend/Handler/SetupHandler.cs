@@ -1,4 +1,5 @@
 using HomeBook.Backend.Abstractions;
+using HomeBook.Backend.Abstractions.Setup;
 using HomeBook.Backend.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -7,8 +8,7 @@ namespace HomeBook.Backend.Handler;
 
 public static class SetupHandler
 {
-    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability(
-        [FromServices] IFileService fileService,
+    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability([FromServices] IFileService fileService,
         CancellationToken cancellationToken)
     {
         try
@@ -32,13 +32,23 @@ public static class SetupHandler
         }
     }
 
-    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck(
-        [FromServices] IFileService fileService,
+    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck([FromServices] IFileService fileService,
+        [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
         CancellationToken cancellationToken)
     {
         try
         {
-            GetDatabaseCheckResponse response = new("homebook-db", "dbadmin", "a-sample-password");
+            string? databaseHost = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_HOST);
+            string? databasePort = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_PORT);
+            string? databaseName = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_NAME);
+            string? databaseUserName = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_USER);
+            string? databaseUserPassword = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_PASSWORD);
+
+            GetDatabaseCheckResponse response = new(databaseHost,
+                databasePort,
+                databaseName,
+                databaseUserName,
+                databaseUserPassword);
 
             bool databaseConfigurationFound = true;
             if (databaseConfigurationFound)

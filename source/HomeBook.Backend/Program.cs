@@ -1,9 +1,16 @@
+using Homebook.Backend.Core.Setup.Extensions;
 using HomeBook.Backend.Endpoints;
 using HomeBook.Backend.Extensions;
 using Scalar.AspNetCore;
 using Serilog;
 
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.Sources.Clear();
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables(prefix: "HB_");
 
 // Serilog einrichten
 builder.Host.UseSerilog((ctx, services, cfg) =>
@@ -13,7 +20,8 @@ builder.Host.UseSerilog((ctx, services, cfg) =>
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddBackendServices(builder.Configuration);
+builder.Services.AddBackendServices(builder.Configuration)
+    .AddBackendCoreSetup(builder.Configuration);
 
 if (builder.Environment.IsDevelopment())
 {
