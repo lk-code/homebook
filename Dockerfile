@@ -1,4 +1,4 @@
-﻿# This Dockerfile is used for a combined multi-arch build of Blazor WASM and REST API
+# This Dockerfile is used for a combined multi-arch build of Blazor WASM and REST API
 # Recommended to use Docker Buildx for multi-architecture builds
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
@@ -28,9 +28,13 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --gid $APP_GID appgroup \
-    && adduser --uid $APP_UID --gid $APP_GID --disabled-password --gecos "" appuser \
-    && mkdir -p /var/log/homebook \
+    && adduser --uid $APP_UID --gid $APP_GID --disabled-password --gecos "" appuser
+
+RUN mkdir -p /var/log/homebook \
     && chown -R appuser:appgroup /var/log/homebook
+
+RUN mkdir -p /var/lib/homebook \
+    && chown -R appuser:appgroup /var/lib/homebook
 
 RUN rm -rf /usr/share/nginx/html/*
 RUN rm /etc/nginx/sites-enabled/default
@@ -51,10 +55,10 @@ WORKDIR /app
 
 RUN chown -R appuser:appgroup /app
 
-ARG FRONTEND_APPSETTINGS_FILE
+ARG FRONTEND_APPSETTINGS_FILE="./source/HomeBook.Frontend/wwwroot/appsettings.json"
 COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/wwwroot/appsettings.json
 
-ARG BACKEND_APPSETTINGS_FILE
+ARG BACKEND_APPSETTINGS_FILE="./source/HomeBook.Backend/appsettings.json"
 COPY $BACKEND_APPSETTINGS_FILE /app/appsettings.json
 
 USER appuser

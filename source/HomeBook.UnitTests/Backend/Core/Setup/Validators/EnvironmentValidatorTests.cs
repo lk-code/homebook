@@ -25,7 +25,9 @@ public class EnvironmentValidatorTests
             DatabasePort: "5432",
             DatabaseName: "homebook",
             DatabaseUserName: "admin",
-            DatabaseUserPassword: "SecurePassword123"
+            DatabaseUserPassword: "SecurePassword123",
+            HomebookUserName: "homebook_admin",
+            HomebookUserPassword: "AdminPassword456"
         );
 
         // Act
@@ -45,7 +47,9 @@ public class EnvironmentValidatorTests
             DatabasePort: "3306",
             DatabaseName: "my_database",
             DatabaseUserName: "db_user",
-            DatabaseUserPassword: "MyPassword456"
+            DatabaseUserPassword: "MyPassword456",
+            HomebookUserName: "homebook_admin",
+            HomebookUserPassword: "AdminPassword456"
         );
 
         // Act
@@ -65,7 +69,9 @@ public class EnvironmentValidatorTests
             DatabasePort: "1521",
             DatabaseName: "production-db",
             DatabaseUserName: "prod.user",
-            DatabaseUserPassword: "ComplexPass789"
+            DatabaseUserPassword: "ComplexPass789",
+            HomebookUserName: "homebook_admin",
+            HomebookUserPassword: "AdminPassword456"
         );
 
         // Act
@@ -85,7 +91,9 @@ public class EnvironmentValidatorTests
             DatabasePort: null,
             DatabaseName: "testdb",
             DatabaseUserName: null,
-            DatabaseUserPassword: "ValidPassword123"
+            DatabaseUserPassword: "ValidPassword123",
+            HomebookUserName: "homebook_admin",
+            HomebookUserPassword: "AdminPassword456"
         );
 
         // Act
@@ -105,7 +113,9 @@ public class EnvironmentValidatorTests
             DatabasePort: null,
             DatabaseName: null,
             DatabaseUserName: null,
-            DatabaseUserPassword: null
+            DatabaseUserPassword: null,
+            HomebookUserName: null,
+            HomebookUserPassword: null
         );
 
         // Act
@@ -125,7 +135,9 @@ public class EnvironmentValidatorTests
             DatabasePort: "",
             DatabaseName: "",
             DatabaseUserName: "",
-            DatabaseUserPassword: ""
+            DatabaseUserPassword: "",
+            HomebookUserName: "",
+            HomebookUserPassword: ""
         );
 
         // Act
@@ -140,37 +152,43 @@ public class EnvironmentValidatorTests
 
     #region DatabaseHost Tests
 
-    [TestCase("01.1.1.1")]            // Invalid IPv4 (leading zeros) but valid hostname
-    [TestCase("192.168.1.1.1")]       // Invalid IPv4 (5 parts) but valid hostname
-    [TestCase("300.400.500.600")]     // Invalid IPv4 (all > 255) but valid hostname
-    [TestCase("0.0.0.0")]             // Invalid IPv4 (0 not allowed) but valid hostname
-    [TestCase("256.1.1.1")]           // Invalid IPv4 (256 > 255) but valid hostname
-    [TestCase("1.256.1.1")]           // Invalid IPv4 (256 > 255) but valid hostname
-    [TestCase("1.1.256.1")]           // Invalid IPv4 (256 > 255) but valid hostname
-    [TestCase("1.1.1.256")]           // Invalid IPv4 (256 > 255) but valid hostname
-    [TestCase("127.0.0.1")]           // Valid IPv4
-    [TestCase("192.168.1.100")]       // Valid IPv4
-    [TestCase("10.0.0.1")]            // Valid IPv4
-    [TestCase("255.255.255.255")]     // Valid IPv4
-    [TestCase("1.1.1.1")]             // Valid IPv4
-    [TestCase("::1")]                 // Valid IPv6
-    [TestCase("::")]                  // Valid IPv6
-    [TestCase("2001:db8::1")]         // Valid IPv6
-    [TestCase("localhost")]           // Valid hostname
-    [TestCase("database")]            // Valid hostname
-    [TestCase("db.example.com")]      // Valid hostname
-    [TestCase("my-server.local")]     // Valid hostname
-    [TestCase("test123.domain.org")]  // Valid hostname
-    [TestCase("192")]                 // Valid hostname (only numbers)
-    [TestCase("123.456")]             // Valid hostname (only numbers with dot)
-    [TestCase("192.168.1")]           // Valid hostname (3 parts, not IPv4)
-    [TestCase("1.1.1.256")]           // Valid hostname (invalid as IPv4, but valid hostname)
-    [TestCase("256.300.400.500")]     // Valid hostname (invalid as IPv4, but valid hostname)
-    [TestCase("server-01")]           // Valid hostname with hyphen
+    [TestCase("01.1.1.1")] // Invalid IPv4 (leading zeros) but valid hostname
+    [TestCase("192.168.1.1.1")] // Invalid IPv4 (5 parts) but valid hostname
+    [TestCase("300.400.500.600")] // Invalid IPv4 (all > 255) but valid hostname
+    [TestCase("0.0.0.0")] // Invalid IPv4 (0 not allowed) but valid hostname
+    [TestCase("256.1.1.1")] // Invalid IPv4 (256 > 255) but valid hostname
+    [TestCase("1.256.1.1")] // Invalid IPv4 (256 > 255) but valid hostname
+    [TestCase("1.1.256.1")] // Invalid IPv4 (256 > 255) but valid hostname
+    [TestCase("1.1.1.256")] // Invalid IPv4 (256 > 255) but valid hostname
+    [TestCase("127.0.0.1")] // Valid IPv4
+    [TestCase("192.168.1.100")] // Valid IPv4
+    [TestCase("10.0.0.1")] // Valid IPv4
+    [TestCase("255.255.255.255")] // Valid IPv4
+    [TestCase("1.1.1.1")] // Valid IPv4
+    [TestCase("::1")] // Valid IPv6
+    [TestCase("::")] // Valid IPv6
+    [TestCase("2001:db8::1")] // Valid IPv6
+    [TestCase("localhost")] // Valid hostname
+    [TestCase("database")] // Valid hostname
+    [TestCase("db.example.com")] // Valid hostname
+    [TestCase("my-server.local")] // Valid hostname
+    [TestCase("test123.domain.org")] // Valid hostname
+    [TestCase("192")] // Valid hostname (only numbers)
+    [TestCase("123.456")] // Valid hostname (only numbers with dot)
+    [TestCase("192.168.1")] // Valid hostname (3 parts, not IPv4)
+    [TestCase("1.1.1.256")] // Valid hostname (invalid as IPv4, but valid hostname)
+    [TestCase("256.300.400.500")] // Valid hostname (invalid as IPv4, but valid hostname)
+    [TestCase("server-01")] // Valid hostname with hyphen
     public void Validate_ValidHosts_ShouldPass(string host)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(host, null, null, null, null);
+        var config = new EnvironmentConfiguration(host,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -180,20 +198,26 @@ public class EnvironmentValidatorTests
         result.Errors.Where(e => e.PropertyName == nameof(EnvironmentConfiguration.DatabaseHost)).ShouldBeEmpty();
     }
 
-    [TestCase("192.168.1.")]          // Invalid IPv4 (trailing dot) and invalid hostname
-    [TestCase(".192.168.1.1")]        // Invalid IPv4 (leading dot) and invalid hostname
-    [TestCase("invalid..hostname")]   // Invalid hostname (double dot)
-    [TestCase("-invalid")]            // Invalid hostname (starts with hyphen)
-    [TestCase("invalid-")]            // Invalid hostname (ends with hyphen)
-    [TestCase("inv@lid")]             // Invalid hostname (invalid character)
-    [TestCase("host with spaces")]    // Invalid hostname (spaces)
+    [TestCase("192.168.1.")] // Invalid IPv4 (trailing dot) and invalid hostname
+    [TestCase(".192.168.1.1")] // Invalid IPv4 (leading dot) and invalid hostname
+    [TestCase("invalid..hostname")] // Invalid hostname (double dot)
+    [TestCase("-invalid")] // Invalid hostname (starts with hyphen)
+    [TestCase("invalid-")] // Invalid hostname (ends with hyphen)
+    [TestCase("inv@lid")] // Invalid hostname (invalid character)
+    [TestCase("host with spaces")] // Invalid hostname (spaces)
     [TestCase("host;with;semicolons")] // Invalid hostname (semicolons)
-    [TestCase("host<script>")]        // Invalid hostname (special characters)
-    [TestCase("")]                    // Empty string should be valid due to .When condition
+    [TestCase("host<script>")] // Invalid hostname (special characters)
+    [TestCase("")] // Empty string should be valid due to .When condition
     public void Validate_InvalidHosts_ShouldFail(string host)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(host, null, null, null, null);
+        var config = new EnvironmentConfiguration(host,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -224,7 +248,13 @@ public class EnvironmentValidatorTests
     public void Validate_ValidPorts_ShouldPass(string port)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, port, null, null, null);
+        var config = new EnvironmentConfiguration(null,
+            port,
+            null,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -244,7 +274,13 @@ public class EnvironmentValidatorTests
     public void Validate_InvalidPorts_ShouldFail(string port)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, port, null, null, null);
+        var config = new EnvironmentConfiguration(null,
+            port,
+            null,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -269,7 +305,13 @@ public class EnvironmentValidatorTests
     public void Validate_ValidDatabaseNames_ShouldPass(string dbName)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, dbName, null, null);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            dbName,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -290,7 +332,13 @@ public class EnvironmentValidatorTests
     public void Validate_InvalidDatabaseNames_ShouldFail(string dbName)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, dbName, null, null);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            dbName,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -307,7 +355,13 @@ public class EnvironmentValidatorTests
     {
         // Arrange
         var longName = new string('a', 64);
-        var config = new EnvironmentConfiguration(null, null, longName, null, null);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            longName,
+            null,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -333,7 +387,13 @@ public class EnvironmentValidatorTests
     public void Validate_ValidUsernames_ShouldPass(string username)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, null, username, null);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            username,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -356,8 +416,13 @@ public class EnvironmentValidatorTests
     public void Validate_InvalidUsernames_ShouldFail(string username)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, null, username, null);
-
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            username,
+            null,
+            null,
+            null);
         // Act
         var result = _validator.Validate(config);
 
@@ -373,7 +438,13 @@ public class EnvironmentValidatorTests
     {
         // Arrange
         var longUsername = new string('a', 64);
-        var config = new EnvironmentConfiguration(null, null, null, longUsername, null);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            longUsername,
+            null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -398,7 +469,13 @@ public class EnvironmentValidatorTests
     public void Validate_ValidPasswords_ShouldPass(string password)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, null, null, password);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            null,
+            password,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -426,7 +503,13 @@ public class EnvironmentValidatorTests
     public void Validate_PasswordsWithDangerousCharacters_ShouldFail(string password)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, null, null, password);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            null,
+            password,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -443,7 +526,13 @@ public class EnvironmentValidatorTests
     public void Validate_PasswordTooShort_ShouldFail(string password)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, null, null, password);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            null,
+            password,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -460,7 +549,13 @@ public class EnvironmentValidatorTests
     {
         // Empty passwords are allowed due to .When condition
         // Arrange
-        var config = new EnvironmentConfiguration(null, null, null, null, "");
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            null,
+            "",
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -475,7 +570,13 @@ public class EnvironmentValidatorTests
     {
         // Arrange
         var passwordWithControlChar = "password\x00test";
-        var config = new EnvironmentConfiguration(null, null, null, null, passwordWithControlChar);
+        var config = new EnvironmentConfiguration(null,
+            null,
+            null,
+            null,
+            passwordWithControlChar,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -497,7 +598,9 @@ public class EnvironmentValidatorTests
     public void Validate_ComplexInjectionAttempts_ShouldFailOnAllFields(string host, string port, string dbName, string username, string password)
     {
         // Arrange
-        var config = new EnvironmentConfiguration(host, port, dbName, username, password);
+        var config = new EnvironmentConfiguration(host, port, dbName, username, password,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -516,7 +619,10 @@ public class EnvironmentValidatorTests
     {
         // This specific case was failing because the hostname regex was too permissive
         // Arrange
-        var config = new EnvironmentConfiguration("evil.com'; DROP DATABASE homebook; --", "3306", null, null, null);
+        var config = new EnvironmentConfiguration("evil.com'; DROP DATABASE homebook; --",
+            "3306", null, null, null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -536,7 +642,10 @@ public class EnvironmentValidatorTests
     public void Validate_IPv6LocalhostAddresses_ShouldPass()
     {
         // Arrange
-        var config = new EnvironmentConfiguration("::1", null, null, null, null);
+        var config = new EnvironmentConfiguration("::1", null, null,
+            null, null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -550,7 +659,10 @@ public class EnvironmentValidatorTests
     public void Validate_IPv6AllZeros_ShouldPass()
     {
         // Arrange
-        var config = new EnvironmentConfiguration("::", null, null, null, null);
+        var config = new EnvironmentConfiguration("::", null, null,
+            null, null,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -566,7 +678,10 @@ public class EnvironmentValidatorTests
         // Arrange
         var maxDbName = new string('a', 63);
         var maxUsername = new string('u', 63);
-        var config = new EnvironmentConfiguration("localhost", "5432", maxDbName, maxUsername, "ValidPassword123");
+        var config = new EnvironmentConfiguration("localhost", "5432", maxDbName,
+            maxUsername, "ValidPassword123",
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);
@@ -581,7 +696,10 @@ public class EnvironmentValidatorTests
     {
         // Arrange
         var password = "P@ssw0rd!#%*+=?^_~()-[]{}";
-        var config = new EnvironmentConfiguration(null, null, null, null, password);
+        var config = new EnvironmentConfiguration(null, null, null,
+            null, password,
+            null,
+            null);
 
         // Act
         var result = _validator.Validate(config);

@@ -10,11 +10,11 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration)
     {
         // Register the file service
-#if DEBUG
-        services.AddSingleton<IFileService, DebugFileService>();
-#else
-        services.AddSingleton<IFileService, NativeFileService>();
-#endif
+// #if DEBUG
+        // services.AddSingleton<IFileService, DebugFileService>();
+// #else
+         services.AddSingleton<IFileService, NativeFileService>();
+// #endif
 
         // Register other services as needed
         // services.AddSingleton<IOtherService, OtherServiceImplementation>();// Program.cs

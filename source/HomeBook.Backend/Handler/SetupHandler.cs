@@ -8,13 +8,16 @@ namespace HomeBook.Backend.Handler;
 
 public static class SetupHandler
 {
-    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability([FromServices] IFileService fileService,
+    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability(
+        [FromServices] IFileService fileService,
         CancellationToken cancellationToken)
     {
         try
         {
             // 1. check if file "/var/lib/homebook/instance.txt" exists
             string instanceFilePath = "/var/lib/homebook/instance.txt";
+            await File.WriteAllTextAsync(instanceFilePath, "1.0.10", cancellationToken);
+
             bool instanceFileExists = await fileService.DoesFileExistsAsync(instanceFilePath); // false => means setup is not executed yet and available
 
             if (!instanceFileExists)
@@ -32,7 +35,8 @@ public static class SetupHandler
         }
     }
 
-    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck([FromServices] IFileService fileService,
+    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck(
+        [FromServices] IFileService fileService,
         [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
         CancellationToken cancellationToken)
     {

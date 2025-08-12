@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddSetupEnvironment(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<IValidator<EnvironmentConfiguration>, EnvironmentValidator>();
+        services.AddSingleton<IValidator<EnvironmentConfiguration>, EnvironmentValidator>();
 
         return services;
     }
