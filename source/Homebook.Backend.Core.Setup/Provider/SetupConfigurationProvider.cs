@@ -47,50 +47,9 @@ public class SetupConfigurationProvider : ISetupConfigurationProvider
         }
     }
 
-    public bool IsSet(EnvironmentVariables name)
-    {
-        return _valuesByEnum.TryGetValue(name, out var value) && !string.IsNullOrWhiteSpace(value);
-    }
-
     public string? GetValue(EnvironmentVariables name)
     {
         _valuesByEnum.TryGetValue(name, out var value);
         return value;
-    }
-
-    public bool TryGetValueValidated(EnvironmentVariables name, out string? value, out string? error)
-    {
-        _valuesByEnum.TryGetValue(name, out value);
-        error = null;
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            value = null;
-            error = null;
-            return false;
-        }
-
-        switch (name)
-        {
-            case EnvironmentVariables.DATABASE_HOST:
-            case EnvironmentVariables.DATABASE_PORT:
-            case EnvironmentVariables.DATABASE_NAME:
-            case EnvironmentVariables.DATABASE_USER:
-            case EnvironmentVariables.DATABASE_PASSWORD:
-            case EnvironmentVariables.HOMEBOOK_USER_NAME:
-            case EnvironmentVariables.HOMEBOOK_USER_PASSWORD:
-            default:
-                // No validation for other variables, consider valid
-                return true;
-        }
-    }
-
-    public string? GetValidatedOrNull(EnvironmentVariables name)
-    {
-        if (TryGetValueValidated(name, out var value, out var error))
-        {
-            return value;
-        }
-
-        return null;
     }
 }

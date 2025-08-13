@@ -8,19 +8,15 @@ namespace HomeBook.Backend.Handler;
 
 public static class SetupHandler
 {
-    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability(
-        [FromServices] IFileService fileService,
+    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability([FromServices] ISetupInstanceManager setupInstanceManager,
         CancellationToken cancellationToken)
     {
         try
         {
             // 1. check if file "/var/lib/homebook/instance.txt" exists
-            string instanceFilePath = "/var/lib/homebook/instance.txt";
-            await File.WriteAllTextAsync(instanceFilePath, "1.0.10", cancellationToken);
+            bool setupInstanceExists = await setupInstanceManager.IsSetupInstanceCreatedAsync(cancellationToken);
 
-            bool instanceFileExists = await fileService.DoesFileExistsAsync(instanceFilePath); // false => means setup is not executed yet and available
-
-            if (!instanceFileExists)
+            if (!setupInstanceExists)
                 // does not exist => setup is not executed yet and available
                 return TypedResults.Ok();
             else
@@ -35,8 +31,7 @@ public static class SetupHandler
         }
     }
 
-    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck(
-        [FromServices] IFileService fileService,
+    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck([FromServices] IFileService fileService,
         [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
         CancellationToken cancellationToken)
     {
@@ -54,7 +49,11 @@ public static class SetupHandler
                 databaseUserName,
                 databaseUserPassword);
 
-            bool databaseConfigurationFound = true;
+            bool databaseConfigurationFound = databaseHost is not null
+                                              && databasePort is not null
+                                              && databaseName is not null
+                                              && databaseUserName is not null
+                                              && databaseUserPassword is not null;
             if (databaseConfigurationFound)
                 return TypedResults.Ok(response);
             else

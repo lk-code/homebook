@@ -20,7 +20,7 @@ public static class VersionHandler
         [FromServices] IConfiguration configuration,
         CancellationToken cancellationToken)
     {
-        string? version = configuration.GetSection("Version").Value;
+        string? version = configuration.GetSection("Version")?.Value?.Trim();
 
         if (string.IsNullOrEmpty(version))
         {

@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddSetupEnvironment(configuration);
 
         services.AddSingleton<ISetupConfigurationProvider, SetupConfigurationProvider>();
+        services.AddSingleton<ISetupInstanceManager, SetupInstanceManager>();
 
         return services;
     }
