@@ -7,12 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="HomeBook.Client" Version="1.0.25" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.8" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\HomeBook.Client\HomeBook.Client.csproj" />
       <ProjectReference Include="..\HomeBook.Frontend.Abstractions\HomeBook.Frontend.Abstractions.csproj" />
     </ItemGroup>
 

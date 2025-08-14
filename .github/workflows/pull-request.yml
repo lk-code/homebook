@@ -27,27 +27,13 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Restore dependencies
-        run: |
-          dotnet restore
-
-      - name: Build
-        run: |
-          dotnet build --configuration Release --no-restore
-
       - name: Install Kiota CLI
         run: |
           dotnet tool install --global Microsoft.OpenApi.Kiota
 
-      - name: Generate Client
-        shell: bash
+      - name: Restore dependencies
         run: |
-          kiota generate \
-            --language csharp \
-            --class-name RestClient \
-            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
-            --openapi ${{ env.OPENAPI_FILE }} \
-            --output ${{ env.CLIENT_OUTPUT_DIR }} \
+          dotnet restore
 
       - name: Build Client
         run: |

@@ -8,6 +8,7 @@ WORKDIR /src
 COPY . .
 
 # Restore dependencies
+RUN dotnet tool install --global Microsoft.OpenApi.Kiota
 RUN dotnet restore "source/HomeBook.Backend/HomeBook.Backend.csproj"
 RUN dotnet restore "source/HomeBook.Frontend/HomeBook.Frontend.csproj"
 

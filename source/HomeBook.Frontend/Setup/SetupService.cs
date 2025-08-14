@@ -42,7 +42,7 @@ public class SetupService(BackendClient backendClient) : ISetupService
     {
         try
         {
-            GetDatabaseCheckResponse? databaseCheckResponse = await backendClient.Setup.Check.Database.GetAsync(x =>
+            GetDatabaseCheckResponse? databaseCheckResponse = await backendClient.Setup.Database.Configuration.GetAsync(x =>
             {
             }, cancellationToken);
 
