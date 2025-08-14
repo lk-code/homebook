@@ -9,6 +9,7 @@ COPY . .
 
 # Restore dependencies
 RUN dotnet tool install --global Microsoft.OpenApi.Kiota
+ENV PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet restore "source/HomeBook.Backend/HomeBook.Backend.csproj"
 RUN dotnet restore "source/HomeBook.Frontend/HomeBook.Frontend.csproj"
 
