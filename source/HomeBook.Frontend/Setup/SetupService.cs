@@ -54,8 +54,8 @@ public class SetupService(BackendClient backendClient) : ISetupService
 
                 // Store parameters separately
                 _storedConfigValues["DatabaseName"] = databaseCheckResponse.DatabaseName;
-                _storedConfigValues["DatabaseUserName"] = databaseCheckResponse.Username;
-                _storedConfigValues["DatabaseUserPassword"] = databaseCheckResponse.Password;
+                _storedConfigValues["DatabaseUserName"] = databaseCheckResponse.DatabaseUserName;
+                _storedConfigValues["DatabaseUserPassword"] = databaseCheckResponse.DatabaseUserPassword;
 
                 return;
             }

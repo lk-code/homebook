@@ -2,7 +2,6 @@ using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Setup;
 using HomeBook.Backend.Requests;
 using HomeBook.Backend.Responses;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBook.Backend.Handler;
