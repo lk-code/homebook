@@ -31,13 +31,13 @@ jobs:
         run: |
           dotnet restore
 
-      - name: Build
-        run: |
-          dotnet build --configuration Release --no-restore
-
       - name: Install Kiota CLI
         run: |
           dotnet tool install --global Microsoft.OpenApi.Kiota
+
+      - name: Build
+        run: |
+          dotnet build --configuration Release --no-restore
 
       - name: Generate Client
         shell: bash

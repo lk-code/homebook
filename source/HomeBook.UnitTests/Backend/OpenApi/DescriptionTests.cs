@@ -6,7 +6,7 @@ namespace HomeBook.UnitTests.Backend.OpenApi;
 public class DescriptionTests
 {
     [Test]
-    public void Description_With_Returns()
+    public void Description_WithMultipleLines_Returns()
     {
         // Arrange
         var description = new Description("this is a description",

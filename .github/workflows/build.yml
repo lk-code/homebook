@@ -152,6 +152,10 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      - name: Install Kiota CLI
+        run: |
+          dotnet tool install --global Microsoft.OpenApi.Kiota
+
       - name: Restore dependencies
         run: |
           dotnet restore
@@ -159,10 +163,6 @@ jobs:
       - name: Build Solution
         run: |
           dotnet build --configuration Release --no-restore
-
-      - name: Install Kiota CLI
-        run: |
-          dotnet tool install --global Microsoft.OpenApi.Kiota
 
       - name: Generate Client
         run: |
