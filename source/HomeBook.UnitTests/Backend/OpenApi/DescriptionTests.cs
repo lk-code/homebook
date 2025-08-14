@@ -18,11 +18,9 @@ public class DescriptionTests
         var result = description.ToString();
 
         // Assert
-        result.ShouldBe("this is a description"
-                        + Environment.NewLine
-                        + Environment.NewLine
-                        + "HTTP 200: this is a success response" + Environment.NewLine
-                        + "HTTP 400: this is a bad request response" + Environment.NewLine
+        result.ShouldBe("this is a description" + Environment.NewLine + Environment.NewLine
+                        + "HTTP 200: this is a success response" + Environment.NewLine + Environment.NewLine
+                        + "HTTP 400: this is a bad request response" + Environment.NewLine + Environment.NewLine
                         + "HTTP 500: this is an internal server error response");
     }
 }
