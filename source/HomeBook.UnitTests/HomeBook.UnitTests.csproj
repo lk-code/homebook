@@ -35,6 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Homebook.Backend.Core.Setup\Homebook.Backend.Core.Setup.csproj"/>
+    <ProjectReference Include="..\HomeBook.Backend\HomeBook.Backend.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,7 +20,7 @@ public class EnvironmentValidator : AbstractValidator<EnvironmentConfiguration>
             .WithMessage("DatabasePort must be a valid port number between 1 and 65535")
             .When(x => !string.IsNullOrEmpty(x.DatabasePort));
 
-        // Database Name validation
+        // Database Name validation+
         RuleFor(x => x.DatabaseName)
             .Must(BeValidDatabaseName)
             .WithMessage("DatabaseName can only contain alphanumeric characters, underscores and hyphens")

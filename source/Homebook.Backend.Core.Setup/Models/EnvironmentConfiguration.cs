@@ -8,8 +8,12 @@ namespace Homebook.Backend.Core.Setup.Models;
 /// <param name="DatabaseName">the name of the database which should used by the application.</param>
 /// <param name="DatabaseUserName">the username for accessing the database.</param>
 /// <param name="DatabaseUserPassword">the password for the database user.</param>
+/// <param name="HomebookUserName">the username for the Homebook user, which is used as primary administrator.</param>
+/// <param name="HomebookUserPassword">the password for the Homebook user, which is used as primary administrator.</param>
 public record EnvironmentConfiguration(string? DatabaseHost,
     string? DatabasePort,
     string? DatabaseName,
     string? DatabaseUserName,
-    string? DatabaseUserPassword);
+    string? DatabaseUserPassword,
+    string? HomebookUserName,
+    string? HomebookUserPassword);

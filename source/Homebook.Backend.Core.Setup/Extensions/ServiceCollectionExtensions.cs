@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddSetupEnvironment(configuration);
 
         services.AddSingleton<ISetupConfigurationProvider, SetupConfigurationProvider>();
+        services.AddSingleton<ISetupInstanceManager, SetupInstanceManager>();
 
         return services;
     }
@@ -24,7 +25,7 @@ public static class ServiceCollectionExtensions
     private static IServiceCollection AddSetupEnvironment(this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddScoped<IValidator<EnvironmentConfiguration>, EnvironmentValidator>();
+        services.AddSingleton<IValidator<EnvironmentConfiguration>, EnvironmentValidator>();
 
         return services;
     }
