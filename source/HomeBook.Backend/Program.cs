@@ -1,4 +1,5 @@
 using Homebook.Backend.Core.Setup.Extensions;
+using HomeBook.Backend.Data.Extensions;
 using HomeBook.Backend.Endpoints;
 using HomeBook.Backend.Extensions;
 using Scalar.AspNetCore;
@@ -21,7 +22,8 @@ builder.Host.UseSerilog((ctx, services, cfg) =>
 builder.Services.AddOpenApi();
 
 builder.Services.AddBackendServices(builder.Configuration)
-    .AddBackendCoreSetup(builder.Configuration);
+    .AddBackendCoreSetup(builder.Configuration)
+    .AddBackendCoreData(builder.Configuration);
 
 if (builder.Environment.IsDevelopment())
 {

@@ -1,6 +1,7 @@
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Setup;
 using HomeBook.Backend.Handler;
+using HomeBook.Backend.Requests;
 using HomeBook.Backend.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
@@ -14,6 +15,7 @@ public class SetupHandlerTests
     private ISetupInstanceManager _setupInstanceManager = null!;
     private IFileService _fileService = null!;
     private ISetupConfigurationProvider _setupConfigurationProvider = null!;
+    private IDatabaseManager _databaseManager = null!;
 
     [SetUp]
     public void SetUpSubstitutes()
@@ -21,6 +23,7 @@ public class SetupHandlerTests
         _setupInstanceManager = Substitute.For<ISetupInstanceManager>();
         _fileService = Substitute.For<IFileService>();
         _setupConfigurationProvider = Substitute.For<ISetupConfigurationProvider>();
+        _databaseManager = Substitute.For<IDatabaseManager>();
     }
 
     [Test]
@@ -35,7 +38,7 @@ public class SetupHandlerTests
         var result = await SetupHandler.HandleGetAvailability(_setupInstanceManager, CancellationToken.None);
 
         // Assert
-        var conflict = result.Result.ShouldBeOfType<Conflict>();
+        var conflict = result.ShouldBeOfType<Conflict>();
         conflict.ShouldNotBeNull();
     }
 
@@ -51,7 +54,7 @@ public class SetupHandlerTests
         var result = await SetupHandler.HandleGetAvailability(_setupInstanceManager, CancellationToken.None);
 
         // Assert
-        var ok = result.Result.ShouldBeOfType<Ok>();
+        var ok = result.ShouldBeOfType<Ok>();
         ok.ShouldNotBeNull();
     }
 
@@ -68,7 +71,7 @@ public class SetupHandlerTests
         var result = await SetupHandler.HandleGetAvailability(_setupInstanceManager, CancellationToken.None);
 
         // Assert
-        var internalError = result.Result.ShouldBeOfType<InternalServerError<string>>();
+        var internalError = result.ShouldBeOfType<InternalServerError<string>>();
         internalError.Value.ShouldBe(boom);
     }
 
@@ -86,7 +89,7 @@ public class SetupHandlerTests
         var result = await SetupHandler.HandleGetDatabaseCheck(_fileService, _setupConfigurationProvider, CancellationToken.None);
 
         // Assert
-        var ok = result.Result.ShouldBeOfType<Ok<GetDatabaseCheckResponse>>();
+        var ok = result.ShouldBeOfType<Ok<GetDatabaseCheckResponse>>();
         ok.Value.ShouldNotBeNull();
         ok.Value.DatabaseHost.ShouldBe("db.example.local");
         ok.Value.DatabasePort.ShouldBe("3306");
@@ -119,7 +122,7 @@ public class SetupHandlerTests
         var result = await SetupHandler.HandleGetDatabaseCheck(_fileService, _setupConfigurationProvider, CancellationToken.None);
 
         // Assert: The current implementation always returns Ok with whatever it read
-        var ok = result.Result.ShouldBeOfType<NotFound>();
+        var ok = result.ShouldBeOfType<NotFound>();
     }
 
     [Test]
@@ -134,7 +137,85 @@ public class SetupHandlerTests
         var result = await SetupHandler.HandleGetDatabaseCheck(_fileService, _setupConfigurationProvider, CancellationToken.None);
 
         // Assert
-        var internalErr = result.Result.ShouldBeOfType<InternalServerError<string>>();
+        var internalErr = result.ShouldBeOfType<InternalServerError<string>>();
+        internalErr.Value.ShouldBe("boom");
+    }
+
+    [Test]
+    public async Task HandleCheckDatabase_WithDatabaseIsAvailable_ReturnsHttp200Ok()
+    {
+        // Arrange
+        var databaseHost = "db.example.local";
+        var databasePort = (ushort)3306;
+        var databaseName = "homebook";
+        var databaseUserName = "hb_user";
+        var databaseUserPassword = "s3cr3t";
+        _databaseManager.IsDatabaseAvailableAsync(databaseHost,
+                databasePort,
+                databaseName,
+                databaseUserName,
+                databaseUserPassword,
+                Arg.Any<CancellationToken>())
+            .Returns(true);
+
+        // Act
+        var request = new CheckDatabaseRequest(databaseHost, databasePort, databaseName, databaseUserName, databaseUserPassword);
+        var result = await SetupHandler.HandleCheckDatabase(request, _databaseManager, CancellationToken.None);
+
+        // Assert
+        var internalErr = result.ShouldBeOfType<Ok>();
+    }
+
+    [Test]
+    public async Task HandleCheckDatabase_WithDatabaseIsNotAvailable_ReturnsHttp503ServiceUnavailable()
+    {
+        // Arrange
+        var databaseHost = "db.example.local";
+        var databasePort = (ushort)3306;
+        var databaseName = "homebook";
+        var databaseUserName = "hb_user";
+        var databaseUserPassword = "s3cr3t";
+        _databaseManager.IsDatabaseAvailableAsync(databaseHost,
+                databasePort,
+                databaseName,
+                databaseUserName,
+                databaseUserPassword,
+                Arg.Any<CancellationToken>())
+            .Returns(false);
+
+        // Act
+        var request = new CheckDatabaseRequest(databaseHost, databasePort, databaseName, databaseUserName, databaseUserPassword);
+        var result = await SetupHandler.HandleCheckDatabase(request, _databaseManager, CancellationToken.None);
+
+        // Assert
+        var internalErr = result.ShouldBeOfType<StatusCodeHttpResult>();
+        internalErr.StatusCode.ShouldBe(503); // Service Unavailable
+    }
+
+    [Test]
+    public async Task HandleCheckDatabase_Throws_ReturnsHttp500InternalServerError()
+    {
+        // Arrange
+        var databaseHost = "db.example.local";
+        var databasePort = (ushort)3306;
+        var databaseName = "homebook";
+        var databaseUserName = "hb_user";
+        var databaseUserPassword = "s3cr3t";
+        _databaseManager
+            .When(x => x.IsDatabaseAvailableAsync(databaseHost,
+                databasePort,
+                databaseName,
+                databaseUserName,
+                databaseUserPassword,
+                Arg.Any<CancellationToken>()))
+            .Do(_ => throw new InvalidOperationException("boom"));
+
+        // Act
+        var request = new CheckDatabaseRequest(databaseHost, databasePort, databaseName, databaseUserName, databaseUserPassword);
+        var result = await SetupHandler.HandleCheckDatabase(request, _databaseManager, CancellationToken.None);
+
+        // Assert
+        var internalErr = result.ShouldBeOfType<InternalServerError<string>>();
         internalErr.Value.ShouldBe("boom");
     }
 }

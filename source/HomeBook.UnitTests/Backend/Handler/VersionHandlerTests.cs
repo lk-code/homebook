@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Configuration;
 using NSubstitute;
+using NUnit.Framework;
+using Shouldly;
 using HomeBook.Backend.Handler;
 
 namespace HomeBook.UnitTests.Backend.Handler;
@@ -31,9 +33,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(expectedVersion);
     }
 
@@ -49,9 +49,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var errorResult = result.Result as InternalServerError<string>;
-        errorResult.ShouldNotBeNull();
+        var errorResult = result.ShouldBeOfType<InternalServerError<string>>();
         errorResult.Value.ShouldBe("Service Version is not configured.");
     }
 
@@ -60,16 +58,14 @@ public class VersionHandlerTests
     {
         // Arrange
         var configSection = Substitute.For<IConfigurationSection>();
-        configSection.Value.Returns((string)null);
+        configSection.Value.Returns((string?)null);
         _configuration.GetSection("Version").Returns(configSection);
 
         // Act
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var errorResult = result.Result as InternalServerError<string>;
-        errorResult.ShouldNotBeNull();
+        var errorResult = result.ShouldBeOfType<InternalServerError<string>>();
         errorResult.Value.ShouldBe("Service Version is not configured.");
     }
 
@@ -85,9 +81,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var errorResult = result.Result as InternalServerError<string>;
-        errorResult.ShouldNotBeNull();
+        var errorResult = result.ShouldBeOfType<InternalServerError<string>>();
         errorResult.Value.ShouldBe("Service Version is not configured.");
     }
 
@@ -104,9 +98,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(expectedVersion);
     }
 
@@ -123,9 +115,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(expectedVersion);
     }
 
@@ -145,9 +135,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(version);
     }
 
@@ -165,9 +153,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, cancelledToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(expectedVersion);
     }
 
@@ -191,15 +177,13 @@ public class VersionHandlerTests
     public async Task HandleGetVersion_WithNullConfigurationSection_ShouldReturnInternalServerError()
     {
         // Arrange
-        _configuration.GetSection("Version").Returns((IConfigurationSection)null);
+        _configuration.GetSection("Version").Returns((IConfigurationSection?)null);
 
         // Act
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var errorResult = result.Result as InternalServerError<string>;
-        errorResult.ShouldNotBeNull();
+        var errorResult = result.ShouldBeOfType<InternalServerError<string>>();
         errorResult.Value.ShouldBe("Service Version is not configured.");
     }
 
@@ -216,9 +200,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(expectedVersion);
     }
 
@@ -235,9 +217,7 @@ public class VersionHandlerTests
         var result = await VersionHandler.HandleGetVersion(_configuration, _cancellationToken);
 
         // Assert
-        result.ShouldBeOfType<Results<Ok<string>, InternalServerError<string>>>();
-        var okResult = result.Result as Ok<string>;
-        okResult.ShouldNotBeNull();
+        var okResult = result.ShouldBeOfType<Ok<string>>();
         okResult.Value.ShouldBe(expectedVersion);
     }
 }

@@ -16,7 +16,7 @@ public static class VersionHandler
     //
     // }
 
-    public static async Task<Results<Ok<string>, InternalServerError<string>>> HandleGetVersion(
+    public static async Task<IResult> HandleGetVersion(
         [FromServices] IConfiguration configuration,
         CancellationToken cancellationToken)
     {

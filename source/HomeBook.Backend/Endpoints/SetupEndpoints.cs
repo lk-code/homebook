@@ -37,6 +37,32 @@ public static class SetupEndpoints
             // HTTP 500 => unknown error while setup checking
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
+        group.MapPost("/database/check", SetupHandler.HandleCheckDatabase)
+            .WithName("CheckDatabase")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "check that the Database is available"
+            })
+            // HTTP 200 => Database is available
+            .Produces(StatusCodes.Status200OK)
+            // HTTP 503 => Database is not available
+            .Produces(StatusCodes.Status503ServiceUnavailable)
+            // HTTP 500 => unknown error while database connection check
+            .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        group.MapPost("/database/migrate", SetupHandler.HandleMigrateDatabase)
+            .WithName("MigrateDatabase")
+            .WithOpenApi(operation => new(operation)
+            {
+                Summary = "migrate the database schema to the latest version"
+            })
+            // HTTP 200 => Database migration was successful
+            .Produces(StatusCodes.Status200OK)
+            // HTTP 409 => Database migration is already executed and not available
+            .Produces(StatusCodes.Status409Conflict)
+            // HTTP 500 => unknown error while database migration
+            .Produces<string>(StatusCodes.Status500InternalServerError);
+
         return routeBuilder;
     }
 }

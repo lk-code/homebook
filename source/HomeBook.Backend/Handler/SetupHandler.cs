@@ -1,5 +1,6 @@
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Setup;
+using HomeBook.Backend.Requests;
 using HomeBook.Backend.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,13 @@ namespace HomeBook.Backend.Handler;
 
 public static class SetupHandler
 {
-    public static async Task<Results<Ok, Conflict, InternalServerError<string>>> HandleGetAvailability([FromServices] ISetupInstanceManager setupInstanceManager,
+    /// <summary>
+    /// checks if the setup is available and no setup instance is created yet.
+    /// </summary>
+    /// <param name="setupInstanceManager"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IResult> HandleGetAvailability([FromServices] ISetupInstanceManager setupInstanceManager,
         CancellationToken cancellationToken)
     {
         try
@@ -31,7 +38,14 @@ public static class SetupHandler
         }
     }
 
-    public static async Task<Results<Ok<GetDatabaseCheckResponse>, NotFound, InternalServerError<string>>> HandleGetDatabaseCheck([FromServices] IFileService fileService,
+    /// <summary>
+    /// returns the database configuration if it is available (set via environment variables).
+    /// </summary>
+    /// <param name="fileService"></param>
+    /// <param name="setupConfigurationProvider"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IResult> HandleGetDatabaseCheck([FromServices] IFileService fileService,
         [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
         CancellationToken cancellationToken)
     {
@@ -43,21 +57,77 @@ public static class SetupHandler
             string? databaseUserName = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_USER);
             string? databaseUserPassword = setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_PASSWORD);
 
-            GetDatabaseCheckResponse response = new(databaseHost,
-                databasePort,
-                databaseName,
-                databaseUserName,
-                databaseUserPassword);
 
             bool databaseConfigurationFound = databaseHost is not null
                                               && databasePort is not null
                                               && databaseName is not null
                                               && databaseUserName is not null
                                               && databaseUserPassword is not null;
-            if (databaseConfigurationFound)
-                return TypedResults.Ok(response);
-            else
+            if (!databaseConfigurationFound)
                 return TypedResults.NotFound();
+
+            GetDatabaseCheckResponse response = new(databaseHost,
+                databasePort,
+                databaseName,
+                databaseUserName,
+                databaseUserPassword);
+            return TypedResults.Ok(response);
+        }
+        catch (Exception err)
+        {
+            return TypedResults.InternalServerError(err.Message);
+        }
+    }
+
+    /// <summary>
+    /// check the database connection via the given configuration.
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="databaseManager"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IResult> HandleCheckDatabase([FromBody] CheckDatabaseRequest request,
+        [FromServices] IDatabaseManager databaseManager,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            bool isDatabaseAvailable = await databaseManager.IsDatabaseAvailableAsync(
+                request.DatabaseHost,
+                request.DatabasePort,
+                request.DatabaseName,
+                request.DatabaseUserName,
+                request.DatabaseUserPassword,
+                cancellationToken);
+
+            if (isDatabaseAvailable)
+                // database is available
+                return TypedResults.Ok();
+            else
+                // database is not available
+                return TypedResults.StatusCode(StatusCodes.Status503ServiceUnavailable);
+        }
+        catch (Exception err)
+        {
+            return TypedResults.InternalServerError(err.Message);
+        }
+    }
+
+    /// <summary>
+    /// starts the database migration process.
+    /// </summary>
+    /// <param name="fileService"></param>
+    /// <param name="setupConfigurationProvider"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IResult> HandleMigrateDatabase([FromServices] IFileService fileService,
+        [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return TypedResults.Ok();
+            return TypedResults.StatusCode(StatusCodes.Status409Conflict);
         }
         catch (Exception err)
         {
