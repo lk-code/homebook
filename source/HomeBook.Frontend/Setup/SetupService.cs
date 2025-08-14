@@ -53,7 +53,9 @@ public class SetupService(BackendClient backendClient) : ISetupService
                 setupSteps.Add(new DatabaseConnectionSetupStep());
 
                 // Store parameters separately
+                _storedConfigValues["DatabaseHost"] = databaseCheckResponse.DatabaseHost;
                 _storedConfigValues["DatabaseName"] = databaseCheckResponse.DatabaseName;
+                _storedConfigValues["DatabasePort"] = databaseCheckResponse.DatabasePort;
                 _storedConfigValues["DatabaseUserName"] = databaseCheckResponse.DatabaseUserName;
                 _storedConfigValues["DatabaseUserPassword"] = databaseCheckResponse.DatabaseUserPassword;
 

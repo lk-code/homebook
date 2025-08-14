@@ -1,5 +1,115 @@
-<h3>DatabaseFormSetupStep</h3>
+<MudCard>
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h6">Database Connection Setup</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
+    <MudCardContent>
+        <EditForm Model="@_databaseConfig" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator/>
 
-@code {
-    
-}
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_databaseConfig.Host"
+                                  Label="Database Host"
+                                  Placeholder="localhost"
+                                  HelperText="Enter the database server hostname or IP address"
+                                  For="@(() => _databaseConfig.Host)"
+                                  Required="true"
+                                  Variant="Variant.Outlined"/>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_databaseConfig.Port"
+                                  Label="Port"
+                                  Placeholder="5432"
+                                  HelperText="Enter the database port (default: 5432 for PostgreSQL)"
+                                  For="@(() => _databaseConfig.Port)"
+                                  Required="true"
+                                  Variant="Variant.Outlined"/>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_databaseConfig.DatabaseName"
+                                  Label="Database Name"
+                                  Placeholder="homebook"
+                                  HelperText="Enter the name of the database"
+                                  For="@(() => _databaseConfig.DatabaseName)"
+                                  Required="true"
+                                  Variant="Variant.Outlined"/>
+                </MudItem>
+
+                <MudItem xs="12" md="6">
+                    <MudTextField @bind-Value="_databaseConfig.Username"
+                                  Label="Username"
+                                  Placeholder="homebook_user"
+                                  HelperText="Enter the database username"
+                                  For="@(() => _databaseConfig.Username)"
+                                  Required="true"
+                                  Variant="Variant.Outlined"/>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="_databaseConfig.Password"
+                                  Label="Password"
+                                  InputType="InputType.Password"
+                                  HelperText="Enter the database password"
+                                  For="@(() => _databaseConfig.Password)"
+                                  Required="true"
+                                  Variant="Variant.Outlined"/>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudCheckBox T="bool"
+                                 @bind-Checked="_databaseConfig.UseSSL"
+                                 Label="Use SSL Connection"
+                                 Color="Color.Primary"/>
+                </MudItem>
+
+                <MudItem xs="12">
+                    <MudTextField @bind-Value="_databaseConfig.ConnectionTimeout"
+                                  Label="Connection Timeout (seconds)"
+                                  Placeholder="30"
+                                  HelperText="Connection timeout in seconds (optional)"
+                                  For="@(() => _databaseConfig.ConnectionTimeout)"
+                                  Variant="Variant.Outlined"/>
+                </MudItem>
+            </MudGrid>
+
+            <MudDivider Class="my-4"/>
+
+            <MudStack Row Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                <MudButton ButtonType="ButtonType.Submit"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="Icons.Material.Filled.CheckCircle"
+                           Disabled="@_isProcessing">
+                    @if (_isProcessing)
+                    {
+                        <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
+                        <MudText Class="ms-2">Testing Connection...</MudText>
+                    }
+                    else
+                    {
+                        <MudText>Test Connection</MudText>
+                    }
+                </MudButton>
+
+                <MudButton OnClick="ClearForm"
+                           Variant="Variant.Text"
+                           Color="Color.Secondary"
+                           StartIcon="Icons.Material.Filled.Clear">
+                    Clear
+                </MudButton>
+            </MudStack>
+
+            @if (_connectionResult is not null)
+            {
+                <MudAlert Severity="@(_connectionResult.IsSuccess ? Severity.Success : Severity.Error)"
+                          Class="mt-4">
+                    @_connectionResult.Message
+                </MudAlert>
+            }
+        </EditForm>
+    </MudCardContent>
+</MudCard>
