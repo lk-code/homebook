@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using FluentValidation;
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Setup;
@@ -7,20 +6,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Homebook.Backend.Core.Setup.Provider;
 
-public class SetupConfigurationProvider : ISetupConfigurationProvider
+public class SetupConfigurationProvider(
+    ILogger<SetupConfigurationProvider> logger,
+    IValidator<EnvironmentConfiguration> environmentValidator)
+    : ISetupConfigurationProvider
 {
-    private readonly ILogger<SetupConfigurationProvider> _logger;
-    private readonly Dictionary<EnvironmentVariables, string?> _valuesByEnum;
+    private Dictionary<EnvironmentVariables, string?>? _valuesByEnum;
 
-    private static readonly Regex HostRegex = new Regex("^[A-Za-z0-9.-]{1,253}$", RegexOptions.Compiled);
-    private static readonly Regex NameRegex = new Regex("^[A-Za-z0-9_.-]{1,64}$", RegexOptions.Compiled);
-    private const int MaxPasswordLength = 256;
-
-    public SetupConfigurationProvider(ILogger<SetupConfigurationProvider> logger,
-        IValidator<EnvironmentConfiguration> environmentValidator)
+    private void LoadEnvironmentConfiguration(IValidator<EnvironmentConfiguration> environmentValidator)
     {
-        _logger = logger;
+        if (_valuesByEnum is not null)
+            return;
 
+        _valuesByEnum = new Dictionary<EnvironmentVariables, string?>();
+
+        _valuesByEnum.Clear();
         EnvironmentConfiguration environmentConfiguration = new(
             Environment.GetEnvironmentVariable(EnvironmentVariables.DATABASE_HOST.ToString()),
             Environment.GetEnvironmentVariable(EnvironmentVariables.DATABASE_PORT.ToString()),
@@ -32,7 +32,6 @@ public class SetupConfigurationProvider : ISetupConfigurationProvider
         );
         environmentValidator.ValidateAndThrow(environmentConfiguration);
 
-        _valuesByEnum = new Dictionary<EnvironmentVariables, string?>();
         foreach (EnvironmentVariables varName in Enum.GetValues<EnvironmentVariables>())
         {
             string? value = Environment.GetEnvironmentVariable(varName.ToString());
@@ -40,16 +39,19 @@ public class SetupConfigurationProvider : ISetupConfigurationProvider
         }
 
         // displaying the loaded environment variables for debugging purposes
-        _logger.LogInformation("Loaded environment variables:");
+        logger.LogInformation("Loaded environment variables:");
         foreach (var kvp in _valuesByEnum)
         {
-            _logger.LogInformation("{VariableName}: {Value}", kvp.Key, kvp.Value ?? "null");
+            logger.LogInformation("{VariableName}: {Value}", kvp.Key, kvp.Value ?? "null");
         }
     }
 
     public string? GetValue(EnvironmentVariables name)
     {
-        _valuesByEnum.TryGetValue(name, out var value);
+        LoadEnvironmentConfiguration(environmentValidator);
+
+        _valuesByEnum!.TryGetValue(name, out var value);
+
         return value;
     }
 }

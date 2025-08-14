@@ -53,7 +53,7 @@ app.UseDefaultFiles();
 // app.UseStaticFiles();
 app.MapFallbackToFile("index.html"); // <- important for Blazor Routing
 
-app.MapVersionEndpoints()
-    .MapSetupEndpoints();
+app.MapSetupEndpoints()
+    .MapVersionEndpoints();
 
 app.Run();

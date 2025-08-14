@@ -1,13 +1,13 @@
+using FluentValidation;
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Setup;
 using HomeBook.Backend.Requests;
 using HomeBook.Backend.Responses;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBook.Backend.Handler;
 
-public static class SetupHandler
+public class SetupHandler
 {
     /// <summary>
     /// checks if the setup is available and no setup instance is created yet.
@@ -15,7 +15,8 @@ public static class SetupHandler
     /// <param name="setupInstanceManager"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IResult> HandleGetAvailability([FromServices] ISetupInstanceManager setupInstanceManager,
+    public static async Task<IResult> HandleGetAvailability([FromServices] ILogger<SetupHandler> logger,
+        [FromServices] ISetupInstanceManager setupInstanceManager,
         CancellationToken cancellationToken)
     {
         try
@@ -34,6 +35,7 @@ public static class SetupHandler
         }
         catch (Exception err)
         {
+            logger.LogError(err, "Error while checking setup availability");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -45,7 +47,8 @@ public static class SetupHandler
     /// <param name="setupConfigurationProvider"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IResult> HandleGetDatabaseCheck([FromServices] IFileService fileService,
+    public static async Task<IResult> HandleGetDatabaseCheck([FromServices] ILogger<SetupHandler> logger,
+        [FromServices] IFileService fileService,
         [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
         CancellationToken cancellationToken)
     {
@@ -73,8 +76,14 @@ public static class SetupHandler
                 databaseUserPassword);
             return TypedResults.Ok(response);
         }
+        catch (ValidationException err)
+        {
+            logger.LogError(err, "Validation error while getting database configuration");
+            return TypedResults.BadRequest(err.Errors.Select(x => x.ErrorMessage).ToArray());
+        }
         catch (Exception err)
         {
+            logger.LogError(err, "Error while checking database configuration");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -87,6 +96,7 @@ public static class SetupHandler
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static async Task<IResult> HandleCheckDatabase([FromBody] CheckDatabaseRequest request,
+        [FromServices] ILogger<SetupHandler> logger,
         [FromServices] IDatabaseManager databaseManager,
         CancellationToken cancellationToken)
     {
@@ -109,6 +119,7 @@ public static class SetupHandler
         }
         catch (Exception err)
         {
+            logger.LogError(err, "Error while checking database connection");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -120,7 +131,8 @@ public static class SetupHandler
     /// <param name="setupConfigurationProvider"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IResult> HandleMigrateDatabase([FromServices] IFileService fileService,
+    public static async Task<IResult> HandleMigrateDatabase([FromServices] ILogger<SetupHandler> logger,
+        [FromServices] IFileService fileService,
         [FromServices] ISetupConfigurationProvider setupConfigurationProvider,
         CancellationToken cancellationToken)
     {
@@ -131,6 +143,7 @@ public static class SetupHandler
         }
         catch (Exception err)
         {
+            logger.LogError(err, "Error while migrating database");
             return TypedResults.InternalServerError(err.Message);
         }
     }

@@ -4,6 +4,7 @@ using HomeBook.Backend.Handler;
 using HomeBook.Backend.Requests;
 using HomeBook.Backend.Responses;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.Extensions.Logging;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 
@@ -12,6 +13,7 @@ namespace HomeBook.UnitTests.Backend.Handler;
 [TestFixture]
 public class SetupHandlerTests
 {
+    private ILogger<SetupHandler> _logger;
     private ISetupInstanceManager _setupInstanceManager = null!;
     private IFileService _fileService = null!;
     private ISetupConfigurationProvider _setupConfigurationProvider = null!;
@@ -20,6 +22,18 @@ public class SetupHandlerTests
     [SetUp]
     public void SetUpSubstitutes()
     {
+        var factory = LoggerFactory.Create(builder =>
+        {
+            builder.AddSimpleConsole(options =>
+                {
+                    options.IncludeScopes = true;
+                    options.SingleLine = true;
+                    options.TimestampFormat = "HH:mm:ss ";
+                })
+                .SetMinimumLevel(LogLevel.Debug);
+        });
+
+        _logger = factory.CreateLogger<SetupHandler>();
         _setupInstanceManager = Substitute.For<ISetupInstanceManager>();
         _fileService = Substitute.For<IFileService>();
         _setupConfigurationProvider = Substitute.For<ISetupConfigurationProvider>();
@@ -35,7 +49,7 @@ public class SetupHandlerTests
             .Returns(true);
 
         // Act
-        var result = await SetupHandler.HandleGetAvailability(_setupInstanceManager, CancellationToken.None);
+        var result = await SetupHandler.HandleGetAvailability(_logger, _setupInstanceManager, CancellationToken.None);
 
         // Assert
         var conflict = result.ShouldBeOfType<Conflict>();
@@ -51,7 +65,7 @@ public class SetupHandlerTests
             .Returns(false);
 
         // Act
-        var result = await SetupHandler.HandleGetAvailability(_setupInstanceManager, CancellationToken.None);
+        var result = await SetupHandler.HandleGetAvailability(_logger, _setupInstanceManager, CancellationToken.None);
 
         // Assert
         var ok = result.ShouldBeOfType<Ok>();
@@ -68,7 +82,7 @@ public class SetupHandlerTests
             .Throws(new InvalidOperationException(boom));
 
         // Act
-        var result = await SetupHandler.HandleGetAvailability(_setupInstanceManager, CancellationToken.None);
+        var result = await SetupHandler.HandleGetAvailability(_logger, _setupInstanceManager, CancellationToken.None);
 
         // Assert
         var internalError = result.ShouldBeOfType<InternalServerError<string>>();
@@ -86,7 +100,7 @@ public class SetupHandlerTests
         _setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_PASSWORD).Returns("s3cr3t");
 
         // Act
-        var result = await SetupHandler.HandleGetDatabaseCheck(_fileService, _setupConfigurationProvider, CancellationToken.None);
+        var result = await SetupHandler.HandleGetDatabaseCheck(_logger, _fileService, _setupConfigurationProvider, CancellationToken.None);
 
         // Assert
         var ok = result.ShouldBeOfType<Ok<GetDatabaseCheckResponse>>();
@@ -119,7 +133,7 @@ public class SetupHandlerTests
         _setupConfigurationProvider.GetValue(EnvironmentVariables.DATABASE_PASSWORD).Returns((string?)null);
 
         // Act
-        var result = await SetupHandler.HandleGetDatabaseCheck(_fileService, _setupConfigurationProvider, CancellationToken.None);
+        var result = await SetupHandler.HandleGetDatabaseCheck(_logger, _fileService, _setupConfigurationProvider, CancellationToken.None);
 
         // Assert: The current implementation always returns Ok with whatever it read
         var ok = result.ShouldBeOfType<NotFound>();
@@ -134,7 +148,7 @@ public class SetupHandlerTests
             .Do(_ => throw new InvalidOperationException("boom"));
 
         // Act
-        var result = await SetupHandler.HandleGetDatabaseCheck(_fileService, _setupConfigurationProvider, CancellationToken.None);
+        var result = await SetupHandler.HandleGetDatabaseCheck(_logger, _fileService, _setupConfigurationProvider, CancellationToken.None);
 
         // Assert
         var internalErr = result.ShouldBeOfType<InternalServerError<string>>();
@@ -160,7 +174,7 @@ public class SetupHandlerTests
 
         // Act
         var request = new CheckDatabaseRequest(databaseHost, databasePort, databaseName, databaseUserName, databaseUserPassword);
-        var result = await SetupHandler.HandleCheckDatabase(request, _databaseManager, CancellationToken.None);
+        var result = await SetupHandler.HandleCheckDatabase(request, _logger, _databaseManager, CancellationToken.None);
 
         // Assert
         var internalErr = result.ShouldBeOfType<Ok>();
@@ -185,7 +199,7 @@ public class SetupHandlerTests
 
         // Act
         var request = new CheckDatabaseRequest(databaseHost, databasePort, databaseName, databaseUserName, databaseUserPassword);
-        var result = await SetupHandler.HandleCheckDatabase(request, _databaseManager, CancellationToken.None);
+        var result = await SetupHandler.HandleCheckDatabase(request, _logger, _databaseManager, CancellationToken.None);
 
         // Assert
         var internalErr = result.ShouldBeOfType<StatusCodeHttpResult>();
@@ -212,7 +226,7 @@ public class SetupHandlerTests
 
         // Act
         var request = new CheckDatabaseRequest(databaseHost, databasePort, databaseName, databaseUserName, databaseUserPassword);
-        var result = await SetupHandler.HandleCheckDatabase(request, _databaseManager, CancellationToken.None);
+        var result = await SetupHandler.HandleCheckDatabase(request, _logger, _databaseManager, CancellationToken.None);
 
         // Assert
         var internalErr = result.ShouldBeOfType<InternalServerError<string>>();
