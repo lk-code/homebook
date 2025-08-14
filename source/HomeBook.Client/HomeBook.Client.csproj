@@ -27,13 +27,13 @@
     <PackageReference Include="Microsoft.Kiota.Bundle" Version="1.19.1"/>
   </ItemGroup>
 
-  <Target Name="BuildServiceFirst" BeforeTargets="Build">
-    <MSBuild Projects="..\HomeBook.Backend\HomeBook.Backend.csproj" Targets="Build"/>
-  </Target>
+<!--  <Target Name="BuildServiceFirst" BeforeTargets="Build">-->
+<!--    <MSBuild Projects="..\HomeBook.Backend\HomeBook.Backend.csproj" Targets="Build"/>-->
+<!--  </Target>-->
 
-  <Target Name="GenerateClient" DependsOnTargets="BuildServiceFirst" BeforeTargets="Build">
-    <Exec Command="kiota generate --language csharp --class-name BackendClient --namespace-name HomeBook.Client --openapi HomeBook.Backend.json --output ."/>
-  </Target>
+<!--  <Target Name="GenerateClient" DependsOnTargets="BuildServiceFirst" BeforeTargets="Build">-->
+<!--    <Exec Command="kiota generate &#45;&#45;language csharp &#45;&#45;class-name BackendClient &#45;&#45;namespace-name HomeBook.Client &#45;&#45;openapi HomeBook.Backend.json &#45;&#45;output ."/>-->
+<!--  </Target>-->
 
   <ItemGroup>
     <None Include="..\..\icon_128.png">

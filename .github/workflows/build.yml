@@ -17,8 +17,11 @@ env:
   DOTNET_VERSION: "9.0.x"
   FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
   BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
+  OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
   CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
   CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
+  CLIENT_NAMESPACE: "HomeBook.Client"
+  CLIENT_CLASS: "BackendClient"
 
 jobs:
 
@@ -53,6 +56,20 @@ jobs:
       - name: Restore dependencies
         run: |
           dotnet restore
+
+      - name: Build OpenAPI
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Generate Client
+        shell: bash
+        run: |
+          kiota generate \
+            --language csharp \
+            --class-name ${{ env.CLIENT_CLASS }} \
+            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+            --openapi ${{ env.OPENAPI_FILE }} \
+            --output ${{ env.CLIENT_OUTPUT_DIR }} \
 
       - name: Build And Test
         env:
@@ -135,10 +152,6 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      - name: Build Solution
-        run: |
-          dotnet build --configuration Release --no-restore
-
       - name: Install Kiota CLI
         run: |
           dotnet tool install --global Microsoft.OpenApi.Kiota
@@ -146,6 +159,19 @@ jobs:
       - name: Restore dependencies
         run: |
           dotnet restore
+
+      - name: Build Solution
+        run: |
+          dotnet build --configuration Release --no-restore
+
+      - name: Generate Client
+        run: |
+          kiota generate \
+            --language csharp \
+            --class-name ${{ env.CLIENT_CLASS }} \
+            --namespace-name ${{ env.CLIENT_NAMESPACE }} \
+            --openapi ${{ env.OPENAPI_FILE }} \
+            --output ${{ env.CLIENT_OUTPUT_DIR }} \
 
       - name: Build Client
         run: |

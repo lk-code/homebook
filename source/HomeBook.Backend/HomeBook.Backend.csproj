@@ -4,7 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <OpenApiDocumentsDirectory>../HomeBook.Client/</OpenApiDocumentsDirectory>
+<!--    <OpenApiDocumentsDirectory>../HomeBook.Client/</OpenApiDocumentsDirectory>-->
+    <OpenApiDocumentsDirectory>.</OpenApiDocumentsDirectory>
   </PropertyGroup>
 
   <ItemGroup>
