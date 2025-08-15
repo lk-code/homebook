@@ -4,10 +4,7 @@
 
 @layout ContentOnlyLayout
 
-@using HomeBook.Frontend.Abstractions.Contracts
-
-@inject NavigationManager NavigationManager
-@inject ISetupService SetupService
+@inject IConfiguration Configuration
 
 <UIWaveBackground/>
 
@@ -18,7 +15,7 @@
         <MudCardHeader>
 
             <CardHeaderContent>
-                <MudText Typo="Typo.h3">Setup</MudText>
+                <MudText Typo="Typo.h3">HomeBook Setup</MudText>
             </CardHeaderContent>
 
         </MudCardHeader>
@@ -64,6 +61,10 @@
             </MudHidden>
 
         </MudCardContent>
+
+        <MudCardActions Class="mud-theme-primary px-5">
+            Version: @_appVersion - Server: @_appServer
+        </MudCardActions>
 
     </MudCard>
 
