@@ -5,42 +5,53 @@
 @inject ISetupService SetupService
 @inject BackendClient BackendClient
 
-<MudText Typo="Typo.h4">Check Server Connection</MudText>
+<MudCard Class="frosted-b3 mud-elevation-6">
 
-<div class="relative d-flex flex-grow-1 flex-wrap flex-column justify-center align-center">
+    <MudCardHeader>
+        <CardHeaderContent>
+            <MudText Typo="Typo.h4">Check Server Connection</MudText>
+        </CardHeaderContent>
+    </MudCardHeader>
 
-    @if (_isChecking)
-    {
-        <MudProgressLinear Color="Color.Primary"
-                           Indeterminate="@_isChecking"
-                           Class="my-7"/>
-    }
+    <MudCardContent>
 
-</div>
+        <div class="relative d-flex flex-grow-1 flex-wrap flex-column justify-center align-center">
 
-@if (!_isChecking)
-{
-    @if (_serverIsOk)
-    {
-        <MudAlert Class="mt-3"
-                  Severity="Severity.Info">
-            Server is found and connected.
-        </MudAlert>
-    }
+            @if (_isChecking)
+            {
+                <MudProgressLinear Color="Color.Primary"
+                                   Indeterminate="@_isChecking"
+                                   Class="my-7"/>
+            }
 
-    @if (!string.IsNullOrEmpty(_errorMessage))
-    {
-        <MudAlert Class="mt-3"
-                  Severity="Severity.Error">
-            @_errorMessage
-        </MudAlert>
+        </div>
 
-        <MudButton Color="Color.Primary"
-                   Variant="Variant.Filled"
-                   Class="mt-3"
-                   OnClick="async () => await StartAsync()">
-            Retry
-        </MudButton>
-    }
-}
+        @if (!_isChecking)
+        {
+            @if (_serverIsOk)
+            {
+                <MudAlert Class="mt-3"
+                          Severity="Severity.Info">
+                    Server is found and connected.
+                </MudAlert>
+            }
 
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <MudAlert Class="mt-3"
+                          Severity="Severity.Error">
+                    @_errorMessage
+                </MudAlert>
+
+                <MudButton Color="Color.Primary"
+                           Variant="Variant.Filled"
+                           Class="mt-3"
+                           OnClick="async () => await StartAsync()">
+                    Retry
+                </MudButton>
+            }
+        }
+
+    </MudCardContent>
+
+</MudCard>

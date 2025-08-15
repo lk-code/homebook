@@ -1,7 +1,9 @@
+@using HomeBook.Frontend.Themes
+
 @inherits LayoutComponentBase
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider Theme="HomebookTheme.GetTheme()" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -12,7 +14,7 @@
 
 <MudLayout>
 
-    <MudMainContent>
+    <MudMainContent Class="pa-0 ma-0">
         @Body
     </MudMainContent>
 

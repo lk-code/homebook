@@ -1,0 +1,53 @@
+@use "sass:math";
+
+$frosted-color: rgb(255, 255, 255); // Base color (RGB)
+$frosted-alpha-min: 0.05;           // Alpha for b1
+$frosted-alpha-step: 0.05;          // Fixed alpha step per class
+$frosted-blur: 6px;                 // Blur strength
+$frosted-steps: 10;                 // Number of classes
+$frosted-border-alpha: 0.05;        // Extra alpha for border
+$frosted-gradient-deg: 160deg;      // Gradient angle
+$frosted-gradient-add: 0.25;        // Extra alpha at gradient end
+$frosted-inner-shadow-alpha: 0.3;   // Strength of the white inner shadow
+
+@mixin frosted-base($alpha) {
+    $alpha-end: min($alpha + $frosted-gradient-add, 1);     // Cap gradient end
+    $border-alpha: min($alpha + $frosted-border-alpha, 1);  // Cap border alpha
+
+    position: relative; // Required for ::before positioning
+
+    background:
+        // Top dent / subtle highlight
+        radial-gradient(
+                ellipse 80% 30% at top center,
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 80%
+        ),
+            // Main frost gradient
+        linear-gradient(
+                $frosted-gradient-deg,
+                rgba($frosted-color, $alpha) 0%,
+                rgba($frosted-color, $alpha-end) 100%
+        ),
+        rgba($frosted-color, $alpha) !important;
+
+    backdrop-filter: blur($frosted-blur);
+    border: 1px solid rgba($frosted-color, $border-alpha);
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0; // same size as parent
+        pointer-events: none; // let clicks pass through
+        box-shadow: inset 0px 4px 48px rgba(255, 255, 255, ($frosted-inner-shadow-alpha + $alpha));
+        border-radius: inherit; // match parent border radius
+    }
+}
+
+@for $i from 1 through $frosted-steps {
+    $alpha: $frosted-alpha-min + ($i - 1) * $frosted-alpha-step;
+
+    .frosted-b#{$i} {
+        @include frosted-base($alpha);
+    }
+}

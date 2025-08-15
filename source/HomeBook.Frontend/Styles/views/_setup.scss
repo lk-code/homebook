@@ -1,0 +1,17 @@
+.hb-setup-container {
+    height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 120px;
+}
+
+.hb-setup-card {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.ui-setup-stepper {
+
+    .mud-stepper-actions {
+        display: none;
+    }
+}

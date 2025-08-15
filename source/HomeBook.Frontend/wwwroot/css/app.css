@@ -62,6 +62,156 @@
   content: var(--blazor-load-percentage-text, "Loading");
 }
 
+.frosted-b1 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.3) 100%), rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.frosted-b1::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.35);
+  border-radius: inherit;
+}
+
+.frosted-b2 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.35) 100%), rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.frosted-b2::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.4);
+  border-radius: inherit;
+}
+
+.frosted-b3 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.4) 100%), rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.frosted-b3::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.45);
+  border-radius: inherit;
+}
+
+.frosted-b4 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.45) 100%), rgba(255, 255, 255, 0.2) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.frosted-b4::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.5);
+  border-radius: inherit;
+}
+
+.frosted-b5 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.5) 100%), rgba(255, 255, 255, 0.25) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.frosted-b5::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.55);
+  border-radius: inherit;
+}
+
+.frosted-b6 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.55) 100%), rgba(255, 255, 255, 0.3) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.frosted-b6::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.6);
+  border-radius: inherit;
+}
+
+.frosted-b7 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.6) 100%), rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.frosted-b7::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.65);
+  border-radius: inherit;
+}
+
+.frosted-b8 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.65) 100%), rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+}
+.frosted-b8::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.7);
+  border-radius: inherit;
+}
+
+.frosted-b9 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.7) 100%), rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+.frosted-b9::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.75);
+  border-radius: inherit;
+}
+
+.frosted-b10 {
+  position: relative;
+  background: radial-gradient(ellipse 80% 30% at top center, rgba(255, 255, 255, 0.15) 0%, transparent 80%), linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.75) 100%), rgba(255, 255, 255, 0.5) !important;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+.frosted-b10::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0px 4px 48px rgba(255, 255, 255, 0.8);
+  border-radius: inherit;
+}
+
 .ui-wavebackground-container {
   margin: auto;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
@@ -81,12 +231,15 @@
 }
 .ui-wavebackground-container.ui-bg-02 {
   background: url("/img/bg/ws25.jpg") no-repeat center center fixed;
+  background-size: cover;
 }
 .ui-wavebackground-container.ui-bg-03 {
   background: url("/img/bg/wp12118355.webp") no-repeat center center fixed;
+  background-size: cover;
 }
 .ui-wavebackground-container.ui-bg-04 {
   background: url("/img/bg/wp12118355-light.webp") no-repeat center center fixed;
+  background-size: cover;
 }
 .ui-wavebackground-container .wave {
   background: rgba(255, 255, 255, 0.25);
@@ -140,10 +293,15 @@
     transform: translateX(1);
   }
 }
+.hb-setup-container {
+  height: 100vh;
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
 .hb-setup-card {
-  background: rgba(255, 255, 255, 0.3) !important;
-  backdrop-filter: blur(10px);
-  height: 70vh;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .ui-setup-stepper .mud-stepper-actions {

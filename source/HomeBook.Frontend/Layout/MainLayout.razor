@@ -1,7 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using HomeBook.Frontend.Themes
+@inherits LayoutComponentBase
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider Theme="HomebookTheme.GetTheme()" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@

@@ -3,21 +3,25 @@
 
 @inject ISetupService SetupService
 
-<MudStepper @ref="_setupStepper"
-            Vertical="IsVertical"
-            ShowResetButton="false"
-            Class="ui-setup-stepper">
+<MudCard Class="frosted-b1 mud-elevation-6">
 
-    <ChildContent>
+    <MudStepper @ref="_setupStepper"
+                Vertical="IsVertical"
+                ShowResetButton="false"
+                Class="ui-setup-stepper">
 
-        @foreach (SetupStepViewModel step in _setupSteps)
-        {
-            <MudStep @ref="step.StepRef"
-                     Title="@step.Title"
-                     Completed="@step.Completed"
-                     HasError="@step.HasError"/>
-        }
+        <ChildContent>
 
-    </ChildContent>
+            @foreach (SetupStepViewModel step in _setupSteps)
+            {
+                <MudStep @ref="step.StepRef"
+                         Title="@step.Title"
+                         Completed="@step.Completed"
+                         HasError="@step.HasError"/>
+            }
 
-</MudStepper>
+        </ChildContent>
+
+    </MudStepper>
+
+</MudCard>

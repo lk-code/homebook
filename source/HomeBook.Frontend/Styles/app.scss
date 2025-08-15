@@ -1,5 +1,6 @@
-@import "blazorbase";
+@use "blazorbase";
 
-@import "components";
+@use "styles";
+@use "components";
 
-@import "setup";
+@use "views";

@@ -3,7 +3,7 @@
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
-WORKDIR /src
+WORKDIR /homebook-src
 
 COPY . .
 
@@ -52,16 +52,16 @@ RUN mkdir -p /var/cache/nginx /var/lib/nginx /var/log/nginx /var/run /usr/share/
 
 COPY --from=build /frontend_dist/wwwroot /usr/share/nginx/html
 
-COPY --from=build /backend_dist /app
-WORKDIR /app
+COPY --from=build /backend_dist /opt/homebook
+WORKDIR /opt/homebook
 
-RUN chown -R appuser:appgroup /app
+RUN chown -R appuser:appgroup /opt/homebook
 
 ARG FRONTEND_APPSETTINGS_FILE="./source/HomeBook.Frontend/wwwroot/appsettings.json"
 COPY $FRONTEND_APPSETTINGS_FILE /usr/share/nginx/html/wwwroot/appsettings.json
 
 ARG BACKEND_APPSETTINGS_FILE="./source/HomeBook.Backend/appsettings.json"
-COPY $BACKEND_APPSETTINGS_FILE /app/appsettings.json
+COPY $BACKEND_APPSETTINGS_FILE /opt/homebook/appsettings.json
 
 USER appuser
-CMD ["/bin/sh", "-c", "dotnet /app/HomeBook.Backend.dll & nginx -g 'daemon off;'"]
+CMD ["/bin/sh", "-c", "dotnet /opt/homebook/HomeBook.Backend.dll & nginx -g 'daemon off;'"]

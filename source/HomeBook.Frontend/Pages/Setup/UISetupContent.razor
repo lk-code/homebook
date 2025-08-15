@@ -10,19 +10,3 @@
         <DynamicComponent Type="@_activeSetupStep.GetType()"/>
     }
 </div>
-
-<MudPaper Style="margin-top: 200px;">
-
-    <MudButton OnClick="Callback">
-        Setup Finished
-    </MudButton>
-
-    <MudButton OnClick="() => SetupService.SetStepStatusAsync(true, false)">
-        Success
-    </MudButton>
-
-    <MudButton OnClick="() => SetupService.SetStepStatusAsync(false, true)">
-        Error
-    </MudButton>
-
-</MudPaper>

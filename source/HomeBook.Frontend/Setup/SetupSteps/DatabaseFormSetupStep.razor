@@ -1,10 +1,13 @@
-<MudCard>
+<MudCard Class="frosted-b3 mud-elevation-6">
+
     <MudCardHeader>
         <CardHeaderContent>
-            <MudText Typo="Typo.h6">Database Connection Setup</MudText>
+            <MudText Typo="Typo.h4">Database Connection Setup</MudText>
         </CardHeaderContent>
     </MudCardHeader>
+
     <MudCardContent>
+
         <EditForm Model="@_databaseConfig" OnValidSubmit="OnValidSubmit">
             <DataAnnotationsValidator/>
 
@@ -111,5 +114,7 @@
                 </MudAlert>
             }
         </EditForm>
+
     </MudCardContent>
+
 </MudCard>
