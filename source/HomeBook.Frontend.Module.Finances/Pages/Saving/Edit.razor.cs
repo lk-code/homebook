@@ -35,7 +35,7 @@ public partial class Edit : ComponentBase
         }
         catch (Exception)
         {
-            int i = 0;
+            // TODO: display error
         }
         finally
         {

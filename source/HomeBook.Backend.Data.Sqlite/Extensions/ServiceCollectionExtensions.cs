@@ -40,7 +40,7 @@ public static class ServiceCollectionExtensions
         if (useInMemory)
             connectionString = ConnectionStringBuilder.BuildInMemory();
         else
-            connectionString = ConnectionStringBuilder.Build(configuration["Database:File"]);
+            connectionString = ConnectionStringBuilder.Build(configuration["Database:File"]!);
 
         optionsBuilder.SetDbOptions(connectionString);
 

@@ -7,7 +7,7 @@ public partial class UiNumericGroup<T> : ComponentBase
 {
     private MudNumericField<T> _numericInput = null!;
 
-    protected T _value;
+    protected T _value = default!;
 
     [Parameter]
     public T Value
@@ -17,13 +17,13 @@ public partial class UiNumericGroup<T> : ComponentBase
     }
 
     [Parameter]
-    public T Min { get; set; }
+    public T Min { get; set; } = default!;
 
     [Parameter]
-    public T Max { get; set; }
+    public T Max { get; set; } = default!;
 
     [Parameter]
-    public T Step { get; set; }
+    public T Step { get; set; } = default!;
 
     [Parameter]
     public EventCallback<T> ValueChanged { get; set; }

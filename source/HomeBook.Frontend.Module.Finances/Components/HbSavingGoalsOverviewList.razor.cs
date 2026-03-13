@@ -35,7 +35,7 @@ public partial class HbSavingGoalsOverviewList : ComponentBase
         }
         catch (Exception)
         {
-            int i = 0;
+            // TODO: display error
         }
         finally
         {

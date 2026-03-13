@@ -22,9 +22,6 @@ public static class SearchEndpoints
                 "HTTP 401: User is not authorized",
                 "HTTP 500: Unknown error while getting preference"))
             .RequireAuthorization()
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces<SearchResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces<string>(StatusCodes.Status500InternalServerError);

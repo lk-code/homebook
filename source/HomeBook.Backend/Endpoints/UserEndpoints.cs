@@ -22,9 +22,6 @@ public static class UserEndpoints
                 "HTTP 401: User is not authorized",
                 "HTTP 500: Unknown error while getting preference"))
             .RequireAuthorization()
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces<GetUserPreferenceLocaleResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -37,9 +34,6 @@ public static class UserEndpoints
                 "HTTP 401: User is not authorized",
                 "HTTP 500: Unknown error while updating preference"))
             .RequireAuthorization()
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces<string>(StatusCodes.Status500InternalServerError);
