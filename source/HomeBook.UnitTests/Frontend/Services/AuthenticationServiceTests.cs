@@ -255,8 +255,6 @@ public class AuthenticationServiceTests
     {
         // arrange
         var cancellationToken = CancellationToken.None;
-        var tokenResponse = "a-s-e-c-r-e-t-t-o-k-e-n";
-        var refreshTokenResponse = "a-s-e-c-r-e-t-r-e-f-r-e-s-h-t-o-k-e-n";
         var expiresAt = DateTime.UtcNow.AddHours(1);
         var expectedExpiresAt = new DateTimeOffset(expiresAt, TimeSpan.FromHours(0)).DateTime.ToString("O");
 
@@ -276,7 +274,6 @@ public class AuthenticationServiceTests
         // arrange
         var cancellationToken = CancellationToken.None;
         var tokenResponse = "a-s-e-c-r-e-t-t-o-k-e-n";
-        var refreshTokenResponse = "a-s-e-c-r-e-t-r-e-f-r-e-s-h-t-o-k-e-n";
         var expiresAt = DateTime.UtcNow.AddHours(1);
         var expectedExpiresAt = new DateTimeOffset(expiresAt, TimeSpan.FromHours(0)).DateTime.ToString("O");
 
@@ -296,7 +293,6 @@ public class AuthenticationServiceTests
         // arrange
         var cancellationToken = CancellationToken.None;
         var tokenResponse = "a-s-e-c-r-e-t-t-o-k-e-n";
-        var refreshTokenResponse = "a-s-e-c-r-e-t-r-e-f-r-e-s-h-t-o-k-e-n";
         var expiresAt = DateTime.UtcNow.AddHours(-1);
         var expectedExpiresAt = new DateTimeOffset(expiresAt, TimeSpan.FromHours(0)).DateTime.ToString("O");
 
@@ -326,7 +322,6 @@ public class AuthenticationServiceTests
         // arrange
         var cancellationToken = CancellationToken.None;
         var tokenResponse = "a-s-e-c-r-e-t-t-o-k-e-n";
-        var refreshTokenResponse = "a-s-e-c-r-e-t-r-e-f-r-e-s-h-t-o-k-e-n";
         var expiresAt = DateTime.UtcNow.AddHours(-1);
         var expectedExpiresAt = new DateTimeOffset(expiresAt, TimeSpan.FromHours(0)).DateTime.ToString("O");
 
@@ -409,7 +404,6 @@ public class AuthenticationServiceTests
         // arrange
         var cancellationToken = CancellationToken.None;
         var userId = Guid.NewGuid();
-        var username = "testuser";
         var expiresAt = DateTime.UtcNow.AddHours(1);
         var tokenResponse = "invalid-token";
         var expectedExpiresAt = new DateTimeOffset(expiresAt, TimeSpan.FromHours(0)).DateTime.ToString("O");

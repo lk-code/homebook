@@ -86,7 +86,7 @@ public class FinanceSavingGoalHandlerE2ETests
             .BuildServiceProvider();
 
         // apply migrations
-        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE");
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
         await databaseMigrator.MigrateAsync(cancellationToken);
 
         // verify that migrations were applied

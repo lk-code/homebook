@@ -71,7 +71,7 @@ public class InfoHandlerE2ETests
             .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
             .BuildServiceProvider();
         // apply migrations
-        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE");
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
         await databaseMigrator.MigrateAsync(cancellationToken);
 
         // write test data
