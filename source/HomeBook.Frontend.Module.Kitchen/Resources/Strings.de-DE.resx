@@ -92,4 +92,10 @@
     <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
         <value>Kcal</value>
     </data>
+    <data name="RecipeEditIngredients_IngredientName_Placeholder" xml:space="preserve">
+        <value>Zutat</value>
+    </data>
+    <data name="RecipeEditIngredients_AdditionalNote_Placeholder" xml:space="preserve">
+        <value>Zusatz (optional)</value>
+    </data>
 </root>

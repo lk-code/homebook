@@ -278,5 +278,29 @@ namespace HomeBook.Frontend.Module.Kitchen.Resources {
                 return ResourceManager.GetString("RecipeEditIngredients_Ingredients_Title", resourceCulture);
             }
         }
+        
+        public static string RecipeEditIngredients_Quantity_Placeholder {
+            get {
+                return ResourceManager.GetString("RecipeEditIngredients_Quantity_Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditIngredients_Unit_Placeholder {
+            get {
+                return ResourceManager.GetString("RecipeEditIngredients_Unit_Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditIngredients_IngredientName_Placeholder {
+            get {
+                return ResourceManager.GetString("RecipeEditIngredients_IngredientName_Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditIngredients_AdditionalNote_Placeholder {
+            get {
+                return ResourceManager.GetString("RecipeEditIngredients_AdditionalNote_Placeholder", resourceCulture);
+            }
+        }
     }
 }
