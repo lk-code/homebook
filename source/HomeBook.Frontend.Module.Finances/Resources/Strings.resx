@@ -40,7 +40,7 @@
         <value>You don't have any savings goals yet</value>
     </data>
     <data name="Savings_Edit_Title" xml:space="preserve">
-        <value />
+        <value>Saving Title</value>
     </data>
     <data name="Savings_Edit_NotFound" xml:space="preserve">
         <value>Saving Goal not found!</value>

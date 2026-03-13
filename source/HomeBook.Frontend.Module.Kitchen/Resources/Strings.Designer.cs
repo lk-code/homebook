@@ -164,5 +164,113 @@ namespace HomeBook.Frontend.Module.Kitchen.Resources {
                 return ResourceManager.GetString("RecipeEdit_RecipeDescriptionTextField_Label", resourceCulture);
             }
         }
+        
+        public static string RecipeEdit_ServingsLabel_Singular {
+            get {
+                return ResourceManager.GetString("RecipeEdit_ServingsLabel_Singular", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_ServingsLabel_Plural {
+            get {
+                return ResourceManager.GetString("RecipeEdit_ServingsLabel_Plural", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_DurationAdditionalArea_Title {
+            get {
+                return ResourceManager.GetString("RecipeEdit_DurationAdditionalArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_AbortButton_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_AbortButton_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_SaveRecipeButton_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_SaveRecipeButton_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_RecipeSource_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_RecipeSource_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_RecipeComment_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_RecipeComment_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_CaloriesPerServing_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_CaloriesPerServing_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_RestingTime_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_RestingTime_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_CookingBakingTime_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_CookingBakingTime_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_WorkingTime_Content {
+            get {
+                return ResourceManager.GetString("RecipeEdit_WorkingTime_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_WorkingTimeHour_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_WorkingTimeHour_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_WorkingTimeMinute_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_WorkingTimeMinute_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_CookingBakingTimeHour_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_CookingBakingTimeHour_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_CookingBakingTimeMinute_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_CookingBakingTimeMinute_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_RestingTimeHour_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_RestingTimeHour_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_RestingTimeMinute_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_RestingTimeMinute_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEdit_CaloriesPerServing_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEdit_CaloriesPerServing_AdornmentText", resourceCulture);
+            }
+        }
     }
 }

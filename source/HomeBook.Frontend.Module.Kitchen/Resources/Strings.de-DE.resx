@@ -59,4 +59,37 @@
     <data name="RecipeEdit_ViewRecipeButton_Text" xml:space="preserve">
         <value>Rezept ansehen</value>
     </data>
+    <data name="RecipeEdit_CaloriesPerServing_Content" xml:space="preserve">
+        <value>Kalorien/Portion</value>
+    </data>
+    <data name="RecipeEdit_RestingTime_Content" xml:space="preserve">
+        <value>Ruhezeit</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTime_Content" xml:space="preserve">
+        <value>Koch/Backzeit</value>
+    </data>
+    <data name="RecipeEdit_WorkingTime_Content" xml:space="preserve">
+        <value>Arbeitszeit</value>
+    </data>
+    <data name="RecipeEdit_WorkingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_WorkingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_RestingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_RestingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
+        <value>Kcal</value>
+    </data>
 </root>
