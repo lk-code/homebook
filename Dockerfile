@@ -1,7 +1,7 @@
 # This Dockerfile is used for a combined multi-arch build of Blazor WASM and REST API
 # Recommended to use Docker Buildx for multi-architecture builds
 
-FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0.101 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /homebook-src
 
@@ -26,7 +26,7 @@ RUN dotnet publish "source/HomeBook.Frontend/HomeBook.Frontend.csproj" -c "$BUIL
 # Publish backend
 RUN dotnet publish "source/HomeBook.Backend/HomeBook.Backend.csproj" -c "$BUILD_CONFIGURATION" -o /backend_dist /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.101 AS final
 ARG APP_UID=21001
 EXPOSE 8080 5000
 ENV ASPNETCORE_URLS=http://+:5000
