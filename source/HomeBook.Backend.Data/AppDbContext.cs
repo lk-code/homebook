@@ -6,7 +6,7 @@ namespace HomeBook.Backend.Data;
 
 public class AppDbContext(
     DbContextOptions<AppDbContext> options,
-    IEnumerable<SaveChangesInterceptor> saveChangesInterceptors)
+    IEnumerable<SaveChangesInterceptor>? saveChangesInterceptors)
     : DbContext(options)
 {
     public DbSet<User> Users { get; set; } = null!;

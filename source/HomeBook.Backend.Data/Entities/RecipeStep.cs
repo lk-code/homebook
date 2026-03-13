@@ -17,7 +17,7 @@ public class RecipeStep
 
     [Required]
     [StringLength(500)]
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
     public int? TimerDurationInSeconds { get; set; }
 }
