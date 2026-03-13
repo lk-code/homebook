@@ -302,5 +302,47 @@ namespace HomeBook.Frontend.Module.Kitchen.Resources {
                 return ResourceManager.GetString("RecipeEditIngredients_AdditionalNote_Placeholder", resourceCulture);
             }
         }
+        
+        public static string RecipeEditSteps_Steps_Title {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_Steps_Title", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditSteps_StepIndexText_Content {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_StepIndexText_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditSteps_StepTimerText_Content {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_StepTimerText_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditSteps_StepTimerTitle_Content {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_StepTimerTitle_Content", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditSteps_StepTimerHour_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_StepTimerHour_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditSteps_StepTimerMinute_AdornmentText {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_StepTimerMinute_AdornmentText", resourceCulture);
+            }
+        }
+        
+        public static string RecipeEditSteps_StepDescription_Placeholder {
+            get {
+                return ResourceManager.GetString("RecipeEditSteps_StepDescription_Placeholder", resourceCulture);
+            }
+        }
     }
 }

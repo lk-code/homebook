@@ -98,4 +98,22 @@
     <data name="RecipeEditIngredients_AdditionalNote_Placeholder" xml:space="preserve">
         <value>Zusatz (optional)</value>
     </data>
+    <data name="RecipeEditSteps_Steps_Title" xml:space="preserve">
+        <value>Zubereitung</value>
+    </data>
+    <data name="RecipeEditSteps_StepIndexText_Content" xml:space="preserve">
+        <value>Schritt {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerText_Content" xml:space="preserve">
+        <value>Timer: {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEditSteps_StepDescription_Placeholder" xml:space="preserve">
+        <value>Was passiert in diesem Schritt?</value>
+    </data>
 </root>

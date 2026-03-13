@@ -1,7 +1,12 @@
 @using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Module.Kitchen.Resources
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Strings> Loc
+
 <MudText Typo="Typo.h5"
          Class="mx-5 my-3">
-    +Zubereitung
+    @Loc[nameof(Resources.Strings.RecipeEditSteps_Steps_Title)]
 </MudText>
 
 <MudList T="string"
@@ -13,7 +18,9 @@
                      Dense="true">
 
             <div class="d-flex flex-column flex-grow-1">
-                <MudText Class="flex-grow-1" Typo="Typo.h6">+Schritt @(index + 1)</MudText>
+                <MudText Class="flex-grow-1" Typo="Typo.h6">
+                    @string.Format(Loc[nameof(Resources.Strings.RecipeEditSteps_StepIndexText_Content)], (index + 1))
+                </MudText>
 
                 <div class="d-flex align-center justify-space-between flex-grow-1 gap-3">
 
@@ -31,7 +38,7 @@
                             @if (step.TimerDurationInSeconds is > 0)
                             {
                                 <MudText Typo="Typo.caption">
-                                    +Timer: @FormatStepTimer(step.TimerDurationInSeconds)
+                                    @string.Format(Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerText_Content)], FormatStepTimer(step.TimerDurationInSeconds))
                                 </MudText>
                             }
                         }
@@ -50,7 +57,7 @@
                 {
                     <MudText Typo="Typo.h6"
                              Class="mx-3">
-                        +Timer für diesen Schritt
+                        @Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerTitle_Content)]
                     </MudText>
 
                     <div class="d-flex align-center justify-space-between flex-grow-1 gap-3 mx-3">
@@ -62,7 +69,7 @@
                                          Value="@GetStepHours(step)"
                                          ValueChanged="@(value => SetStepHours(step, value))"
                                          Adornment="Adornment.End"
-                                         AdornmentText="+h"
+                                         AdornmentText="@Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerHour_AdornmentText)]"
                                          AdornmentColor="Color.Primary"/>
                         <MudNumericField T="int"
                                          Margin="Margin.Dense"
@@ -73,7 +80,7 @@
                                          Value="@GetStepMinutes(step)"
                                          ValueChanged="@(value => SetStepMinutes(step, value))"
                                          Adornment="Adornment.End"
-                                         AdornmentText="+m"
+                                         AdornmentText="@Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerMinute_AdornmentText)]"
                                          AdornmentColor="Color.Primary"/>
                     </div>
                 }
@@ -89,13 +96,15 @@
                      Dense="true">
 
             <div class="d-flex flex-column flex-grow-1">
-                <MudText Class="flex-grow-1" Typo="Typo.h6">+Schritt @(Steps.Count + 1)</MudText>
+                <MudText Class="flex-grow-1" Typo="Typo.h6">
+                    @string.Format(Loc[nameof(Resources.Strings.RecipeEditSteps_StepIndexText_Content)], (Steps.Count + 1))
+                </MudText>
 
                 <div class="d-flex align-center gap-3">
 
                     <MudTextField T="string"
                                   @bind-Value="_newStepDescription"
-                                  Placeholder="Was passiert in diesem Schritt?"
+                                  Placeholder="@Loc[nameof(Resources.Strings.RecipeEditSteps_StepDescription_Placeholder)]"
                                   Margin="Margin.Dense"
                                   Variant="Variant.Outlined"/>
 
@@ -107,7 +116,7 @@
 
                 <MudText Typo="Typo.h6"
                          Class="mx-3">
-                    +Timer für diesen Schritt
+                    @Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerTitle_Content)]
                 </MudText>
 
                 <div class="d-flex align-center justify-space-between flex-grow-1 gap-3 mx-3">
@@ -118,7 +127,7 @@
                                      Min="0"
                                      @bind-Value="_newStepHours"
                                      Adornment="Adornment.End"
-                                     AdornmentText="+h"
+                                     AdornmentText="@Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerHour_AdornmentText)]"
                                      AdornmentColor="Color.Primary"/>
                     <MudNumericField T="int"
                                      Margin="Margin.Dense"
@@ -128,7 +137,7 @@
                                      Max="59"
                                      @bind-Value="_newStepMinutes"
                                      Adornment="Adornment.End"
-                                     AdornmentText="+m"
+                                     AdornmentText="@Loc[nameof(Resources.Strings.RecipeEditSteps_StepTimerMinute_AdornmentText)]"
                                      AdornmentColor="Color.Primary"/>
                 </div>
 

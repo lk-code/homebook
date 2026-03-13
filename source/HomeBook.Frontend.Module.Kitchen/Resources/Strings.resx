@@ -147,4 +147,25 @@
     <data name="RecipeEditIngredients_AdditionalNote_Placeholder" xml:space="preserve">
         <value>Note (optional)</value>
     </data>
+    <data name="RecipeEditSteps_Steps_Title" xml:space="preserve">
+        <value>Instructions</value>
+    </data>
+    <data name="RecipeEditSteps_StepIndexText_Content" xml:space="preserve">
+        <value>Step {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerText_Content" xml:space="preserve">
+        <value>Timer: {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerTitle_Content" xml:space="preserve">
+        <value>Timer for this step</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEditSteps_StepDescription_Placeholder" xml:space="preserve">
+        <value>What happens in this step?</value>
+    </data>
 </root>
