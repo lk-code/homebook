@@ -132,15 +132,11 @@ public partial class PlanOverview : ComponentBase
     private async Task OnMealAdd(MealType mealType, DateOnly date, RecipeViewModel meal)
     {
         // TODO: call rest
-
-        int i = 0;
     }
 
     private async Task OnMealDelete(MealType mealType, DateOnly date)
     {
         // TODO: call rest
-
-        int i = 0;
     }
 
     private async Task OnMealPlanItemChanged(MealPlanChangedDto eventArgs)

@@ -46,6 +46,6 @@ public partial class Edit : ComponentBase
 
     private void OnSavingGoalSave(SavingGoalDto dto)
     {
-        int i = 0;
+        // TODO: save thge goal data
     }
 }

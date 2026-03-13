@@ -58,9 +58,9 @@ public partial class Edit : ComponentBase
             _recipe = recipeDto.ToViewModel();
             int i = 0;
         }
-        catch (Exception err)
+        catch (Exception)
         {
-            int i = 0;
+            // TODO: display error
         }
         finally
         {

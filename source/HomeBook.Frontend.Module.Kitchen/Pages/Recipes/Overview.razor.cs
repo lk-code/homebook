@@ -36,9 +36,9 @@ public partial class Overview : ComponentBase
                 _recipes.Add(recipe.ToViewModel());
             }
         }
-        catch (Exception err)
+        catch (Exception)
         {
-            int i = 0;
+            // TODO: display error
         }
         finally
         {

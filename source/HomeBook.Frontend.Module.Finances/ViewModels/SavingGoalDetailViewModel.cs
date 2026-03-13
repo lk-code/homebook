@@ -5,9 +5,9 @@ namespace HomeBook.Frontend.Module.Finances.ViewModels;
 public class SavingGoalDetailViewModel
 {
     public Guid? Id { get; set; } = null;
-    public string Name { get; set; }
-    public string Color { get; set; }
-    public string IconName { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Color { get; set; } = string.Empty;
+    public string IconName { get; set; } = string.Empty;
     public decimal TargetAmount { get; set; }
     public decimal CurrentAmount { get; set; }
     public DateTime? TargetDate { get; set; }
