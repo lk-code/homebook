@@ -5,7 +5,7 @@ on:
         branches: [ "main" ]
 
 env:
-    DOTNET_VERSION: "10.0.x"
+    DOTNET_VERSION: "10.0.101"
     FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
     BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
     OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
