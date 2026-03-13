@@ -1,9 +1,13 @@
 @using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Module.Kitchen.Resources
 @using HomeBook.Frontend.Module.Kitchen.ViewModels
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Strings> Loc
 
 <MudText Typo="Typo.h5"
          Class="mx-5 my-3">
-    +Zutaten
+    @Loc[nameof(Resources.Strings.RecipeEditIngredients_Ingredients_Title)]
 </MudText>
 
 <MudList T="string">

@@ -132,4 +132,7 @@
     <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
         <value>kcal</value>
     </data>
+    <data name="RecipeEditIngredients_Ingredients_Title" xml:space="preserve">
+        <value>Ingredients</value>
+    </data>
 </root>

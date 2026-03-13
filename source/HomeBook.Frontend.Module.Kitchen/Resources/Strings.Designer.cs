@@ -272,5 +272,11 @@ namespace HomeBook.Frontend.Module.Kitchen.Resources {
                 return ResourceManager.GetString("RecipeEdit_CaloriesPerServing_AdornmentText", resourceCulture);
             }
         }
+        
+        public static string RecipeEditIngredients_Ingredients_Title {
+            get {
+                return ResourceManager.GetString("RecipeEditIngredients_Ingredients_Title", resourceCulture);
+            }
+        }
     }
 }
