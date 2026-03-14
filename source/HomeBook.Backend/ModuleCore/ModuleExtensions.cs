@@ -89,13 +89,27 @@ public static class ModuleExtensions
 
         IEnumerable<IModule> modules = sp.GetServices<IModule>();
 
+        // TODO: check that every module key is unique. otherwise stop registering modules! this is for safety because otherwise a scam module can access data from another module with its key
+
         // initialize all modules
         foreach (IModule module in modules)
         {
+            // TODO: ensure that module.key contains only a-z and 0-9
+
             // register endpoints
             try
             {
                 await host.RegisterEndpointsForModuleAsync(module);
+            }
+            catch (NotImplementedException)
+            {
+                // do nothing
+            }
+
+            // register storage
+            try
+            {
+                await host.RegisterStorageForModuleAsync(module);
             }
             catch (NotImplementedException)
             {
@@ -114,6 +128,33 @@ public static class ModuleExtensions
         }
     }
 
+    public static async Task RegisterStorageForModuleAsync(this WebApplication host,
+        IModule module)
+    {
+        if (module is not IBackendModuleStorageRegistrar registrar)
+            return;
+        IBackendModuleStorageRegistrar storageRegistrar = registrar;
+
+        IConfiguration configuration = host.Configuration;
+
+        IStorageBuilder builder = new StorageBuilder();
+        storageRegistrar.RegisterStorage(builder, configuration);
+
+        IStorageBuilderDataAccessor accessor = (IStorageBuilderDataAccessor)builder;
+
+        string[] scopeNames = accessor.GetStorageScopeNames();
+        foreach (string scopeName in scopeNames)
+        {
+            string fullScopeName = $"{module.Key}.{scopeName}";
+
+            // TODO: register scope in database (if doesnt exists) with scope id, scope name, module
+
+            // TODO: create storage directory for scope-id like /data/storage/{guid} if doesnt exists
+
+            int i = 0;
+        }
+    }
+
     public static async Task RegisterEndpointsForModuleAsync(this WebApplication host,
         IModule module)
     {
@@ -124,7 +165,8 @@ public static class ModuleExtensions
         IConfiguration configuration = host.Configuration;
 
         // register endpoint group for module
-        RouteGroupBuilder moduleEndpointGroup = host.MapGroup($"/modules/{module.Key}")
+        string endpointModuleGroupKey = module.Key.Replace(".", "/").ToLower();
+        RouteGroupBuilder moduleEndpointGroup = host.MapGroup($"/modules/{endpointModuleGroupKey}")
             .WithDescription(module.Description)
             .WithTags([
                 module.Name

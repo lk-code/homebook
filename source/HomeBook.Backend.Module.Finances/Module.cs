@@ -19,7 +19,7 @@ public class Module : IModule,
 {
     public string Name { get; } = "Finances Module";
     public string Description { get; } = "Provides financial management features";
-    public string Key { get; } = "finances";
+    public string Key { get; } = "homebook.finances";
     public string Author { get; } = "HomeBook";
     public Version Version { get; } = new("1.0.0");
 
