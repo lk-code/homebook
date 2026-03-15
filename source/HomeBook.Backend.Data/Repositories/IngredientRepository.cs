@@ -32,20 +32,14 @@ public class IngredientRepository(
         {
             await dbContext.RecipeIngredients
                 .Where(u => u.Id == entity.Id)
-                .ExecuteUpdateAsync(UpdateEntityProperties(entity),
+                .ExecuteUpdateAsync(s => s
+                        .SetProperty(u => u.Name, entity.Name)
+                        .SetProperty(u => u.NormalizedName, entity.NormalizedName),
                     cancellationToken: cancellationToken);
         }
 
         await dbContext.SaveChangesAsync(cancellationToken);
         return entity.Id;
-    }
-
-    private static Expression<Func<SetPropertyCalls<RecipeIngredient>, SetPropertyCalls<RecipeIngredient>>>
-        UpdateEntityProperties(RecipeIngredient entity)
-    {
-        return s => s
-            .SetProperty(u => u.Name, entity.Name)
-            .SetProperty(u => u.NormalizedName, entity.NormalizedName);
     }
 
     /// <inheritdoc />

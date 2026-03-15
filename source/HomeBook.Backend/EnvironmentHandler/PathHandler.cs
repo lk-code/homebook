@@ -17,4 +17,5 @@ public static class PathHandler
     public static readonly string DataDirectory = Path.Combine(BASE_PATH, "data");
     public static readonly string TempDirectory = Path.Combine(BASE_PATH, "temp");
     public static readonly string UpdateDirectory = Path.Combine(DataDirectory, "updates");
+    public static readonly string StorageDirectory = Path.Combine(BASE_PATH, "storage");
 }

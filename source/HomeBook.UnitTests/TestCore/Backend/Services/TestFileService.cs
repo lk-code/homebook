@@ -22,6 +22,7 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
     public string DataDirectory { get; } = NativeFileService.DataDirectory;
     public string TempDirectory { get; } = NativeFileService.TempDirectory;
     public string UpdateDirectory { get; } = NativeFileService.UpdateDirectory;
+    public string StorageDirectory { get; } = NativeFileService.StorageDirectory;
 
     public bool FileExists(string path)
     {

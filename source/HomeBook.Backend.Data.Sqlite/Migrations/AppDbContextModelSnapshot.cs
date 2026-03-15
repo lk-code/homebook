@@ -15,7 +15,7 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Configuration", b =>
                 {
@@ -199,6 +199,27 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SavingGoals");
+                });
+
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.StorageModuleRegistration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ScopeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageModuleRegistrations");
                 });
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.User", b =>

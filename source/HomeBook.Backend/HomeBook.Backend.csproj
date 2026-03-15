@@ -44,6 +44,7 @@
     <ItemGroup>
         <ProjectReference Include="..\HomeBook.Backend.Abstractions\HomeBook.Backend.Abstractions.csproj"/>
         <ProjectReference Include="..\HomeBook.Backend.Core.Search\HomeBook.Backend.Core.Search.csproj"/>
+        <ProjectReference Include="..\HomeBook.Backend.Core.Storage\HomeBook.Backend.Core.Storage.csproj" />
         <ProjectReference Include="..\HomeBook.Backend.Core\HomeBook.Backend.Core.csproj"/>
         <ProjectReference Include="..\HomeBook.Backend.Core.Account\HomeBook.Backend.Core.Account.csproj"/>
         <ProjectReference Include="..\HomeBook.Backend.Data.Mysql\HomeBook.Backend.Data.Mysql.csproj"/>

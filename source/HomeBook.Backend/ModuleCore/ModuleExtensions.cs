@@ -1,8 +1,10 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.Search;
+using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Factories;
 using HomeBook.Backend.Modules.Abstractions;
 using HomeBook.Backend.Options;
+using Npgsql;
 
 namespace HomeBook.Backend.ModuleCore;
 
@@ -115,6 +117,11 @@ public static class ModuleExtensions
             {
                 // do nothing
             }
+            catch (Exception err)
+            {
+                int i = 0;
+                // this may happen if the app is started after an update and the migrations are not executed
+            }
 
             // call the initialization logic
             try
@@ -133,6 +140,11 @@ public static class ModuleExtensions
     {
         if (module is not IBackendModuleStorageRegistrar registrar)
             return;
+
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        using IServiceScope scope = host.Services.CreateScope();
+        IStorageProvider storageProvider = scope.ServiceProvider.GetRequiredService<IStorageProvider>();
         IBackendModuleStorageRegistrar storageRegistrar = registrar;
 
         IConfiguration configuration = host.Configuration;
@@ -147,11 +159,23 @@ public static class ModuleExtensions
         {
             string fullScopeName = $"{module.Key}.{scopeName}";
 
-            // TODO: register scope in database (if doesnt exists) with scope id, scope name, module
+            bool isScopeRegistered = await storageProvider.IsScopeRegisteredAsync(fullScopeName,
+                cancellationToken);
+            Guid scopeId = Guid.Empty;
+            if (!isScopeRegistered)
+            {
+                scopeId = await storageProvider.RegisterStorageScopeAsync(fullScopeName,
+                    module.Key,
+                    cancellationToken);
+            }
+            else
+            {
+                scopeId = (await storageProvider.GetScopeIdByFullName(fullScopeName,
+                    cancellationToken))!.Value;
+            }
 
             // TODO: create storage directory for scope-id like /data/storage/{guid} if doesnt exists
-
-            int i = 0;
+            await storageProvider.CreateStorageForScopeAsync(scopeId, cancellationToken);
         }
     }
 

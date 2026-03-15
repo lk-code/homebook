@@ -12,6 +12,7 @@ public class NativeFileService : IApplicationPathProvider, IFileSystemService
     public string DataDirectory { get; } = PathHandler.DataDirectory;
     public string TempDirectory { get; } = PathHandler.TempDirectory;
     public string UpdateDirectory { get; } = PathHandler.UpdateDirectory;
+    public string StorageDirectory { get; } = PathHandler.StorageDirectory;
 
     /// <inheritdoc />
     public bool FileExists(string path) => File.Exists(path);

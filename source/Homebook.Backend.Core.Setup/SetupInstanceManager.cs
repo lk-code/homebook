@@ -23,7 +23,8 @@ public class SetupInstanceManager(
             applicationPathProvider.LogDirectory,
             applicationPathProvider.DataDirectory,
             applicationPathProvider.TempDirectory,
-            applicationPathProvider.UpdateDirectory
+            applicationPathProvider.UpdateDirectory,
+            applicationPathProvider.StorageDirectory
         ];
 
         foreach (string dir in requiredDirectories)

@@ -61,6 +61,5 @@ public class Module : IModule,
         IConfiguration configuration)
     {
         storageBuilder.RegisterStorage("RecipeImages");
-        storageBuilder.RegisterStorage("RecipeCache");
     }
 }

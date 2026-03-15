@@ -17,7 +17,7 @@ namespace HomeBook.Backend.Data.PostgreSql.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.11")
+                .HasAnnotation("ProductVersion", "10.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -205,6 +205,27 @@ namespace HomeBook.Backend.Data.PostgreSql.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SavingGoals");
+                });
+
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.StorageModuleRegistration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ModuleKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("ScopeName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageModuleRegistrations");
                 });
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.User", b =>
