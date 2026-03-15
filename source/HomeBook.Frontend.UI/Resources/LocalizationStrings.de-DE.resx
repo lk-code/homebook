@@ -127,4 +127,25 @@
   <data name="UISetupStepper_AdminUserSetupStep_Title" xml:space="preserve">
     <value>Admin Benutzer</value>
   </data>
+  <data name="UISetupStepper_ConfigurationSetupStep_Title" xml:space="preserve">
+    <value>Konfiguration</value>
+  </data>
+  <data name="Setup_Title" xml:space="preserve">
+    <value>HomeBook Setup</value>
+  </data>
+  <data name="Setup_CardActions_Server" xml:space="preserve">
+    <value>Server</value>
+  </data>
+  <data name="Setup_CardActions_Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="UISetupStepper_SetupProcessSetupStep_Title" xml:space="preserve">
+    <value>HomeBook Setup</value>
+  </data>
+  <data name="UISetupStepper_UpdateProcessSetupStep_Title" xml:space="preserve">
+    <value>HomeBook Update</value>
+  </data>
+  <data name="UISetupStepper_DatabaseMigrationSetupStep_Title" xml:space="preserve">
+    <value>Setup</value>
+  </data>
 </root>
