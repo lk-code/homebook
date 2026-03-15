@@ -124,4 +124,7 @@
   <data name="UISetupStepper_DatabaseConfigurationSetupStep_Title" xml:space="preserve">
     <value>Datenbank</value>
   </data>
+  <data name="UISetupStepper_AdminUserSetupStep_Title" xml:space="preserve">
+    <value>Admin Benutzer</value>
+  </data>
 </root>
