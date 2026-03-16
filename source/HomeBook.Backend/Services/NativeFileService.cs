@@ -30,4 +30,6 @@ public class NativeFileService : IApplicationPathProvider, IFileSystemService
 
     /// <inheritdoc />
     public DirectoryInfo CreateDirectory(string path) => Directory.CreateDirectory(path);
+
+    public void DeleteFile(string path) => File.Delete(path);
 }

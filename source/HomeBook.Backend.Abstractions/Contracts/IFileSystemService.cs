@@ -7,4 +7,5 @@ public interface IFileSystemService
     Task FileWriteAllTextAsync(string path, string content, CancellationToken cancellationToken);
     bool DirectoryExists(string path);
     DirectoryInfo CreateDirectory(string path);
+    void DeleteFile(string path);
 }

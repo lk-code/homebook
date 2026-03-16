@@ -16,6 +16,12 @@ public class StorageFileSystemProvider(
             cancellationToken) is not null);
 
     /// <inheritdoc/>
+    public async Task<bool> IsScopeRegisteredAsync(Guid scopeId,
+        CancellationToken cancellationToken) =>
+        (await repository.GetByIdAsync(scopeId,
+            cancellationToken) is not null);
+
+    /// <inheritdoc/>
     public async Task<Guid> RegisterStorageScopeAsync(string fullScopeName,
         string moduleKey,
         CancellationToken cancellationToken) =>
@@ -42,4 +48,20 @@ public class StorageFileSystemProvider(
         CancellationToken cancellationToken) =>
         (await repository.GetByFullScopeNameAsync(fullScopeName,
             cancellationToken))?.Id;
+
+    /// <inheritdoc/>
+    public async Task DeleteFileAsync(Guid scopeId,
+        string filename,
+        CancellationToken cancellationToken)
+    {
+        if (scopeId == Guid.Empty)
+            throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        string storagePath = Path.Combine(applicationPathProvider.StorageDirectory, scopeId.ToString());
+        string fullFilePath = Path.Combine(storagePath, filename);
+
+        fileSystemService.DeleteFile(fullFilePath);
+
+        await Task.CompletedTask;
+    }
 }

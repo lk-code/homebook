@@ -21,6 +21,7 @@ public static class FileEndpoints
                 "HTTP 200: File content returned successfully",
                 "HTTP 400: Invalid parameters",
                 "HTTP 404: File not found",
+                "HTTP 422: Storage Scope not found",
                 "HTTP 500: Unknown error while reading file"))
             .RequireAuthorization()
             .Produces<FileGetResponse>(StatusCodes.Status200OK)
@@ -35,6 +36,7 @@ public static class FileEndpoints
             .WithDescription(new Description("Creates or updates a file with binary content",
                 "HTTP 200: File created/updated successfully",
                 "HTTP 400: Invalid parameters or content",
+                "HTTP 422: Storage Scope not found",
                 "HTTP 500: Unknown error while writing file"))
             .RequireAuthorization()
             .Produces(StatusCodes.Status200OK)
@@ -48,12 +50,11 @@ public static class FileEndpoints
             .WithDescription(new Description("Deletes a file by filename and scope",
                 "HTTP 200: File deleted successfully",
                 "HTTP 400: Invalid parameters",
-                "HTTP 404: File not found",
+                "HTTP 422: Storage Scope not found",
                 "HTTP 500: Unknown error while deleting file"))
             .RequireAuthorization()
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
-            .Produces(StatusCodes.Status404NotFound)
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
         return routeBuilder;

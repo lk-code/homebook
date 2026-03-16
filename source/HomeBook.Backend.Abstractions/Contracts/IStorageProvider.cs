@@ -16,6 +16,14 @@ public interface IStorageProvider
     /// <summary>
     ///
     /// </summary>
+    /// <param name="scopeId"></param>
+    /// <returns></returns>
+    Task<bool> IsScopeRegisteredAsync(Guid scopeId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
     /// <param name="fullScopeName"></param>
     /// <param name="moduleKey"></param>
     /// <returns></returns>
@@ -38,5 +46,16 @@ public interface IStorageProvider
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<Guid?> GetScopeIdByFullName(string fullScopeName,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="scopeId"></param>
+    /// <param name="filename"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task DeleteFileAsync(Guid scopeId,
+        string filename,
         CancellationToken cancellationToken);
 }
