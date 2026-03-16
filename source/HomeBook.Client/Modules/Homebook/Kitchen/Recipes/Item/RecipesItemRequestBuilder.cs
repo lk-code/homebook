@@ -9,28 +9,28 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace HomeBook.Client.Modules.Kitchen.Recipes.Item
+namespace HomeBook.Client.Modules.Homebook.Kitchen.Recipes.Item
 {
     /// <summary>
-    /// Builds and executes requests for operations under \modules\kitchen\recipes\{id}
+    /// Builds and executes requests for operations under \modules\homebook\kitchen\recipes\{id}
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class RecipesItemRequestBuilder : BaseRequestBuilder
     {
         /// <summary>
-        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Kitchen.Recipes.Item.RecipesItemRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Homebook.Kitchen.Recipes.Item.RecipesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public RecipesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/kitchen/recipes/{id}", pathParameters)
+        public RecipesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/homebook/kitchen/recipes/{id}", pathParameters)
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Kitchen.Recipes.Item.RecipesItemRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Homebook.Kitchen.Recipes.Item.RecipesItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public RecipesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/kitchen/recipes/{id}", rawUrl)
+        public RecipesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/homebook/kitchen/recipes/{id}", rawUrl)
         {
         }
         /// <summary>
@@ -194,11 +194,11 @@ namespace HomeBook.Client.Modules.Kitchen.Recipes.Item
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
-        /// <returns>A <see cref="global::HomeBook.Client.Modules.Kitchen.Recipes.Item.RecipesItemRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::HomeBook.Client.Modules.Homebook.Kitchen.Recipes.Item.RecipesItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public global::HomeBook.Client.Modules.Kitchen.Recipes.Item.RecipesItemRequestBuilder WithUrl(string rawUrl)
+        public global::HomeBook.Client.Modules.Homebook.Kitchen.Recipes.Item.RecipesItemRequestBuilder WithUrl(string rawUrl)
         {
-            return new global::HomeBook.Client.Modules.Kitchen.Recipes.Item.RecipesItemRequestBuilder(rawUrl, RequestAdapter);
+            return new global::HomeBook.Client.Modules.Homebook.Kitchen.Recipes.Item.RecipesItemRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

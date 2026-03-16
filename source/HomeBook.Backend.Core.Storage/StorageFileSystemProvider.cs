@@ -34,13 +34,15 @@ public class StorageFileSystemProvider(
         CancellationToken cancellationToken)
     {
         if (scopeId == Guid.Empty)
-            return;
+            throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
         string storagePath = Path.Combine(applicationPathProvider.StorageDirectory, scopeId.ToString());
 
         bool storageDirectoryAlreadyExists = fileSystemService.DirectoryExists(storagePath);
         if (!storageDirectoryAlreadyExists)
             fileSystemService.CreateDirectory(storagePath);
+
+        await Task.CompletedTask;
     }
 
     /// <inheritdoc/>
@@ -48,6 +50,13 @@ public class StorageFileSystemProvider(
         CancellationToken cancellationToken) =>
         (await repository.GetByFullScopeNameAsync(fullScopeName,
             cancellationToken))?.Id;
+
+    private string GetFullStorageFilePath(Guid scopeId, string filename)
+    {
+        string storagePath = Path.Combine(applicationPathProvider.StorageDirectory, scopeId.ToString());
+        string fullFilePath = Path.Combine(storagePath, filename);
+        return fullFilePath;
+    }
 
     /// <inheritdoc/>
     public async Task DeleteFileAsync(Guid scopeId,
@@ -57,11 +66,68 @@ public class StorageFileSystemProvider(
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
-        string storagePath = Path.Combine(applicationPathProvider.StorageDirectory, scopeId.ToString());
-        string fullFilePath = Path.Combine(storagePath, filename);
+        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
 
         fileSystemService.DeleteFile(fullFilePath);
 
         await Task.CompletedTask;
+    }
+
+    /// <inheritdoc/>
+    public async Task<byte[]> GetFileAllBytesAsync(Guid scopeId,
+        string filename,
+        CancellationToken cancellationToken)
+    {
+        if (scopeId == Guid.Empty)
+            throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
+
+        byte[] content = await fileSystemService.FileReadAllBytesAsync(fullFilePath, cancellationToken);
+
+        return content;
+    }
+
+    /// <inheritdoc/>
+    public async Task<string> GetFileAllTextAsync(Guid scopeId,
+        string filename,
+        CancellationToken cancellationToken)
+    {
+        if (scopeId == Guid.Empty)
+            throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
+
+        string content = await fileSystemService.FileReadAllTextAsync(fullFilePath, cancellationToken);
+
+        return content;
+    }
+
+    /// <inheritdoc/>
+    public async Task WriteFileAllBytesAsync(Guid scopeId,
+        string filename,
+        byte[] content,
+        CancellationToken cancellationToken)
+    {
+        if (scopeId == Guid.Empty)
+            throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
+
+        await fileSystemService.FileWriteAllBytesAsync(fullFilePath, content, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task WriteFileAllTextAsync(Guid scopeId,
+        string filename,
+        string content,
+        CancellationToken cancellationToken)
+    {
+        if (scopeId == Guid.Empty)
+            throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
+
+        await fileSystemService.FileWriteAllTextAsync(fullFilePath, content, cancellationToken);
     }
 }

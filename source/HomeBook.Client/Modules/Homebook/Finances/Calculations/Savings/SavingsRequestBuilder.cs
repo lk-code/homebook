@@ -9,28 +9,28 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace HomeBook.Client.Modules.Finances.Calculations.Savings
+namespace HomeBook.Client.Modules.Homebook.Finances.Calculations.Savings
 {
     /// <summary>
-    /// Builds and executes requests for operations under \modules\finances\calculations\savings
+    /// Builds and executes requests for operations under \modules\homebook\finances\calculations\savings
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SavingsRequestBuilder : BaseRequestBuilder
     {
         /// <summary>
-        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Finances.Calculations.Savings.SavingsRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Homebook.Finances.Calculations.Savings.SavingsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SavingsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/finances/calculations/savings", pathParameters)
+        public SavingsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/homebook/finances/calculations/savings", pathParameters)
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Finances.Calculations.Savings.SavingsRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::HomeBook.Client.Modules.Homebook.Finances.Calculations.Savings.SavingsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SavingsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/finances/calculations/savings", rawUrl)
+        public SavingsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/modules/homebook/finances/calculations/savings", rawUrl)
         {
         }
         /// <summary>
@@ -78,11 +78,11 @@ namespace HomeBook.Client.Modules.Finances.Calculations.Savings
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
-        /// <returns>A <see cref="global::HomeBook.Client.Modules.Finances.Calculations.Savings.SavingsRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::HomeBook.Client.Modules.Homebook.Finances.Calculations.Savings.SavingsRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public global::HomeBook.Client.Modules.Finances.Calculations.Savings.SavingsRequestBuilder WithUrl(string rawUrl)
+        public global::HomeBook.Client.Modules.Homebook.Finances.Calculations.Savings.SavingsRequestBuilder WithUrl(string rawUrl)
         {
-            return new global::HomeBook.Client.Modules.Finances.Calculations.Savings.SavingsRequestBuilder(rawUrl, RequestAdapter);
+            return new global::HomeBook.Client.Modules.Homebook.Finances.Calculations.Savings.SavingsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

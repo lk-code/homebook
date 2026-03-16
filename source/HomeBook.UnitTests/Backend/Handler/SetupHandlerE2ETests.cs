@@ -1,3 +1,4 @@
+using System.Text;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.HashProvider;
 using HomeBook.Backend.Core.Licenses;
@@ -138,7 +139,8 @@ public class SetupHandlerE2ETests
                     // Parse the updated JSON content and rebuild configuration
                     try
                     {
-                        var jsonContent = args.Content;
+                        var jsonContentBytes = args.Content;
+                        var jsonContent =  Encoding.UTF8.GetString(jsonContentBytes);
                         if (!string.IsNullOrEmpty(jsonContent))
                         {
                             // Parse JSON to dictionary

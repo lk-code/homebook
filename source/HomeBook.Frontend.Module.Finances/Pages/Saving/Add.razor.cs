@@ -75,7 +75,7 @@ public partial class Add : ComponentBase
 
         // calculate with target date
         string? token = await AuthenticationService.GetTokenAsync(cancellationToken);
-        CalculatedSavingResponse? response = await BackendClient.Modules.Finances.Calculations.Savings
+        CalculatedSavingResponse? response = await BackendClient.Modules.Homebook.Finances.Calculations.Savings
             .PostAsync(new CalculateSavingRequest
                 {
                     TargetAmount = Convert.ToDouble(_model.TargetAmount),
@@ -125,7 +125,7 @@ public partial class Add : ComponentBase
         CancellationToken cancellationToken = CancellationToken.None;
 
         string? token = await AuthenticationService.GetTokenAsync(cancellationToken);
-        await BackendClient.Modules.Finances.SavingGoals
+        await BackendClient.Modules.Homebook.Finances.SavingGoals
             .PostAsync(
                 _summaryVM.ToRequest(),
                 x =>

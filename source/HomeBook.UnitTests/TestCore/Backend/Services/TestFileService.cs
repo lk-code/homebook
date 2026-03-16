@@ -1,3 +1,4 @@
+using System.Text;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Services;
 
@@ -8,7 +9,7 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
     private static readonly IApplicationPathProvider NativeFileService = new NativeFileService();
 
     // Virtual file system storage
-    private readonly Dictionary<string, string> _fileContents = new();
+    private readonly Dictionary<string, byte[]> _fileContents = new();
     private readonly HashSet<string> _directories = new();
 
     // Events for file system changes
@@ -33,12 +34,27 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
     {
         string normalizedPath = NormalizePath(path);
 
-        return _fileContents.TryGetValue(normalizedPath, out string? content)
+        return _fileContents.TryGetValue(normalizedPath, out byte[]? content)
+            ? Task.FromResult(Encoding.UTF8.GetString(content))
+            : throw new FileNotFoundException($"File not found: {path}");
+    }
+
+    public Task<byte[]> FileReadAllBytesAsync(string path, CancellationToken cancellationToken)
+    {
+        string normalizedPath = NormalizePath(path);
+
+        return _fileContents.TryGetValue(normalizedPath, out byte[]? content)
             ? Task.FromResult(content)
             : throw new FileNotFoundException($"File not found: {path}");
     }
 
-    public Task FileWriteAllTextAsync(string path, string content, CancellationToken cancellationToken)
+    public async Task FileWriteAllTextAsync(string path, string content, CancellationToken cancellationToken)
+    {
+        byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+        await FileWriteAllBytesAsync(path, contentBytes, cancellationToken);
+    }
+
+    public async Task FileWriteAllBytesAsync(string path, byte[] content, CancellationToken cancellationToken)
     {
         string normalizedPath = NormalizePath(path);
 
@@ -57,7 +73,7 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
                 content,
                 FileSystemEventType.FileChanged));
 
-        return Task.CompletedTask;
+        await Task.CompletedTask;
     }
 
     public bool DirectoryExists(string path)
@@ -79,12 +95,17 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
         return new DirectoryInfo(normalizedPath);
     }
 
+    public void DeleteFile(string path)
+    {
+        _fileContents.Remove(NormalizePath(path));
+    }
+
     // Additional methods for managing the virtual file system
 
     /// <summary>
     /// Gets all files in the virtual file system
     /// </summary>
-    public IReadOnlyDictionary<string, string> GetAllFiles()
+    public IReadOnlyDictionary<string, byte[]> GetAllFiles()
     {
         return _fileContents.AsReadOnly();
     }
@@ -117,7 +138,8 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
         if (!string.IsNullOrEmpty(directoryPath))
             _directories.Add(NormalizePath(directoryPath));
 
-        _fileContents[normalizedPath] = content;
+        byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+        _fileContents[normalizedPath] = contentBytes;
     }
 
     /// <summary>
@@ -148,7 +170,7 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
 
 public class FileSystemEventArgs(
     string filePath,
-    string? content,
+    byte[] content,
     FileSystemEventType eventType) : EventArgs
 {
     public FileSystemEventArgs(string filePath,
@@ -158,7 +180,7 @@ public class FileSystemEventArgs(
     }
 
     public string FilePath { get; } = filePath;
-    public string? Content { get; } = content;
+    public byte[] Content { get; } = content;
     public FileSystemEventType EventType { get; } = eventType;
 }
 

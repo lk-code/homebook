@@ -34,7 +34,7 @@ namespace HomeBook.Client.Account.Login
         {
         }
         /// <summary>
-        /// Authenticates a user and returns access tokens
+        /// Authenticates a user with email and password, returns JWT tokens
         /// </summary>
         /// <returns>A <see cref="global::HomeBook.Client.Models.LoginResponse"/></returns>
         /// <param name="body">The request body</param>
@@ -59,7 +59,7 @@ namespace HomeBook.Client.Account.Login
             return await RequestAdapter.SendAsync<global::HomeBook.Client.Models.LoginResponse>(requestInfo, global::HomeBook.Client.Models.LoginResponse.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Authenticates a user and returns access tokens
+        /// Authenticates a user with email and password, returns JWT tokens
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>

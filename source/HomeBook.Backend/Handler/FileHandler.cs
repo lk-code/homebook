@@ -20,8 +20,21 @@ public static class FileHandler
         if (!isScopeRegistered)
             return TypedResults.UnprocessableEntity();
 
-        // Empty handler - to be implemented
-        return TypedResults.Ok(new FileGetResponse(filename, scopeId, Array.Empty<byte>()));
+        try
+        {
+            byte[] content = await storageProvider.GetFileAllBytesAsync(scopeId,
+                filename,
+                cancellationToken);
+
+            return TypedResults.Ok(new FileGetResponse(filename,
+                scopeId,
+                content));
+        }
+        catch (Exception err)
+        {
+            // TODO: log and return error
+            return TypedResults.Problem();
+        }
     }
 
     // POST - Create/Update file
@@ -36,8 +49,20 @@ public static class FileHandler
         if (!isScopeRegistered)
             return TypedResults.UnprocessableEntity();
 
-        // Empty handler - to be implemented
-        return TypedResults.Ok("File operation completed");
+        try
+        {
+            await storageProvider.WriteFileAllBytesAsync(request.ScopeId,
+                request.Filename,
+                request.Content,
+                cancellationToken);
+
+            return TypedResults.Ok();
+        }
+        catch (Exception err)
+        {
+            // TODO: log and return error
+            return TypedResults.Problem();
+        }
     }
 
     // DELETE - Delete file

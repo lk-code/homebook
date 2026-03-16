@@ -22,8 +22,16 @@ public class NativeFileService : IApplicationPathProvider, IFileSystemService
         await File.ReadAllTextAsync(path, cancellationToken);
 
     /// <inheritdoc />
+    public async Task<byte[]> FileReadAllBytesAsync(string path, CancellationToken cancellationToken) =>
+        await File.ReadAllBytesAsync(path, cancellationToken);
+
+    /// <inheritdoc />
     public async Task FileWriteAllTextAsync(string path, string content, CancellationToken cancellationToken) =>
         await File.WriteAllTextAsync(path, content, cancellationToken);
+
+    /// <inheritdoc />
+    public async Task FileWriteAllBytesAsync(string path, byte[] content, CancellationToken cancellationToken) =>
+        await File.WriteAllBytesAsync(path, content, cancellationToken);
 
     /// <inheritdoc />
     public bool DirectoryExists(string path) => Directory.Exists(path);
@@ -31,5 +39,6 @@ public class NativeFileService : IApplicationPathProvider, IFileSystemService
     /// <inheritdoc />
     public DirectoryInfo CreateDirectory(string path) => Directory.CreateDirectory(path);
 
+    /// <inheritdoc />
     public void DeleteFile(string path) => File.Delete(path);
 }

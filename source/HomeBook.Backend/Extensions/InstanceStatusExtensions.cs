@@ -21,13 +21,12 @@ public static class InstanceStatusExtensions
         if (isGitHubWorkflow)
             return InstanceStatus.RUNNING;
 
-        string[] commandLineArgs = Environment.GetCommandLineArgs();
-
-        bool isHomeBookExecutable = commandLineArgs
-            .First()
-            .Contains("HomeBook.Backend.dll", StringComparison.OrdinalIgnoreCase);
-        if (!isHomeBookExecutable)
-            return InstanceStatus.DEV;
+        // string[] commandLineArgs = Environment.GetCommandLineArgs();
+        // bool isHomeBookExecutable = commandLineArgs
+        //     .First()
+        //     .Contains("HomeBook.Backend.dll", StringComparison.OrdinalIgnoreCase);
+        // if (!isHomeBookExecutable)
+        //     return InstanceStatus.DEV;
 
         string? databaseProvider = configuration["Database:Provider"];
         return databaseProvider switch
