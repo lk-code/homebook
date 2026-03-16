@@ -4,19 +4,19 @@ using HomeBook.Backend.Responses;
 
 namespace HomeBook.Backend.Endpoints;
 
-public static class FileEndpoints
+public static class StorageFileEndpoints
 {
-    public static IEndpointRouteBuilder MapFileEndpoints(this IEndpointRouteBuilder routeBuilder)
+    public static IEndpointRouteBuilder MapStorageFileEndpoints(this IEndpointRouteBuilder routeBuilder)
     {
         RouteGroupBuilder group = routeBuilder
-            .MapGroup("/file")
-            .WithDescription("Endpoints for file operations")
+            .MapGroup("/storage/files")
+            .WithDescription("Endpoints for storage operations")
             .RequireAuthorization();
 
         // GET - Read file content
-        group.MapGet("", FileHandler.HandleGetFile)
+        group.MapGet("", StorageFileHandler.HandleGetFile)
             .WithName("GetFile")
-            .WithTags("File")
+            .WithTags("Storage")
             .WithDescription(new Description("Reads file content by filename and scope",
                 "HTTP 200: File content returned successfully",
                 "HTTP 400: Invalid parameters",
@@ -30,9 +30,9 @@ public static class FileEndpoints
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
         // POST - Create/Update file
-        group.MapPost("", FileHandler.HandlePostFile)
+        group.MapPost("", StorageFileHandler.HandlePostFile)
             .WithName("PostFile")
-            .WithTags("File")
+            .WithTags("Storage")
             .WithDescription(new Description("Creates or updates a file with binary content",
                 "HTTP 200: File created/updated successfully",
                 "HTTP 400: Invalid parameters or content",
@@ -44,9 +44,9 @@ public static class FileEndpoints
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
         // DELETE - Delete file
-        group.MapDelete("", FileHandler.HandleDeleteFile)
+        group.MapDelete("", StorageFileHandler.HandleDeleteFile)
             .WithName("DeleteFile")
-            .WithTags("File")
+            .WithTags("Storage")
             .WithDescription(new Description("Deletes a file by filename and scope",
                 "HTTP 200: File deleted successfully",
                 "HTTP 400: Invalid parameters",

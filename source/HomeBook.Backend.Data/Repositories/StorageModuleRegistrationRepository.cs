@@ -13,10 +13,11 @@ public class StorageModuleRegistrationRepository(IDbContextFactory<AppDbContext>
     public async Task<StorageModuleRegistration?> GetByFullScopeNameAsync(string fullScopeName,
         CancellationToken cancellationToken)
     {
+        string scopeNameNormalized = fullScopeName.ToLowerInvariant();
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         StorageModuleRegistration? entity = await dbContext.Set<StorageModuleRegistration>()
-            .Where(e => e.ScopeName == fullScopeName)
+            .Where(e => e.ScopeName == scopeNameNormalized)
             .FirstOrDefaultAsync(cancellationToken);
 
         return entity;
@@ -48,12 +49,14 @@ public class StorageModuleRegistrationRepository(IDbContextFactory<AppDbContext>
             throw new EntityExistsException($"Storage Scope for '{moduleKey}' already exists.");
         }
 
+        string scopeNameNormalized = fullScopeName.ToLowerInvariant();
+        string moduleKeyNormalized = moduleKey.ToLowerInvariant();
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         StorageModuleRegistration entity = new()
         {
-            ScopeName = fullScopeName,
-            ModuleKey = moduleKey
+            ScopeName = scopeNameNormalized,
+            ModuleKey = moduleKeyNormalized
         };
 
         dbContext.StorageModuleRegistrations.Add(entity);

@@ -11,13 +11,17 @@ namespace HomeBook.Frontend.Module.PlatformInfo;
 /// the platform info module
 /// </summary>
 public class Module(IStringLocalizer<Strings> Loc)
-    : IModule, IModuleWidgetRegistration, IModuleDependencyRegistration
+    : IModule,
+        IModuleWidgetRegistration,
+        IModuleDependencyRegistration
 {
     /// <inheritdoc />
     public string Name => Loc[nameof(Strings.ModuleName)];
 
     /// <inheritdoc />
     public string Description => Loc[nameof(Strings.ModuleDescription)];
+
+    public string Key { get; } = "homebook.platforminfo";
 
     /// <inheritdoc />
     public string Author { get; } = "HomeBook";

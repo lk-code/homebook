@@ -16,6 +16,11 @@ public interface IModule
     string Description { get; }
 
     /// <summary>
+    /// the key of this module (used for endpoint grouping, etc.)
+    /// </summary>
+    string Key { get; }
+
+    /// <summary>
     /// the author of this module
     /// </summary>
     string Author { get; }

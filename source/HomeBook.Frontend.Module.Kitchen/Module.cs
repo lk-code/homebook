@@ -25,6 +25,9 @@ public class Module(IStringLocalizer<Strings> Loc)
     public string Description => Loc[nameof(Strings.ModuleDescription)];
 
     /// <inheritdoc />
+    public string Key { get; } = "homebook.kitchen";
+
+    /// <inheritdoc />
     public string Author { get; } = "HomeBook";
 
     /// <inheritdoc />
@@ -32,6 +35,8 @@ public class Module(IStringLocalizer<Strings> Loc)
 
     /// <inheritdoc />
     public string Icon { get; } = HomeBookIcons.Icons8.GlassMorphism.Tableware;
+
+    public Guid? RecipeImagesStorageScopeId { get; private set; }
 
     public async Task InitializeAsync()
     {

@@ -5,12 +5,16 @@
 @using HomeBook.Frontend.Module.Kitchen.Contracts
 @using HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components
 @using HomeBook.Frontend.Module.Kitchen.Resources
+@using HomeBook.Frontend.Modules.Abstractions
 @using Microsoft.Extensions.Localization
 
 @inject IRecipeService RecipeService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<Strings> Loc
+@inject IFileStorageService FileStorageService
+@inject IFileStorageRegistration FileStorageRegistration
+@inject IModule Module
 
 @if (!_isLoading
      && _recipe != null)

@@ -5,7 +5,7 @@ using HomeBook.Backend.Requests;
 
 namespace HomeBook.Backend.Handler;
 
-public static class FileHandler
+public static class StorageFileHandler
 {
     // GET - Read file content
     public static async Task<IResult> HandleGetFile([FromQuery] string filename,

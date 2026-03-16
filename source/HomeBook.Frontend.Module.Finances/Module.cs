@@ -26,6 +26,9 @@ public class Module(IStringLocalizer<Strings> Loc)
     public string Description => Loc[nameof(Strings.ModuleDescription)];
 
     /// <inheritdoc />
+    public string Key { get; } = "homebook.finances";
+
+    /// <inheritdoc />
     public string Author { get; } = "HomeBook";
 
     /// <inheritdoc />

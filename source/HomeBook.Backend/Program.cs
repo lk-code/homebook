@@ -126,7 +126,8 @@ switch (instanceStatus)
             .MapInfoEndpoints()
             .MapUserEndpoints()
             .MapSearchEndpoints()
-            .MapFileEndpoints();
+            .MapStorageFileEndpoints()
+            .MapStorageScopeEndpoints();
         break;
 }
 
