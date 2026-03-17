@@ -2,8 +2,17 @@
 # Recommended to use Docker Buildx for multi-architecture builds
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+ARG DOTNET_VERSION=10.0.101
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /homebook-src
+
+# Install specific .NET SDK version
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $DOTNET_VERSION --install-dir /usr/share/dotnet-custom
+
+ENV DOTNET_ROOT=/usr/share/dotnet-custom
+ENV PATH="$DOTNET_ROOT:$PATH"
+
+RUN echo "SDK LIST:" && dotnet --list-sdks
 
 RUN apt-get update && \
     apt-get install -y curl ca-certificates gnupg && \
@@ -14,7 +23,7 @@ RUN apt-get update && \
 
 COPY . .
 
-# Restore dependencies
+# Restore dependenciesok
 #RUN dotnet tool install --global Microsoft.OpenApi.Kiota
 #ENV PATH="$PATH:/root/.dotnet/tools"
 RUN dotnet restore "source/HomeBook.Backend/HomeBook.Backend.csproj"
