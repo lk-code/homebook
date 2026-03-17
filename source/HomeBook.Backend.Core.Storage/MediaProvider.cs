@@ -18,8 +18,8 @@ public class MediaProvider(IMediaItemRepository repository) : IMediaProvider
         if (mediaItem is null)
             return null;
 
-        //TODO: https://homebook.com/storage/file/{mediaItemId}
-        Uri mediaUri = new($"/storage/file/{mediaItemId}", UriKind.Relative);
+        //TODO: https://homebook.com/storage/media/{mediaItemId}
+        Uri mediaUri = new($"/storage/media/{mediaItemId}", UriKind.Relative);
 
         return mediaUri;
     }

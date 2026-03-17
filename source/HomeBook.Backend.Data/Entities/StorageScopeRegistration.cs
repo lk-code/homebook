@@ -20,6 +20,4 @@ public class StorageScopeRegistration
     [StringLength(50, MinimumLength = 1, ErrorMessage = "Module Key must be between 1 and 50 characters long.")]
     [Required]
     public string ModuleKey { get; set; }
-
-    public MediaItem MediaItem { get; set; }
 }

@@ -1,7 +1,6 @@
 using HomeBook.Backend.Core.Modules.OpenApi;
 using HomeBook.Backend.DTOs.Responses.Storage;
 using HomeBook.Backend.Handler;
-using HomeBook.Backend.Responses;
 
 namespace HomeBook.Backend.Endpoints;
 
@@ -9,20 +8,25 @@ public static class StorageFileEndpoints
 {
     public static IEndpointRouteBuilder MapStorageFileEndpoints(this IEndpointRouteBuilder routeBuilder)
     {
-        RouteGroupBuilder group = routeBuilder
-            .MapGroup("/storage/files")
-            .WithDescription("Endpoints for storage operations")
-            .RequireAuthorization();
+        RouteGroupBuilder mediaGroup = routeBuilder
+            .MapGroup("/storage/media")
+            .WithDescription("Endpoints for storage media operations");
 
         // GET - get file as asset
-        group.MapGet("/{mediaId:guid}", StorageFileHandler.HandleGetFileByIdMedia)
-            .WithName("HGetFileByIdMedia")
+        mediaGroup.MapGet("/{mediaId:guid}", StorageFileHandler.HandleGetFileByIdMedia)
+            .WithName("GetFileByIdMedia")
             .WithTags("Storage")
             .WithDescription(new Description("get the file as assets content",
                 "HTTP 200: File content returned successfully",
                 "HTTP 404: File not found"))
             .Produces(StatusCodes.Status200OK, contentType: "application/octet-stream")
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces(StatusCodes.Status404NotFound)
+            .CacheOutput(x => x.Expire(TimeSpan.FromHours(1)));
+
+        RouteGroupBuilder group = routeBuilder
+            .MapGroup("/storage/files")
+            .WithDescription("Endpoints for storage operations")
+            .RequireAuthorization();
 
         // GET - Read file content
         group.MapGet("", StorageFileHandler.HandleGetFile)

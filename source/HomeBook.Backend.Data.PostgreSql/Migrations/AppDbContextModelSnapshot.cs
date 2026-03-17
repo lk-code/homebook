@@ -42,6 +42,28 @@ namespace HomeBook.Backend.Data.PostgreSql.Migrations
                     b.ToTable("Configurations");
                 });
 
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.MediaItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("character varying(250)");
+
+                    b.Property<Guid>("StorageScopeId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StorageScopeId", "FileName")
+                        .IsUnique();
+
+                    b.ToTable("MediaItems");
+                });
+
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe", b =>
                 {
                     b.Property<Guid>("Id")
@@ -207,6 +229,27 @@ namespace HomeBook.Backend.Data.PostgreSql.Migrations
                     b.ToTable("SavingGoals");
                 });
 
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.StorageScopeRegistration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ModuleKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageScopeRegistrations");
+                });
+
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -259,6 +302,17 @@ namespace HomeBook.Backend.Data.PostgreSql.Migrations
                     b.HasKey("UserId", "Key");
 
                     b.ToTable("UserPreferences");
+                });
+
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.MediaItem", b =>
+                {
+                    b.HasOne("HomeBook.Backend.Data.Entities.StorageScopeRegistration", "StorageScope")
+                        .WithMany()
+                        .HasForeignKey("StorageScopeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StorageScope");
                 });
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe", b =>

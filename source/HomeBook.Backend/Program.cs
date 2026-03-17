@@ -24,6 +24,8 @@ builder.Configuration
     .AddJsonFile(PathHandler.RuntimeConfigurationFilePath, optional: true, reloadOnChange: true)
     .AddEnvironmentVariables(prefix: "HB_");
 
+builder.Services.AddOutputCache();
+
 // Serilog einrichten
 builder.Host.UseSerilog((ctx, services, cfg) =>
     cfg.ReadFrom.Configuration(ctx.Configuration)
@@ -136,5 +138,7 @@ switch (instanceStatus)
 
 if (instanceStatus == InstanceStatus.RUNNING)
     await app.RunModulesPostBuild();
+
+app.UseOutputCache();
 
 app.Run();

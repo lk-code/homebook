@@ -1,11 +1,13 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace HomeBook.Backend.Data.Entities;
 
 [DebuggerDisplay("[{nameof(MediaItem)}] {Name}")]
 [Table("MediaItems")]
+[Index(nameof(StorageScopeId), nameof(FileName), IsUnique = true)]
 public class MediaItem
 {
     [Key]
@@ -17,7 +19,6 @@ public class MediaItem
     /// the storage scope entity id
     /// </summary>
     [Required]
-    [ForeignKey(nameof(User))]
     public Guid StorageScopeId { get; set; }
 
     /// <summary>
