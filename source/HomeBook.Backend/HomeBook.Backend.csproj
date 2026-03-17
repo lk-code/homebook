@@ -18,12 +18,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.3" />
-        <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.3">
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
+        <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" Version="10.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Scalar.AspNetCore" Version="2.12.54" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.13.8" />
         <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="6.1.1"/>
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0"/>
@@ -44,6 +44,7 @@
     <ItemGroup>
         <ProjectReference Include="..\HomeBook.Backend.Abstractions\HomeBook.Backend.Abstractions.csproj"/>
         <ProjectReference Include="..\HomeBook.Backend.Core.Search\HomeBook.Backend.Core.Search.csproj"/>
+        <ProjectReference Include="..\HomeBook.Backend.Core.Storage\HomeBook.Backend.Core.Storage.csproj" />
         <ProjectReference Include="..\HomeBook.Backend.Core\HomeBook.Backend.Core.csproj"/>
         <ProjectReference Include="..\HomeBook.Backend.Core.Account\HomeBook.Backend.Core.Account.csproj"/>
         <ProjectReference Include="..\HomeBook.Backend.Data.Mysql\HomeBook.Backend.Data.Mysql.csproj"/>

@@ -15,7 +15,6 @@ public static class PlatformEndpoints
             .WithName("GetLocales")
             .WithTags("Platform")
             .WithDescription("returns all available locales")
-            .WithOpenApi()
             .Produces<GetLocalesResponse>( StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status500InternalServerError);
 

@@ -1,9 +1,13 @@
 @using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Module.Kitchen.Resources
 @using HomeBook.Frontend.Module.Kitchen.ViewModels
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<Strings> Loc
 
 <MudText Typo="Typo.h5"
          Class="mx-5 my-3">
-    +Zutaten
+    @Loc[nameof(Resources.Strings.RecipeEditIngredients_Ingredients_Title)]
 </MudText>
 
 <MudList T="string">
@@ -44,25 +48,25 @@
                                                  @bind-Value="ingredient.Quantity"
                                                  Margin="Margin.Dense"
                                                  Variant="Variant.Outlined"
-                                                 Placeholder="+Menge"
+                                                 Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_Quantity_Placeholder)]"
                                                  Step="0.1m"
                                                  Min="0m"/>
                                 <MudTextField T="string"
                                               @bind-Value="ingredient.Unit"
                                               Margin="Margin.Dense"
                                               Variant="Variant.Outlined"
-                                              Placeholder="+Einheit"/>
+                                              Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_Unit_Placeholder)]"/>
                                 <MudTextField T="string"
                                               @bind-Value="ingredient.Name"
                                               Margin="Margin.Dense"
                                               Variant="Variant.Outlined"
-                                              Placeholder="+Zutat"/>
+                                              Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_IngredientName_Placeholder)]"/>
                             </div>
                             <MudTextField T="string"
                                           @bind-Value="ingredient.AdditionalText"
                                           Margin="Margin.Dense"
                                           Variant="Variant.Outlined"
-                                          Placeholder="+Zusatz (optional)"/>
+                                          Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_AdditionalNote_Placeholder)]"/>
                         </div>
                     }
                 </div>
@@ -89,19 +93,19 @@
                                   @bind-Value="_newUnit"
                                   Margin="Margin.Dense"
                                   Variant="Variant.Outlined"
-                                  Placeholder="+Einheit"/>
+                                  Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_Unit_Placeholder)]"/>
                     <MudTextField T="string"
                                   @bind-Value="_newName"
                                   Margin="Margin.Dense"
                                   Variant="Variant.Outlined"
-                                  Placeholder="+Zutat"/>
+                                  Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_IngredientName_Placeholder)]"/>
                 </div>
                 <div class="d-flex align-center gap-3">
                     <MudTextField T="string"
                                   @bind-Value="_newAdditionalText"
                                   Margin="Margin.Dense"
                                   Variant="Variant.Outlined"
-                                  Placeholder="+Zusatz (optional)"/>
+                                  Placeholder="@Loc[nameof(Resources.Strings.RecipeEditIngredients_AdditionalNote_Placeholder)]"/>
 
                     <MudIconButton Variant="Variant.Outlined"
                                    Icon="@HomeBookIcons.Icons8.Windows11.Filled.Plus"

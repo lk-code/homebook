@@ -23,6 +23,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ISavingGoalsRepository, SavingGoalsRepository>();
         services.AddScoped<IRecipesRepository, RecipesRepository>();
         services.AddScoped<IIngredientRepository, IngredientRepository>();
+        services.AddScoped<IStorageScopeRegistrationRepository, StorageScopeRegistrationRepository>();
+        services.AddScoped<IMediaItemRepository, MediaItemRepository>();
 
         services.AddSingleton<SaveChangesInterceptor, NormalizationInterceptor>();
 

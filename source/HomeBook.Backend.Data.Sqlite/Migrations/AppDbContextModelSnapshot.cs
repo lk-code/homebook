@@ -15,7 +15,7 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.11");
+            modelBuilder.HasAnnotation("ProductVersion", "10.0.5");
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Configuration", b =>
                 {
@@ -35,6 +35,28 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Configurations");
+                });
+
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.MediaItem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("StorageScopeId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StorageScopeId", "FileName")
+                        .IsUnique();
+
+                    b.ToTable("MediaItems");
                 });
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe", b =>
@@ -201,6 +223,27 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.ToTable("SavingGoals");
                 });
 
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.StorageScopeRegistration", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModuleKey")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StorageScopeRegistrations");
+                });
+
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -253,6 +296,17 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.HasKey("UserId", "Key");
 
                     b.ToTable("UserPreferences");
+                });
+
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.MediaItem", b =>
+                {
+                    b.HasOne("HomeBook.Backend.Data.Entities.StorageScopeRegistration", "StorageScope")
+                        .WithMany()
+                        .HasForeignKey("StorageScopeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StorageScope");
                 });
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe", b =>

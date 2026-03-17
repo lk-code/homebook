@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBook.Backend.Handler;
 
-public static class InfoHandler
+public class InfoHandler
 {
-    public static async Task<IResult> HandleGetInstanceInfo(
+    public static async Task<IResult> HandleGetInstanceInfo([FromServices] ILogger<InfoHandler> logger,
         [FromServices] IInstanceConfigurationProvider instanceConfigurationProvider,
         CancellationToken cancellationToken = default)
     {
@@ -23,11 +23,13 @@ public static class InfoHandler
         }
         catch (Exception err)
         {
+            logger.LogError(err, "An error occurred while retrieving instance information.");
+
             return TypedResults.Problem("An error occurred while retrieving instance information.", statusCode: 500);
         }
     }
 
-    public static async Task<IResult> HandleGetInstanceName(
+    public static async Task<IResult> HandleGetInstanceName([FromServices] ILogger<InfoHandler> logger,
         [FromServices] IInstanceConfigurationProvider instanceConfigurationProvider,
         CancellationToken cancellationToken = default)
     {
@@ -37,24 +39,29 @@ public static class InfoHandler
 
             return TypedResults.Ok(instanceName);
         }
-        catch (Exception)
+        catch (Exception err)
         {
+            logger.LogError(err, "An error occurred while retrieving instance information.");
+
             return TypedResults.Problem("An error occurred while retrieving instance name.", statusCode: 500);
         }
     }
 
-    public static async Task<IResult> HandleGetInstanceDefaultLocale(
+    public static async Task<IResult> HandleGetInstanceDefaultLocale([FromServices] ILogger<InfoHandler> logger,
         [FromServices] IInstanceConfigurationProvider instanceConfigurationProvider,
         CancellationToken cancellationToken = default)
     {
         try
         {
-            string? defaultLanguage = await instanceConfigurationProvider.GetHomeBookInstanceDefaultLocaleAsync(cancellationToken);
+            string? defaultLanguage =
+                await instanceConfigurationProvider.GetHomeBookInstanceDefaultLocaleAsync(cancellationToken);
 
             return TypedResults.Ok(defaultLanguage);
         }
-        catch (Exception)
+        catch (Exception err)
         {
+            logger.LogError(err, "An error occurred while retrieving instance information.");
+
             return TypedResults.Problem("An error occurred while retrieving instance name.", statusCode: 500);
         }
     }

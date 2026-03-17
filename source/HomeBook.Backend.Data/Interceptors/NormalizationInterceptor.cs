@@ -1,12 +1,11 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Interceptors;
 
 public class NormalizationInterceptor(
-    ILogger<NormalizationInterceptor> logger,
     IStringNormalizer normalizer) : SaveChangesInterceptor
 {
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData,
@@ -14,7 +13,7 @@ public class NormalizationInterceptor(
     {
         DbContext dbContext = eventData.Context!;
 
-        var allEntries = dbContext.ChangeTracker.Entries();
+        IEnumerable<EntityEntry> allEntries = dbContext.ChangeTracker.Entries();
         IEnumerable<INormalizable> entries = allEntries
             .Where(e => e.State is EntityState.Added or EntityState.Modified)
             .Select(e => e.Entity)

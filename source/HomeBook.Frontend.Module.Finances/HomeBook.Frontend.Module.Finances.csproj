@@ -4,13 +4,14 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <NeutralLanguage>en-US</NeutralLanguage>
 
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,13 +19,6 @@
         <ProjectReference Include="..\HomeBook.Frontend.Core\HomeBook.Frontend.Core.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Modules.Abstractions\HomeBook.Frontend.Modules.Abstractions.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.UI\HomeBook.Frontend.UI.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\Strings.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>

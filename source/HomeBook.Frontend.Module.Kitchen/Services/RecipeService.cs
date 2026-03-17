@@ -19,7 +19,7 @@ public class RecipeService(
         cancellationToken.ThrowIfCancellationRequested();
 
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
-        RecipesListResponse? response = await backendClient.Modules.Kitchen.Recipes.GetAsync(x =>
+        RecipesListResponse? response = await backendClient.Modules.Homebook.Kitchen.Recipes.GetAsync(x =>
             {
                 x.Headers.Add("Authorization", $"Bearer {token}");
 
@@ -45,7 +45,7 @@ public class RecipeService(
         CancellationToken cancellationToken = default)
     {
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
-        RecipeDetailResponse? response = await backendClient.Modules.Kitchen.Recipes[id]
+        RecipeDetailResponse? response = await backendClient.Modules.Homebook.Kitchen.Recipes[id]
             .GetAsync(x =>
                 {
                     x.Headers.Add("Authorization", $"Bearer {token}");
@@ -91,7 +91,7 @@ public class RecipeService(
         if (id.HasValue)
         {
             // Update existing recipe
-            await backendClient.Modules.Kitchen.Recipes[id.Value]
+            await backendClient.Modules.Homebook.Kitchen.Recipes[id.Value]
                 .PutAsync(request,
                     x =>
                     {
@@ -102,7 +102,7 @@ public class RecipeService(
         else
         {
             // Create new recipe
-            await backendClient.Modules.Kitchen.Recipes.PostAsync(request,
+            await backendClient.Modules.Homebook.Kitchen.Recipes.PostAsync(request,
                 x =>
                 {
                     x.Headers.Add("Authorization", $"Bearer {token}");
@@ -135,7 +135,7 @@ public class RecipeService(
         cancellationToken.ThrowIfCancellationRequested();
 
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
-        await backendClient.Modules.Kitchen.Recipes[recipeId]
+        await backendClient.Modules.Homebook.Kitchen.Recipes[recipeId]
             .DeleteAsync(x =>
                 {
                     x.Headers.Add("Authorization", $"Bearer {token}");
@@ -151,7 +151,7 @@ public class RecipeService(
         cancellationToken.ThrowIfCancellationRequested();
 
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
-        await backendClient.Modules.Kitchen.Recipes[recipeId]
+        await backendClient.Modules.Homebook.Kitchen.Recipes[recipeId]
             .PatchAsync(
                 new RecipeRenameRequest
                 {

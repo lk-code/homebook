@@ -1,7 +1,6 @@
 using System.Reflection;
 using AngleSharp;
 using AngleSharp.Dom;
-using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models;
 using Microsoft.Extensions.Logging;

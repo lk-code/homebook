@@ -78,4 +78,94 @@
     <data name="RecipeEdit_RecipeDescriptionTextField_Label" xml:space="preserve">
         <value>Description</value>
     </data>
+    <data name="RecipeEdit_ServingsLabel_Singular" xml:space="preserve">
+        <value>For 1 serving</value>
+    </data>
+    <data name="RecipeEdit_ServingsLabel_Plural" xml:space="preserve">
+        <value>For {0} servings</value>
+    </data>
+    <data name="RecipeEdit_DurationAdditionalArea_Title" xml:space="preserve">
+        <value>Duration &amp; Additional Information</value>
+    </data>
+    <data name="RecipeEdit_AbortButton_Content" xml:space="preserve">
+        <value>Abort</value>
+    </data>
+    <data name="RecipeEdit_SaveRecipeButton_Content" xml:space="preserve">
+        <value>Save Recipe</value>
+    </data>
+    <data name="RecipeEdit_RecipeSource_Content" xml:space="preserve">
+        <value>Recipe Source</value>
+    </data>
+    <data name="RecipeEdit_RecipeComment_Content" xml:space="preserve">
+        <value>Comment</value>
+    </data>
+    <data name="RecipeEdit_CaloriesPerServing_Content" xml:space="preserve">
+        <value>Calories per serving</value>
+    </data>
+    <data name="RecipeEdit_RestingTime_Content" xml:space="preserve">
+        <value>Rest period</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTime_Content" xml:space="preserve">
+        <value>Cooking/Baking time</value>
+    </data>
+    <data name="RecipeEdit_WorkingTime_Content" xml:space="preserve">
+        <value>Working Time</value>
+    </data>
+    <data name="RecipeEdit_WorkingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_WorkingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_RestingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_RestingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
+        <value>kcal</value>
+    </data>
+    <data name="RecipeEditIngredients_Ingredients_Title" xml:space="preserve">
+        <value>Ingredients</value>
+    </data>
+    <data name="RecipeEditIngredients_Quantity_Placeholder" xml:space="preserve">
+        <value>Quantity</value>
+    </data>
+    <data name="RecipeEditIngredients_Unit_Placeholder" xml:space="preserve">
+        <value>Unit</value>
+    </data>
+    <data name="RecipeEditIngredients_IngredientName_Placeholder" xml:space="preserve">
+        <value>Ingredient</value>
+    </data>
+    <data name="RecipeEditIngredients_AdditionalNote_Placeholder" xml:space="preserve">
+        <value>Note (optional)</value>
+    </data>
+    <data name="RecipeEditSteps_Steps_Title" xml:space="preserve">
+        <value>Instructions</value>
+    </data>
+    <data name="RecipeEditSteps_StepIndexText_Content" xml:space="preserve">
+        <value>Step {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerText_Content" xml:space="preserve">
+        <value>Timer: {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerTitle_Content" xml:space="preserve">
+        <value>Timer for this step</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEditSteps_StepDescription_Placeholder" xml:space="preserve">
+        <value>What happens in this step?</value>
+    </data>
 </root>

@@ -23,7 +23,6 @@ public class InfoHandlerE2ETests
     [SetUp]
     public void SetUpSubstitutes()
     {
-        // create logger
         _loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.AddSimpleConsole(options =>
@@ -72,7 +71,7 @@ public class InfoHandlerE2ETests
             .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
             .BuildServiceProvider();
         // apply migrations
-        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE");
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
         await databaseMigrator.MigrateAsync(cancellationToken);
 
         // write test data
@@ -83,6 +82,7 @@ public class InfoHandlerE2ETests
 
         // Act & Assert
         var instanceInfoResult = await InfoHandler.HandleGetInstanceInfo(
+            _loggerFactory.CreateLogger<InfoHandler>(),
             instanceConfigurationProvider,
             cancellationToken);
         var instanceInfoResponse = instanceInfoResult.ShouldBeOfType<Ok<GetInstanceInfoResponse>>();
@@ -91,6 +91,7 @@ public class InfoHandlerE2ETests
         instanceInfoResponse.Value.DefaultLocale.ShouldBe("te-ST");
 
         var instanceNameResult = await InfoHandler.HandleGetInstanceName(
+            _loggerFactory.CreateLogger<InfoHandler>(),
             instanceConfigurationProvider,
             cancellationToken);
         var instanceNameResponse = instanceNameResult.ShouldBeOfType<Ok<string>>();
@@ -98,6 +99,7 @@ public class InfoHandlerE2ETests
         instanceNameResponse.Value.ShouldBe("Test Instance");
 
         var instanceDefaultLocaleResult = await InfoHandler.HandleGetInstanceDefaultLocale(
+            _loggerFactory.CreateLogger<InfoHandler>(),
             instanceConfigurationProvider,
             cancellationToken);
         var instanceDefaultLocaleResponse = instanceDefaultLocaleResult.ShouldBeOfType<Ok<string>>();

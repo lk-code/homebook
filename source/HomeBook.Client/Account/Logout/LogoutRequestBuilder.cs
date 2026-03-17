@@ -33,7 +33,7 @@ namespace HomeBook.Client.Account.Logout
         {
         }
         /// <summary>
-        /// Logs out the current user and invalidates their token
+        /// Invalidates the current user&apos;s access token
         /// </summary>
         /// <returns>A <see cref="string"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -51,7 +51,7 @@ namespace HomeBook.Client.Account.Logout
             return await RequestAdapter.SendPrimitiveAsync<string>(requestInfo, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Logs out the current user and invalidates their token
+        /// Invalidates the current user&apos;s access token
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

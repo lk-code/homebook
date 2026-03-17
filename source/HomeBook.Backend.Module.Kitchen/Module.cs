@@ -11,11 +11,12 @@ namespace HomeBook.Backend.Module.Kitchen;
 public class Module : IModule,
     IBackendModuleEndpointRegistrar,
     IBackendModuleServiceRegistrar,
-    IBackendModuleSearchRegistrar
+    IBackendModuleSearchRegistrar,
+    IBackendModuleStorageRegistrar
 {
     public string Name { get; } = "Kitchen Module";
     public string Description { get; } = "Provides kitchen and recipe management features";
-    public string Key { get; } = "kitchen";
+    public string Key { get; } = "homebook.kitchen";
     public string Author { get; } = "HomeBook";
     public Version Version { get; } = new("1.0.0");
 
@@ -24,12 +25,14 @@ public class Module : IModule,
         await Task.CompletedTask;
     }
 
-    public void RegisterEndpoints(IEndpointBuilder builder, IConfiguration configuration)
+    public void RegisterEndpoints(IEndpointBuilder builder,
+        IConfiguration configuration)
     {
         builder.MapRecipeEndpoints();
     }
 
-    public static void RegisterServices(IServiceCollection services, IConfiguration configuration)
+    public static void RegisterServices(IServiceCollection services,
+        IConfiguration configuration)
     {
         services.AddScoped<IRecipesProvider, RecipesProvider>();
     }
@@ -52,5 +55,11 @@ public class Module : IModule,
         };
         return new SearchResult(items.Count,
             items);
+    }
+
+    public void RegisterStorage(IStorageBuilder storageBuilder,
+        IConfiguration configuration)
+    {
+        storageBuilder.RegisterStorage("RecipeImages");
     }
 }

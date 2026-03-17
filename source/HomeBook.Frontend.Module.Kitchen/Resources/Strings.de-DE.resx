@@ -59,4 +59,61 @@
     <data name="RecipeEdit_ViewRecipeButton_Text" xml:space="preserve">
         <value>Rezept ansehen</value>
     </data>
+    <data name="RecipeEdit_CaloriesPerServing_Content" xml:space="preserve">
+        <value>Kalorien/Portion</value>
+    </data>
+    <data name="RecipeEdit_RestingTime_Content" xml:space="preserve">
+        <value>Ruhezeit</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTime_Content" xml:space="preserve">
+        <value>Koch/Backzeit</value>
+    </data>
+    <data name="RecipeEdit_WorkingTime_Content" xml:space="preserve">
+        <value>Arbeitszeit</value>
+    </data>
+    <data name="RecipeEdit_WorkingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_WorkingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_CookingBakingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_RestingTimeHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEdit_RestingTimeMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
+        <value>Kcal</value>
+    </data>
+    <data name="RecipeEditIngredients_IngredientName_Placeholder" xml:space="preserve">
+        <value>Zutat</value>
+    </data>
+    <data name="RecipeEditIngredients_AdditionalNote_Placeholder" xml:space="preserve">
+        <value>Zusatz (optional)</value>
+    </data>
+    <data name="RecipeEditSteps_Steps_Title" xml:space="preserve">
+        <value>Zubereitung</value>
+    </data>
+    <data name="RecipeEditSteps_StepIndexText_Content" xml:space="preserve">
+        <value>Schritt {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerText_Content" xml:space="preserve">
+        <value>Timer: {0}</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerHour_AdornmentText" xml:space="preserve">
+        <value>h</value>
+    </data>
+    <data name="RecipeEditSteps_StepTimerMinute_AdornmentText" xml:space="preserve">
+        <value>m</value>
+    </data>
+    <data name="RecipeEditSteps_StepDescription_Placeholder" xml:space="preserve">
+        <value>Was passiert in diesem Schritt?</value>
+    </data>
 </root>

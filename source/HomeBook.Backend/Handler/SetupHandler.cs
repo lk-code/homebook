@@ -403,7 +403,7 @@ public class SetupHandler
             case "SQLITE":
             {
                 await runtimeConfigurationProvider.UpdateConfigurationAsync("Database:FilePath",
-                    setupConfiguration.DatabaseFile,
+                    setupConfiguration.DatabaseFile!,
                     cancellationToken);
             }
                 break;
@@ -411,24 +411,24 @@ public class SetupHandler
             case "POSTGRESQL":
             {
                 await runtimeConfigurationProvider.UpdateConfigurationAsync("Database:Host",
-                    setupConfiguration.DatabaseHost,
+                    setupConfiguration.DatabaseHost!,
                     cancellationToken);
 
                 await runtimeConfigurationProvider.UpdateConfigurationAsync("Database:Port",
-                    setupConfiguration.DatabasePort,
+                    setupConfiguration.DatabasePort!,
                     cancellationToken);
 
                 await runtimeConfigurationProvider.UpdateConfigurationAsync("Database:InstanceDbName",
-                    setupConfiguration.DatabaseName,
+                    setupConfiguration.DatabaseName!,
                     cancellationToken);
 
                 await runtimeConfigurationProvider.UpdateConfigurationAsync("Database:Username",
-                    setupConfiguration.DatabaseUserName,
+                    setupConfiguration.DatabaseUserName!,
                     cancellationToken);
 
                 // TODO: store password as encrypted value in .secret file
                 await runtimeConfigurationProvider.UpdateConfigurationAsync("Database:Password",
-                    setupConfiguration.DatabaseUserPassword,
+                    setupConfiguration.DatabaseUserPassword!,
                     cancellationToken);
             }
                 break;

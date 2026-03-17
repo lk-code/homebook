@@ -17,6 +17,7 @@ using Homebook.Backend.Core.Setup.Factories;
 using Homebook.Backend.Core.Setup.Models;
 using Homebook.Backend.Core.Setup.Provider;
 using Homebook.Backend.Core.Setup.Validators;
+using HomeBook.Backend.Core.Storage.Extensions;
 using HomeBook.Backend.Data;
 using HomeBook.Backend.Data.Extensions;
 using HomeBook.Backend.Data.Mysql.Extensions;
@@ -48,6 +49,7 @@ public static class ServiceCollectionExtensions
             .AddBackendCoreSetup(configuration, instanceStatus)
             .AddBackendCoreLicenses(configuration, instanceStatus)
             .AddBackendCoreSearch(configuration, instanceStatus)
+            .AddBackendCoreStorage(configuration, instanceStatus)
             .AddBackendDatabaseProvider(configuration, instanceStatus)
             .AddAccountServices(configuration, instanceStatus);
 

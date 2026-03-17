@@ -21,9 +21,6 @@ public static class SetupEndpoints
                 "HTTP 201: Setup is finished, but an update is required => Update must be executed before Homebook can be used",
                 "HTTP 204: Setup is finished and no update is required => Homebook is ready to use",
                 "HTTP 500: Unknown error while setup checking"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status204NoContent)
@@ -35,9 +32,6 @@ public static class SetupEndpoints
             .WithDescription(new Description("returns all licenses of the project",
                 "HTTP 200: Licenses found",
                 "HTTP 500: Unknown error while loading licenses"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces<GetLicensesResponse>(StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
@@ -49,10 +43,6 @@ public static class SetupEndpoints
                 "HTTP 400: Validation error, e.g. too short password, etc.",
                 "HTTP 404: No Database configuration found",
                 "HTTP 500: Unknown error while checking Database configuration"))
-            .WithOpenApi(operation => new(operation)
-            {
-                // Summary = "check if database configuration is available via environment variables"
-            })
             .Produces<GetDatabaseCheckResponse>(StatusCodes.Status200OK)
             .Produces<string[]>(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound)
@@ -65,9 +55,6 @@ public static class SetupEndpoints
                 "HTTP 200: Database is available => returns the detected database provider in uppercases",
                 "HTTP 500: Unknown error while database connection check",
                 "HTTP 503: Database is not available"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Accepts<CheckDatabaseRequest>("application/json")
             .Produces<string>(StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status500InternalServerError)
@@ -80,9 +67,6 @@ public static class SetupEndpoints
                 "HTTP 200: A user was pre-configured",
                 "HTTP 404: No pre-configured user found",
                 "HTTP 500: Unknown error while loading pre-configured user"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -95,9 +79,6 @@ public static class SetupEndpoints
                 "HTTP 200: Configuration was found",
                 "HTTP 404: No configuration found",
                 "HTTP 500: Unknown error while loading configuration"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -111,9 +92,6 @@ public static class SetupEndpoints
                 "HTTP 400: Validation error for example with the database configuration, e.g. too short password, etc.",
                 "HTTP 422: Licenses not accepted",
                 "HTTP 500: Unknown error while starting setup"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Accepts<StartSetupRequest>("application/json")
             .Produces(StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status400BadRequest)

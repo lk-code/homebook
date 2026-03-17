@@ -5,12 +5,16 @@
 @using HomeBook.Frontend.Module.Kitchen.Contracts
 @using HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components
 @using HomeBook.Frontend.Module.Kitchen.Resources
+@using HomeBook.Frontend.Modules.Abstractions
 @using Microsoft.Extensions.Localization
 
 @inject IRecipeService RecipeService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 @inject IStringLocalizer<Strings> Loc
+@inject IFileStorageService FileStorageService
+@inject IFileStorageRegistration FileStorageRegistration
+@inject IMediaService MediaService
 
 @if (!_isLoading
      && _recipe != null)
@@ -101,12 +105,12 @@
                     {
                         case 1:
                             <MudText Typo="Typo.body1">
-                                +Für 1 Portion
+                                @Loc[nameof(Resources.Strings.RecipeEdit_ServingsLabel_Singular)]
                             </MudText>
                             break;
                         default:
                             <MudText Typo="Typo.body1">
-                                +Für <b>@_recipe.NumberOfServings</b> Portionen
+                                @string.Format(Loc[nameof(Resources.Strings.RecipeEdit_ServingsLabel_Plural)], _recipe.NumberOfServings)
                             </MudText>
                             break;
                     }
@@ -147,7 +151,7 @@
 
             <MudText Typo="Typo.h5"
                      Class="mx-5 my-3">
-                +Dauer & weitere Angaben
+                @Loc[nameof(Resources.Strings.RecipeEdit_DurationAdditionalArea_Title)]
             </MudText>
 
             <MudPaper Class="frosted-b4 text-dark mx-3 mb-5">
@@ -158,7 +162,7 @@
 
                         <MudText Typo="Typo.h6"
                                  Class="mx-3">
-                            +Arbeitszeit
+                            @Loc[nameof(Resources.Strings.RecipeEdit_WorkingTime_Content)]
                         </MudText>
 
                         <div class="d-flex align-center justify-space-between flex-grow-1 gap-3 mx-3">
@@ -170,7 +174,7 @@
                                              Value="@GetDurationHours(_recipe.DurationWorkingMinutes)"
                                              ValueChanged="SetWorkingHours"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+h"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_WorkingTimeHour_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                             <MudNumericField T="int"
                                              Margin="Margin.Dense"
@@ -181,7 +185,7 @@
                                              Value="@GetDurationMinutes(_recipe.DurationWorkingMinutes)"
                                              ValueChanged="SetWorkingMinutes"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+m"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_WorkingTimeMinute_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                         </div>
 
@@ -191,7 +195,7 @@
 
                         <MudText Typo="Typo.h6"
                                  Class="mx-3">
-                            +Koch/Backzeit
+                            @Loc[nameof(Resources.Strings.RecipeEdit_CookingBakingTime_Content)]
                         </MudText>
 
                         <div class="d-flex align-center justify-space-between flex-grow-1 gap-3 mx-3">
@@ -203,7 +207,7 @@
                                              Value="@GetDurationHours(_recipe.DurationCookingMinutes)"
                                              ValueChanged="SetCookingHours"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+h"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_CookingBakingTimeHour_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                             <MudNumericField T="int"
                                              Margin="Margin.Dense"
@@ -214,7 +218,7 @@
                                              Value="@GetDurationMinutes(_recipe.DurationCookingMinutes)"
                                              ValueChanged="SetCookingMinutes"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+m"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_CookingBakingTimeMinute_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                         </div>
                     </MudItem>
@@ -223,7 +227,7 @@
 
                         <MudText Typo="Typo.h6"
                                  Class="mx-3">
-                            +Ruhezeit
+                            @Loc[nameof(Resources.Strings.RecipeEdit_RestingTime_Content)]
                         </MudText>
 
                         <div class="d-flex align-center justify-space-between flex-grow-1 gap-3 mx-3">
@@ -235,7 +239,7 @@
                                              Value="@GetDurationHours(_recipe.DurationRestingMinutes)"
                                              ValueChanged="SetRestingHours"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+h"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_RestingTimeHour_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                             <MudNumericField T="int"
                                              Margin="Margin.Dense"
@@ -246,7 +250,7 @@
                                              Value="@GetDurationMinutes(_recipe.DurationRestingMinutes)"
                                              ValueChanged="SetRestingMinutes"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+m"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_RestingTimeMinute_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                         </div>
                     </MudItem>
@@ -255,7 +259,7 @@
 
                         <MudText Typo="Typo.h6"
                                  Class="mx-3">
-                            +Kalorien/Portion
+                            @Loc[nameof(Resources.Strings.RecipeEdit_CaloriesPerServing_Content)]
                         </MudText>
 
                         <div class="d-flex align-center justify-space-between flex-grow-1 gap-3 mx-3">
@@ -266,7 +270,7 @@
                                              Min="0"
                                              @bind-Value="@_recipe.CaloriesKcal"
                                              Adornment="Adornment.End"
-                                             AdornmentText="+Kcal"
+                                             AdornmentText="@Loc[nameof(Resources.Strings.RecipeEdit_CaloriesPerServing_AdornmentText)]"
                                              AdornmentColor="Color.Primary"/>
                         </div>
                     </MudItem>
@@ -279,7 +283,7 @@
 
                 <MudText Typo="Typo.h6"
                          Class="mx-3">
-                    +Kommentar
+                    @Loc[nameof(Resources.Strings.RecipeEdit_RecipeComment_Content)]
                 </MudText>
 
                 <MudTextField T="string"
@@ -291,7 +295,7 @@
 
                 <MudText Typo="Typo.h6"
                          Class="mx-3">
-                    +Quelle
+                    @Loc[nameof(Resources.Strings.RecipeEdit_RecipeSource_Content)]
                 </MudText>
 
                 <MudTextField T="string"
@@ -311,7 +315,7 @@
                 <MudButton Color="Color.Secondary"
                            Variant="Variant.Text"
                            OnClick="AbortEditingRecipe">
-                    +Abort
+                    @Loc[nameof(Resources.Strings.RecipeEdit_AbortButton_Content)]
                 </MudButton>
 
                 <MudSpacer/>
@@ -319,7 +323,7 @@
                 <MudButton Color="Color.Primary"
                            Variant="Variant.Filled"
                            OnClick="SaveRecipeAsync">
-                    +Save Recipe
+                    @Loc[nameof(Resources.Strings.RecipeEdit_SaveRecipeButton_Content)]
                 </MudButton>
 
             </div>

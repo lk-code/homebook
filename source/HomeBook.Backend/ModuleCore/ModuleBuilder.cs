@@ -40,7 +40,7 @@ public class ModuleBuilder(
         if (typeof(IBackendModuleServiceRegistrar).IsAssignableFrom(typeof(T)))
         {
             MethodInfo? method = typeof(T).GetMethod(
-                "RegisterServices",
+                nameof(IBackendModuleServiceRegistrar.RegisterServices),
                 BindingFlags.Public | BindingFlags.Static
             );
             method?.Invoke(null, [serviceCollection, configuration]);

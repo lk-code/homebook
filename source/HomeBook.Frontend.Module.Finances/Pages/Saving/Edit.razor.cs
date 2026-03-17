@@ -35,7 +35,7 @@ public partial class Edit : ComponentBase
         }
         catch (Exception)
         {
-            int i = 0;
+            // TODO: display error
         }
         finally
         {
@@ -46,6 +46,6 @@ public partial class Edit : ComponentBase
 
     private void OnSavingGoalSave(SavingGoalDto dto)
     {
-        int i = 0;
+        // TODO: save thge goal data
     }
 }

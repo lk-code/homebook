@@ -1,8 +1,10 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.Search;
+using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Factories;
 using HomeBook.Backend.Modules.Abstractions;
 using HomeBook.Backend.Options;
+using Npgsql;
 
 namespace HomeBook.Backend.ModuleCore;
 
@@ -89,9 +91,13 @@ public static class ModuleExtensions
 
         IEnumerable<IModule> modules = sp.GetServices<IModule>();
 
+        // TODO: check that every module key is unique. otherwise stop registering modules! this is for safety because otherwise a scam module can access data from another module with its key
+
         // initialize all modules
         foreach (IModule module in modules)
         {
+            // TODO: ensure that module.key contains only a-z and 0-9
+
             // register endpoints
             try
             {
@@ -100,6 +106,21 @@ public static class ModuleExtensions
             catch (NotImplementedException)
             {
                 // do nothing
+            }
+
+            // register storage
+            try
+            {
+                await host.RegisterStorageForModuleAsync(module);
+            }
+            catch (NotImplementedException)
+            {
+                // do nothing
+            }
+            catch (Exception err)
+            {
+                int i = 0;
+                // this may happen if the app is started after an update and the migrations are not executed
             }
 
             // call the initialization logic
@@ -114,6 +135,50 @@ public static class ModuleExtensions
         }
     }
 
+    public static async Task RegisterStorageForModuleAsync(this WebApplication host,
+        IModule module)
+    {
+        if (module is not IBackendModuleStorageRegistrar registrar)
+            return;
+
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        using IServiceScope scope = host.Services.CreateScope();
+        IStorageProvider storageProvider = scope.ServiceProvider.GetRequiredService<IStorageProvider>();
+        IBackendModuleStorageRegistrar storageRegistrar = registrar;
+
+        IConfiguration configuration = host.Configuration;
+
+        IStorageBuilder builder = new StorageBuilder();
+        storageRegistrar.RegisterStorage(builder, configuration);
+
+        IStorageBuilderDataAccessor accessor = (IStorageBuilderDataAccessor)builder;
+
+        string[] scopeNames = accessor.GetStorageScopeNames();
+        foreach (string scopeName in scopeNames)
+        {
+            string fullScopeName = $"{module.Key}.{scopeName}";
+
+            bool isScopeRegistered = await storageProvider.IsScopeRegisteredAsync(fullScopeName,
+                cancellationToken);
+            Guid scopeId = Guid.Empty;
+            if (!isScopeRegistered)
+            {
+                scopeId = await storageProvider.RegisterStorageScopeAsync(fullScopeName,
+                    module.Key,
+                    cancellationToken);
+            }
+            else
+            {
+                scopeId = (await storageProvider.GetScopeIdByFullName(fullScopeName,
+                    cancellationToken))!.Value;
+            }
+
+            // TODO: create storage directory for scope-id like /data/storage/{guid} if doesnt exists
+            await storageProvider.CreateStorageForScopeAsync(scopeId, cancellationToken);
+        }
+    }
+
     public static async Task RegisterEndpointsForModuleAsync(this WebApplication host,
         IModule module)
     {
@@ -124,7 +189,8 @@ public static class ModuleExtensions
         IConfiguration configuration = host.Configuration;
 
         // register endpoint group for module
-        RouteGroupBuilder moduleEndpointGroup = host.MapGroup($"/modules/{module.Key}")
+        string endpointModuleGroupKey = module.Key.Replace(".", "/").ToLower();
+        RouteGroupBuilder moduleEndpointGroup = host.MapGroup($"/modules/{endpointModuleGroupKey}")
             .WithDescription(module.Description)
             .WithTags([
                 module.Name

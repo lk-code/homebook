@@ -34,7 +34,7 @@ public partial class HbSavingGoalEditForm : ComponentBase
         if (Form is null)
             return;
 
-        await Form.Validate();
+        await Form.ValidateAsync();
     }
 
     protected async Task OnSaveClicked()
@@ -42,7 +42,7 @@ public partial class HbSavingGoalEditForm : ComponentBase
         if (Form is null)
             return;
 
-        await Form.Validate();
+        await Form.ValidateAsync();
 
         if (!Form.IsValid)
             return;

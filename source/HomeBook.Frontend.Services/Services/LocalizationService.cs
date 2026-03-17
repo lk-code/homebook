@@ -17,7 +17,7 @@ public class LocalizationService(
     IUserPreferencesProvider userPreferencesProvider,
     IJSRuntime jsRuntime) : ILocalizationService, IAsyncDisposable
 {
-    private string _defaultLocale;
+    private string _defaultLocale = null!;
 
     /// <inheritdoc />
     public async Task InitializeAsync(CancellationToken cancellationToken)

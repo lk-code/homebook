@@ -10,7 +10,7 @@ namespace HomeBook.UnitTests.Backend.Handler;
 [TestFixture]
 public class UpdateHandlerTests
 {
-    private ILogger<SetupHandler> _logger;
+    private ILoggerFactory _loggerFactory;
     private ISetupInstanceManager _setupInstanceManager = null!;
     private IHostApplicationLifetime _hostApplicationLifetime = null!;
     private IUpdateProcessor _updateProcessor = null!;
@@ -18,7 +18,7 @@ public class UpdateHandlerTests
     [SetUp]
     public void SetUpSubstitutes()
     {
-        var factory = LoggerFactory.Create(builder =>
+        _loggerFactory = LoggerFactory.Create(builder =>
         {
             builder.AddSimpleConsole(options =>
                 {
@@ -29,10 +29,16 @@ public class UpdateHandlerTests
                 .SetMinimumLevel(LogLevel.Debug);
         });
 
-        _logger = factory.CreateLogger<SetupHandler>();
         _setupInstanceManager = Substitute.For<ISetupInstanceManager>();
         _hostApplicationLifetime = Substitute.For<IHostApplicationLifetime>();
         _updateProcessor = Substitute.For<IUpdateProcessor>();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        // dispose logger
+        _loggerFactory.Dispose();
     }
 
     [Test]
@@ -44,7 +50,8 @@ public class UpdateHandlerTests
             .Returns(false);
 
         // Act
-        var result = await UpdateHandler.HandleStartUpdate(_logger,
+        var result = await UpdateHandler.HandleStartUpdate(
+            _loggerFactory.CreateLogger<SetupHandler>(),
             _setupInstanceManager,
             _hostApplicationLifetime,
             _updateProcessor,
@@ -67,7 +74,8 @@ public class UpdateHandlerTests
             .Returns(false);
 
         // Act
-        var result = await UpdateHandler.HandleStartUpdate(_logger,
+        var result = await UpdateHandler.HandleStartUpdate(
+            _loggerFactory.CreateLogger<SetupHandler>(),
             _setupInstanceManager,
             _hostApplicationLifetime,
             _updateProcessor,

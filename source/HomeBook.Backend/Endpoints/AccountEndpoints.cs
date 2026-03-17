@@ -16,12 +16,7 @@ public static class AccountEndpoints
         group.MapPost("/login", AccountHandler.HandleLogin)
             .WithName("Login")
             .WithTags("Account", "Authentication")
-            .WithDescription("Authenticates a user and returns access tokens")
-            .WithOpenApi(operation => new(operation)
-            {
-                Summary = "User Login",
-                Description = "Authenticates a user with email and password, returns JWT tokens"
-            })
+            .WithDescription("Authenticates a user with email and password, returns JWT tokens")
             .Accepts<LoginRequest>("application/json")
             .Produces<LoginResponse>(StatusCodes.Status200OK)
             .Produces<ValidationProblemDetails>(StatusCodes.Status400BadRequest)
@@ -31,13 +26,8 @@ public static class AccountEndpoints
         group.MapPost("/logout", AccountHandler.HandleLogout)
             .WithName("Logout")
             .WithTags("Account", "Authentication")
-            .WithDescription("Logs out the current user and invalidates their token")
+            .WithDescription("Invalidates the current user's access token")
             .RequireAuthorization()
-            .WithOpenApi(operation => new(operation)
-            {
-                Summary = "User Logout",
-                Description = "Invalidates the current user's access token"
-            })
             .Produces<string>(StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status400BadRequest);
 

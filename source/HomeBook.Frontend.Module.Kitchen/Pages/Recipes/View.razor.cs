@@ -43,9 +43,9 @@ public partial class View : ComponentBase
 
             _recipe = recipeDto.ToViewModel();
         }
-        catch (Exception err)
+        catch (Exception)
         {
-            int i = 0;
+            // TODO: display error
         }
         finally
         {

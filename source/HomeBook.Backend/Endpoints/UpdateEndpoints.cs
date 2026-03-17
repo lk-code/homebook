@@ -18,9 +18,6 @@ public static class UpdateEndpoints
                 "HTTP 200: Update was successful",
                 "HTTP 409: Setup was not executed yet - setup must be completed before update can be started",
                 "HTTP 500: Unknown error while starting update"))
-            .WithOpenApi(operation => new(operation)
-            {
-            })
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status409Conflict)
             .Produces<string>(StatusCodes.Status500InternalServerError);

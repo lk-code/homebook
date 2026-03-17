@@ -17,7 +17,6 @@ public static class InfoEndpoints
             .WithTags("Info")
             .WithDescription("Returns instance information (requires authentication)")
             .RequireAuthorization()
-            .WithOpenApi()
             .Produces<GetInstanceInfoResponse>()
             .Produces<string>(StatusCodes.Status401Unauthorized)
             .Produces<string>(StatusCodes.Status500InternalServerError);
@@ -27,7 +26,6 @@ public static class InfoEndpoints
             .WithTags("Info")
             .WithDescription("Returns the instance name as a string (public endpoint)")
             .AllowAnonymous()
-            .WithOpenApi()
             .Produces<string>()
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
@@ -36,7 +34,6 @@ public static class InfoEndpoints
             .WithTags("Info")
             .WithDescription("Returns the instance default locale as a string (public endpoint) e.g. 'en-EN', 'de-DE' ...")
             .AllowAnonymous()
-            .WithOpenApi()
             .Produces<string>()
             .Produces<string>(StatusCodes.Status500InternalServerError);
 

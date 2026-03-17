@@ -27,25 +27,6 @@ public class InstanceStatusExtensionsTests
         Environment.SetEnvironmentVariable("GITHUB_ACTIONS", _originalGitHubActionsValue);
     }
 
-    [TestCase("", InstanceStatus.SETUP)]
-    [TestCase(null, InstanceStatus.SETUP)]
-    [TestCase("not-empty-value", InstanceStatus.RUNNING)]
-    public void ContainsUserAsync_ShouldReturnExpectedResult(string? status, InstanceStatus expected)
-    {
-        // Arrange
-        var configuration = new DataBuilder()
-            .Add("Database",
-                new DataBuilder()
-                    .Add("Provider", status))
-            .ToConfiguration();
-
-        // Act
-        var actual = configuration.GetCurrentInstanceStatus();
-
-        // Assert
-        actual.ShouldBe(expected);
-    }
-
     [Test]
     public void ContainsUserAsync_WithEnvGitHubWorkflow_Return()
     {

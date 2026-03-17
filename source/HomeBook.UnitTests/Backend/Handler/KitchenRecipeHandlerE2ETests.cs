@@ -76,7 +76,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             .BuildServiceProvider();
 
         // apply migrations
-        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE");
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
         await databaseMigrator.MigrateAsync(cancellationToken);
 
         // verify that migrations were applied
@@ -250,7 +250,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             .BuildServiceProvider();
 
         // apply migrations
-        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE");
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
         await databaseMigrator.MigrateAsync(cancellationToken);
 
         // verify that migrations were applied
@@ -456,7 +456,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             .BuildServiceProvider();
 
         // apply migrations
-        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE");
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
         await databaseMigrator.MigrateAsync(cancellationToken);
 
         // verify that migrations were applied

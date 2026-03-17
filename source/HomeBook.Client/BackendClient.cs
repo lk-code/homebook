@@ -2,10 +2,12 @@
 #pragma warning disable CS0618
 using HomeBook.Client.Account;
 using HomeBook.Client.Info;
+using HomeBook.Client.Media;
 using HomeBook.Client.Modules;
 using HomeBook.Client.Platform;
 using HomeBook.Client.Search;
 using HomeBook.Client.Setup;
+using HomeBook.Client.Storage;
 using HomeBook.Client.System;
 using HomeBook.Client.Update;
 using HomeBook.Client.User;
@@ -38,6 +40,11 @@ namespace HomeBook.Client
         {
             get => new global::HomeBook.Client.Info.InfoRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The media property</summary>
+        public global::HomeBook.Client.Media.MediaRequestBuilder Media
+        {
+            get => new global::HomeBook.Client.Media.MediaRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The modules property</summary>
         public global::HomeBook.Client.Modules.ModulesRequestBuilder Modules
         {
@@ -57,6 +64,11 @@ namespace HomeBook.Client
         public global::HomeBook.Client.Setup.SetupRequestBuilder Setup
         {
             get => new global::HomeBook.Client.Setup.SetupRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The storage property</summary>
+        public global::HomeBook.Client.Storage.StorageRequestBuilder Storage
+        {
+            get => new global::HomeBook.Client.Storage.StorageRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The system property</summary>
         public global::HomeBook.Client.System.SystemRequestBuilder System

@@ -8,6 +8,7 @@
   <Folder Name="/Backend/Core/">
     <Project Path="source/HomeBook.Backend.Core.Modules/HomeBook.Backend.Core.Modules.csproj" />
     <Project Path="source/HomeBook.Backend.Core.Search/HomeBook.Backend.Core.Search.csproj" />
+    <Project Path="source/HomeBook.Backend.Core.Storage/HomeBook.Backend.Core.Storage.csproj" />
     <Project Path="source\HomeBook.Backend.Core.Account\HomeBook.Backend.Core.Account.csproj" />
     <Project Path="source\HomeBook.Backend.Core.DataProvider\HomeBook.Backend.Core.DataProvider.csproj" />
     <Project Path="source\HomeBook.Backend.Core.Licenses\HomeBook.Backend.Core.Licenses.csproj" />
