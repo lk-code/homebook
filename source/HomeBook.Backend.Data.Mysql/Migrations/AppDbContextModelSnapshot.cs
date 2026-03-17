@@ -204,27 +204,6 @@ namespace HomeBook.Backend.Data.Mysql.Migrations
                     b.ToTable("SavingGoals");
                 });
 
-            modelBuilder.Entity("HomeBook.Backend.Data.Entities.StorageModuleRegistration", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("ModuleKey")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.Property<string>("ScopeName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StorageModuleRegistrations");
-                });
-
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")

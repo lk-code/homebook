@@ -201,27 +201,6 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.ToTable("SavingGoals");
                 });
 
-            modelBuilder.Entity("HomeBook.Backend.Data.Entities.StorageModuleRegistration", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModuleKey")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ScopeName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("StorageModuleRegistrations");
-                });
-
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
