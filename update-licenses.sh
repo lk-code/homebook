@@ -15,7 +15,9 @@ rm -rf "${LICENSES_DIR}"
 mkdir -p "${LICENSES_DIR}"
 
 nuget-license -i ${SOLUTION} --include-transitive --output JsonPretty --file-output ${LICENSES_JSON}
+#nuget-license -i ./homebook.slnx --include-transitive --output JsonPretty --file-output /source/HomeBook.Backend.Core.Licenses/Licenses.json
 nuget-license -i ${SOLUTION} --include-transitive -d ${LICENSES_DIR}
+#nuget-license -i ./homebook.slnx --include-transitive -d ./source/HomeBook.Backend.Core.Licenses/Licenses
 
 echo "License information updated successfully."
 
