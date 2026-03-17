@@ -1,4 +1,5 @@
 using HomeBook.Backend.Core.Modules.OpenApi;
+using HomeBook.Backend.DTOs.Responses.Storage;
 using HomeBook.Backend.Handler;
 using HomeBook.Backend.Responses;
 
@@ -12,6 +13,16 @@ public static class StorageFileEndpoints
             .MapGroup("/storage/files")
             .WithDescription("Endpoints for storage operations")
             .RequireAuthorization();
+
+        // GET - get file as asset
+        group.MapGet("/{mediaId:guid}", StorageFileHandler.HandleGetFileByIdMedia)
+            .WithName("HGetFileByIdMedia")
+            .WithTags("Storage")
+            .WithDescription(new Description("get the file as assets content",
+                "HTTP 200: File content returned successfully",
+                "HTTP 404: File not found"))
+            .Produces(StatusCodes.Status200OK, contentType: "application/octet-stream")
+            .Produces(StatusCodes.Status404NotFound);
 
         // GET - Read file content
         group.MapGet("", StorageFileHandler.HandleGetFile)
@@ -39,7 +50,7 @@ public static class StorageFileEndpoints
                 "HTTP 422: Storage Scope not found",
                 "HTTP 500: Unknown error while writing file"))
             .RequireAuthorization()
-            .Produces(StatusCodes.Status200OK)
+            .Produces<FilePostResponse>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces<string>(StatusCodes.Status500InternalServerError);
 

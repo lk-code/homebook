@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 namespace HomeBook.Backend.Data.Entities;
 
-[DebuggerDisplay("[{nameof(StorageModuleRegistration)}] {Name}")]
-[Table("StorageModuleRegistrations")]
-public class StorageModuleRegistration
+[DebuggerDisplay("[{nameof(StorageScopeRegistration)}] {Name}")]
+[Table("StorageScopeRegistrations")]
+public class StorageScopeRegistration
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -15,9 +15,11 @@ public class StorageModuleRegistration
 
     [StringLength(50, MinimumLength = 1, ErrorMessage = "Scope Name must be between 1 and 50 characters long.")]
     [Required]
-    public string ScopeName { get; set; }
+    public string Name { get; set; }
 
     [StringLength(50, MinimumLength = 1, ErrorMessage = "Module Key must be between 1 and 50 characters long.")]
     [Required]
     public string ModuleKey { get; set; }
+
+    public MediaItem MediaItem { get; set; }
 }

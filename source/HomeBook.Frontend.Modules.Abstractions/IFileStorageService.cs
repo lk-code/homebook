@@ -40,7 +40,7 @@ public interface IFileStorageService
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task WriteFileAllBytesAsync(Guid scopeId, string fileName, byte[] content, CancellationToken cancellationToken);
+    Task<Guid> WriteFileAllBytesAsync(Guid scopeId, string fileName, byte[] content, CancellationToken cancellationToken);
 
     /// <summary>
     ///
@@ -50,5 +50,5 @@ public interface IFileStorageService
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task WriteFileAllTextAsync(Guid scopeId, string fileName, string content, CancellationToken cancellationToken);
+    Task<Guid> WriteFileAllTextAsync(Guid scopeId, string fileName, string content, CancellationToken cancellationToken);
 }

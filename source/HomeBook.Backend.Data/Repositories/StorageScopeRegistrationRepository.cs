@@ -6,30 +6,30 @@ using Microsoft.EntityFrameworkCore;
 namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc/>
-public class StorageModuleRegistrationRepository(IDbContextFactory<AppDbContext> factory)
-    : IStorageModuleRegistrationRepository
+public class StorageScopeRegistrationRepository(IDbContextFactory<AppDbContext> factory)
+    : IStorageScopeRegistrationRepository
 {
     /// <inheritdoc/>
-    public async Task<StorageModuleRegistration?> GetByFullScopeNameAsync(string fullScopeName,
+    public async Task<StorageScopeRegistration?> GetByFullScopeNameAsync(string fullScopeName,
         CancellationToken cancellationToken)
     {
         string scopeNameNormalized = fullScopeName.ToLowerInvariant();
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-        StorageModuleRegistration? entity = await dbContext.Set<StorageModuleRegistration>()
-            .Where(e => e.ScopeName == scopeNameNormalized)
+        StorageScopeRegistration? entity = await dbContext.Set<StorageScopeRegistration>()
+            .Where(e => e.Name == scopeNameNormalized)
             .FirstOrDefaultAsync(cancellationToken);
 
         return entity;
     }
 
     /// <inheritdoc/>
-    public async Task<StorageModuleRegistration?> GetByIdAsync(Guid id,
+    public async Task<StorageScopeRegistration?> GetByIdAsync(Guid id,
         CancellationToken cancellationToken)
     {
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-        StorageModuleRegistration? entity = await dbContext.Set<StorageModuleRegistration>()
+        StorageScopeRegistration? entity = await dbContext.Set<StorageScopeRegistration>()
             .Where(e => e.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -41,7 +41,7 @@ public class StorageModuleRegistrationRepository(IDbContextFactory<AppDbContext>
         string moduleKey,
         CancellationToken cancellationToken)
     {
-        StorageModuleRegistration? existing = await GetByFullScopeNameAsync(fullScopeName,
+        StorageScopeRegistration? existing = await GetByFullScopeNameAsync(fullScopeName,
             cancellationToken);
 
         if (existing is not null)
@@ -53,13 +53,13 @@ public class StorageModuleRegistrationRepository(IDbContextFactory<AppDbContext>
         string moduleKeyNormalized = moduleKey.ToLowerInvariant();
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-        StorageModuleRegistration entity = new()
+        StorageScopeRegistration entity = new()
         {
-            ScopeName = scopeNameNormalized,
+            Name = scopeNameNormalized,
             ModuleKey = moduleKeyNormalized
         };
 
-        dbContext.StorageModuleRegistrations.Add(entity);
+        dbContext.StorageScopeRegistrations.Add(entity);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return entity.Id;

@@ -2,6 +2,7 @@
 #pragma warning disable CS0618
 using HomeBook.Client.Account;
 using HomeBook.Client.Info;
+using HomeBook.Client.Media;
 using HomeBook.Client.Modules;
 using HomeBook.Client.Platform;
 using HomeBook.Client.Search;
@@ -38,6 +39,11 @@ namespace HomeBook.Client
         public global::HomeBook.Client.Info.InfoRequestBuilder Info
         {
             get => new global::HomeBook.Client.Info.InfoRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The media property</summary>
+        public global::HomeBook.Client.Media.MediaRequestBuilder Media
+        {
+            get => new global::HomeBook.Client.Media.MediaRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The modules property</summary>
         public global::HomeBook.Client.Modules.ModulesRequestBuilder Modules

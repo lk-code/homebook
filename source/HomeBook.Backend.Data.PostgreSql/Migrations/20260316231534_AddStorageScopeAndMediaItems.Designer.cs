@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HomeBook.Backend.Data.PostgreSql.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260315220659_AddStorageScopeRegistrations")]
-    partial class AddStorageScopeRegistrations
+    [Migration("20260316231534_AddStorageScopeAndMediaItems")]
+    partial class AddStorageScopeAndMediaItems
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

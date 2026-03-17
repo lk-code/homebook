@@ -5,14 +5,14 @@ namespace HomeBook.Backend.Data.Contracts;
 /// <summary>
 ///
 /// </summary>
-public interface IStorageModuleRegistrationRepository
+public interface IStorageScopeRegistrationRepository
 {
     /// <summary>
     ///
     /// </summary>
     /// <param name="fullScopeName"></param>
     /// <returns></returns>
-    Task<StorageModuleRegistration?> GetByFullScopeNameAsync(string fullScopeName,
+    Task<StorageScopeRegistration?> GetByFullScopeNameAsync(string fullScopeName,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -21,7 +21,7 @@ public interface IStorageModuleRegistrationRepository
     /// <param name="id"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<StorageModuleRegistration?> GetByIdAsync(Guid id,
+    Task<StorageScopeRegistration?> GetByIdAsync(Guid id,
         CancellationToken cancellationToken);
 
     /// <summary>

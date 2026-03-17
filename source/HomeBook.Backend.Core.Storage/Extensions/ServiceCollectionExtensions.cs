@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
         InstanceStatus instanceStatus)
     {
         services.AddScoped<IStorageProvider, StorageFileSystemProvider>();
+        services.AddScoped<IMediaProvider, MediaProvider>();
 
         return services;
     }

@@ -89,7 +89,7 @@ public interface IStorageProvider
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task WriteFileAllBytesAsync(Guid scopeId,
+    Task<Guid> WriteFileAllBytesAsync(Guid scopeId,
         string filename,
         byte[] content,
         CancellationToken cancellationToken);
@@ -102,7 +102,7 @@ public interface IStorageProvider
     /// <param name="content"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task WriteFileAllTextAsync(Guid scopeId,
+    Task<Guid> WriteFileAllTextAsync(Guid scopeId,
         string filename,
         string content,
         CancellationToken cancellationToken);

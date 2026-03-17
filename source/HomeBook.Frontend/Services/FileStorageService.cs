@@ -55,14 +55,14 @@ public class FileStorageService(
     }
 
     /// <inheritdoc/>
-    public async Task WriteFileAllBytesAsync(Guid scopeId,
+    public async Task<Guid> WriteFileAllBytesAsync(Guid scopeId,
         string fileName,
         byte[] content,
         CancellationToken cancellationToken)
     {
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
 
-        await backendClient.Storage.Files.PostAsync(new FilePostRequest
+        FilePostResponse? response = await backendClient.Storage.Files.PostAsFilePostResponseAsync(new FilePostRequest
             {
                 ScopeId = scopeId,
                 Filename = fileName,
@@ -70,10 +70,12 @@ public class FileStorageService(
             },
             x => x.Headers.Add("Authorization", $"Bearer {token}"),
             cancellationToken);
+
+        return response!.MediaItemId!.Value;
     }
 
     /// <inheritdoc/>
-    public async Task WriteFileAllTextAsync(Guid scopeId,
+    public async Task<Guid> WriteFileAllTextAsync(Guid scopeId,
         string fileName,
         string content,
         CancellationToken cancellationToken)

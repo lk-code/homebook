@@ -23,6 +23,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IFileStorageService, FileStorageService>();
         services.AddSingleton<IFileStorageRegistration, FileStorageRegistration>();
+        services.AddSingleton<IMediaService, MediaService>();
 
         services.AddSingleton<IWidgetFactory, WidgetFactory>();
 

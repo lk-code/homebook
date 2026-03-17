@@ -1,12 +1,52 @@
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models.Media;
+using HomeBook.Backend.DTOs.Responses.Storage;
 using Microsoft.AspNetCore.Mvc;
-using HomeBook.Backend.Responses;
 using HomeBook.Backend.Requests;
+using Microsoft.AspNetCore.StaticFiles;
 
 namespace HomeBook.Backend.Handler;
 
 public static class StorageFileHandler
 {
+    // GET - Read file content
+    public static async Task<IResult> HandleGetFileByIdMedia(Guid mediaId,
+        [FromServices] IMediaProvider mediaProvider,
+        [FromServices] IStorageProvider storageProvider,
+        CancellationToken cancellationToken)
+    {
+        if (mediaId == Guid.Empty)
+            return TypedResults.NotFound();
+
+        MediaItemDto? mediaItem = await mediaProvider.GetMediaItemByIdAsync(mediaId,
+            cancellationToken);
+        if (mediaItem is null)
+            return TypedResults.NotFound();
+
+        bool isScopeRegistered = await storageProvider.IsScopeRegisteredAsync(mediaItem.ScopeId,
+            cancellationToken);
+        if (!isScopeRegistered)
+            return TypedResults.NotFound();
+
+        try
+        {
+            byte[] content = await storageProvider.GetFileAllBytesAsync(mediaItem.ScopeId,
+                mediaItem.Filename,
+                cancellationToken);
+
+            var contentTypeProvider = new FileExtensionContentTypeProvider();
+            if (!contentTypeProvider.TryGetContentType(mediaItem.Filename, out string? contentType))
+                contentType = "application/octet-stream";
+
+            return TypedResults.File(content, contentType);
+        }
+        catch (Exception err)
+        {
+            // TODO: log and return error
+            return TypedResults.Problem();
+        }
+    }
+
     // GET - Read file content
     public static async Task<IResult> HandleGetFile([FromQuery] string filename,
         [FromQuery] Guid scopeId,
@@ -51,12 +91,12 @@ public static class StorageFileHandler
 
         try
         {
-            await storageProvider.WriteFileAllBytesAsync(request.ScopeId,
+            Guid mediaItemId = await storageProvider.WriteFileAllBytesAsync(request.ScopeId,
                 request.Filename,
                 request.Content,
                 cancellationToken);
 
-            return TypedResults.Ok();
+            return TypedResults.Ok(new FilePostResponse(mediaItemId));
         }
         catch (Exception err)
         {

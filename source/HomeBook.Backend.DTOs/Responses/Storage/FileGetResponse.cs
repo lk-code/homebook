@@ -1,4 +1,4 @@
-namespace HomeBook.Backend.Responses;
+namespace HomeBook.Backend.DTOs.Responses.Storage;
 
 /// <summary>
 /// Response model for file get operations

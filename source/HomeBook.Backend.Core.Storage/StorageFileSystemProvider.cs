@@ -1,11 +1,13 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Data.Contracts;
+using HomeBook.Backend.Data.Entities;
 
 namespace HomeBook.Backend.Core.Storage;
 
 /// <inheritdoc/>
 public class StorageFileSystemProvider(
-    IStorageModuleRegistrationRepository repository,
+    IStorageScopeRegistrationRepository repository,
+    IMediaItemRepository mediaItemRepository,
     IApplicationPathProvider applicationPathProvider,
     IFileSystemService fileSystemService) : IStorageProvider
 {
@@ -70,7 +72,12 @@ public class StorageFileSystemProvider(
 
         fileSystemService.DeleteFile(fullFilePath);
 
-        await Task.CompletedTask;
+        MediaItem? mediaItemId = await mediaItemRepository
+            .GetMediaItemByFilenameAsync(scopeId, filename, cancellationToken);
+        if (mediaItemId is null)
+            return;
+
+        await mediaItemRepository.DeleteMediaItemAsync(mediaItemId!.Id, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -104,7 +111,7 @@ public class StorageFileSystemProvider(
     }
 
     /// <inheritdoc/>
-    public async Task WriteFileAllBytesAsync(Guid scopeId,
+    public async Task<Guid> WriteFileAllBytesAsync(Guid scopeId,
         string filename,
         byte[] content,
         CancellationToken cancellationToken)
@@ -115,10 +122,22 @@ public class StorageFileSystemProvider(
         string fullFilePath = GetFullStorageFilePath(scopeId, filename);
 
         await fileSystemService.FileWriteAllBytesAsync(fullFilePath, content, cancellationToken);
+
+        MediaItem? mediaItem = await mediaItemRepository.GetMediaItemByFilenameAsync(scopeId,
+            filename,
+            cancellationToken);
+        if (mediaItem is not null)
+            await mediaItemRepository.DeleteMediaItemAsync(mediaItem!.Id, cancellationToken);
+
+        Guid mediaItemId = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            filename,
+            cancellationToken);
+
+        return mediaItemId;
     }
 
     /// <inheritdoc/>
-    public async Task WriteFileAllTextAsync(Guid scopeId,
+    public async Task<Guid> WriteFileAllTextAsync(Guid scopeId,
         string filename,
         string content,
         CancellationToken cancellationToken)
@@ -129,5 +148,17 @@ public class StorageFileSystemProvider(
         string fullFilePath = GetFullStorageFilePath(scopeId, filename);
 
         await fileSystemService.FileWriteAllTextAsync(fullFilePath, content, cancellationToken);
+
+        MediaItem? mediaItem = await mediaItemRepository.GetMediaItemByFilenameAsync(scopeId,
+            filename,
+            cancellationToken);
+        if (mediaItem is not null)
+            await mediaItemRepository.DeleteMediaItemAsync(mediaItem!.Id, cancellationToken);
+
+        Guid mediaItemId = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            filename,
+            cancellationToken);
+
+        return mediaItemId;
     }
 }

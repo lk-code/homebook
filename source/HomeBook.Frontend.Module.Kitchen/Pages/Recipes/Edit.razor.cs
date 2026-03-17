@@ -44,8 +44,12 @@ public partial class Edit : ComponentBase
         byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
 
         // 1. WRITE
-        await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, contentBytes, cancellationToken);
-        // await FileStorageService.WriteFileAllTextAsync(scopeId, fileName, contentString, cancellationToken);
+        Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, contentBytes, cancellationToken);
+        // Guid mediaItemId = await FileStorageService.WriteFileAllTextAsync(scopeId, fileName, contentString, cancellationToken);
+
+        // TODO: get static path for ui to get the file without auth
+        // TODO: add caching for this endpoint
+        Uri staticAssetUrl = await MediaService.GetUrlForMediaItemAsync(mediaItemId, cancellationToken);
 
         // 2. READ
         // byte[] responseContentBytes = await FileStorageService.GetFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
