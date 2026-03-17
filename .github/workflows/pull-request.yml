@@ -2,18 +2,21 @@ name: Pull Request
 
 on:
     pull_request:
-        branches: [ "main" ]
+        branches:
+            - main
 
 env:
-    DOTNET_VERSION: "10.0"
-    FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
-    BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
+    DOTNET_VERSION: "10.0.101"
+    SOLUTION_FILE: "./homebook.slnx"
+    BACKEND_CSPROJ: "./source/HomeBook.Backend/HomeBook.Backend.csproj"
+    FRONTEND_CSPROJ: "./source/HomeBook.Frontend/HomeBook.Frontend.csproj"
     OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
-    CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
     CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
     CLIENT_NAMESPACE: "HomeBook.Client"
     UNIT_TEST_CSPROJ: "./source/HomeBook.UnitTests/HomeBook.UnitTests.csproj"
-    E2E_TEST_CSPROJ: "./source/HomeBook.E2ETests/HomeBook.E2ETests.csproj"
+    PUBLISH_DIR: "./publish"
+    FRONTEND_PUBLISH_DIR: "./publish/frontend"
+    BACKEND_PUBLISH_DIR: "./publish/backend"
 
 jobs:
     pull-request-check:
@@ -29,9 +32,9 @@ jobs:
                 uses: actions/setup-java@v4
                 with:
                     java-version: 17
-                    distribution: 'zulu'
+                    distribution: "zulu"
 
-            -   name: Setup .NET
+            -   name: Setup .NET 10.0.101
                 uses: actions/setup-dotnet@v4
                 with:
                     dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -57,10 +60,10 @@ jobs:
                 run: dotnet tool install --global dotnet-coverage
 
             -   name: .NET Restore
-                run: dotnet restore
+                run: dotnet restore ${{ env.SOLUTION_FILE }}
 
             -   name: .NET Build (Service for Client Generation)
-                run: dotnet build --no-restore
+                run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore
 
             -   name: Generate Kiota Client
                 shell: bash
@@ -95,7 +98,7 @@ jobs:
 
             -   name: .NET Build
                 shell: pwsh
-                run: dotnet build --no-restore
+                run: dotnet build ${{ env.SOLUTION_FILE }} --no-restore
 
             -   name: Collect Test Coverage
                 shell: pwsh
@@ -110,16 +113,20 @@ jobs:
                 run: |
                     dotnet-sonarscanner end /d:sonar.token="$env:SONARTOKEN"
 
+            -   name: Publish frontend
+                run: |
+                    rm -rf ${{ env.PUBLISH_DIR }}
+                    dotnet publish ${{ env.FRONTEND_CSPROJ }} --configuration Release --no-restore --output ${{ env.FRONTEND_PUBLISH_DIR }}
+
+            -   name: Publish backend
+                run: |
+                    dotnet publish ${{ env.BACKEND_CSPROJ }} --configuration Release --no-restore --output ${{ env.BACKEND_PUBLISH_DIR }} /p:UseAppHost=false
+
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435
 
             -   name: Build Docker Image
-                run: |
-                    docker build \
-                      --file ./Dockerfile \
-                      --build-arg FRONTEND_APPSETTINGS_FILE=${{ env.FRONTEND_APPSETTINGS_FILE }} \
-                      --build-arg BACKEND_APPSETTINGS_FILE=${{ env.BACKEND_APPSETTINGS_FILE }} \
-                      --tag test-image .
+                run: docker build --file ./Dockerfile --tag test-image .
 
             -   uses: actions/upload-artifact@v4
                 with:
