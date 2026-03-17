@@ -17,6 +17,7 @@ public class RecipeDetailViewModel
     public string Image { get; set; } = string.Empty;
     public string Source { get; set; } = string.Empty;
     public string Comments { get; set; } = string.Empty;
+    public List<Guid> ImageMediaIds = [];
 
     public int NumberOfServings { get; set; }
 

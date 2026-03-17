@@ -3,6 +3,7 @@ using HomeBook.Frontend.Module.Kitchen.Models;
 using HomeBook.Frontend.Module.Kitchen.ViewModels;
 using HomeBook.Frontend.Modules.Abstractions;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using MudBlazor;
 
 namespace HomeBook.Frontend.Module.Kitchen.Pages.Recipes;
@@ -15,6 +16,8 @@ public partial class Edit : ComponentBase
     [Inject(Key = "HomeBook.Frontend.Module.Kitchen.Module")]
     public IModule ModuleInstance { get; set; } = default!;
 
+    private bool _isUploadingImage = false;
+    private string? _acceptedFileTypes = ".png, .jpg, .jpeg, .webp";
     private bool _isLoading = false;
     private RecipeDetailViewModel? _recipe = null;
     private bool _nameEditMode = false;
@@ -28,37 +31,6 @@ public partial class Edit : ComponentBase
             return;
 
         await LoadRecipeAsync();
-
-        CancellationToken cancellationToken = CancellationToken.None;
-        Guid? recipeImagesStorageScopeId = await FileStorageRegistration.GetScopeIdForModuleAsync(ModuleInstance,
-            "RecipeImages",
-            cancellationToken);
-        if (recipeImagesStorageScopeId is null)
-            return;
-        string fileName = "test.txt";
-        string content = """
-                         Hello World from the UI!
-
-                         this is a test with a text!
-                         """;
-        byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
-
-        // 1. WRITE
-        Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, contentBytes, cancellationToken);
-        // Guid mediaItemId = await FileStorageService.WriteFileAllTextAsync(scopeId, fileName, contentString, cancellationToken);
-
-        // TODO: get static path for ui to get the file without auth
-        // TODO: add caching for this endpoint
-        Uri staticAssetUrl = await MediaService.GetUrlForMediaItemAsync(mediaItemId, cancellationToken);
-
-        // 2. READ
-        // byte[] responseContentBytes = await FileStorageService.GetFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
-        // // string contentString = await FileStorageService.GetFileAllTextAsync(scopeId, fileName, cancellationToken);
-        //
-        // // 3. DELETE
-        // await FileStorageService.DeleteFileAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
-        //
-        // int i = 0;
     }
 
     private async Task LoadRecipeAsync()
@@ -178,6 +150,24 @@ public partial class Edit : ComponentBase
         }
     }
 
+    private Task UpdateRecipeImageMediaIdsAsync(IList<Guid> imageMediaIds)
+    {
+        if (_recipe is null)
+            return Task.CompletedTask;
+
+        _recipe.ImageMediaIds = imageMediaIds.ToList();
+        return Task.CompletedTask;
+    }
+
+    private Task UpdateRecipePreviewImageAsync(string? previewImageUrl)
+    {
+        if (_recipe is null)
+            return Task.CompletedTask;
+
+        _recipe.Image = previewImageUrl ?? string.Empty;
+        return Task.CompletedTask;
+    }
+
     private static int GetDurationHours(TimeSpan? duration) => duration.HasValue ? (int)duration.Value.TotalHours : 0;
 
     private static int GetDurationMinutes(TimeSpan? duration) => duration.HasValue ? duration.Value.Minutes : 0;
@@ -229,5 +219,75 @@ public partial class Edit : ComponentBase
             return null;
 
         return (int)Math.Round(duration.Value.TotalMinutes);
+    }
+
+    private async Task UploadRecipeImagesAsync(InputFileChangeEventArgs args)
+    {
+        try
+        {
+            _isUploadingImage = true;
+            StateHasChanged();
+
+            string fileName = args.File.Name;
+            using var stream = args.File.OpenReadStream((50 * 1024 * 1024));
+            using var ms = new MemoryStream();
+
+            await stream.CopyToAsync(ms);
+            byte[] fileContent = ms.ToArray();
+
+
+            // Upload file and save MediaId
+            CancellationToken cancellationToken = CancellationToken.None;
+            Guid? recipeImagesStorageScopeId = await FileStorageRegistration.GetScopeIdForModuleAsync(ModuleInstance,
+                "RecipeImages",
+                cancellationToken);
+            if (recipeImagesStorageScopeId is null)
+                return;
+            Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value,
+                fileName,
+                fileContent,
+                cancellationToken);
+            Uri staticAssetUrl = await MediaService.GetUrlForMediaItemAsync(mediaItemId,
+                cancellationToken);
+
+            _recipe.ImageMediaIds.Add(mediaItemId);
+            StateHasChanged();
+        }
+        catch (Exception err)
+        {
+        }
+        finally
+        {
+            _isUploadingImage = false;
+            StateHasChanged();
+        }
+
+
+        /*
+        string fileName = "test.txt";
+        string content = """
+                         Hello World from the UI!
+
+                         this is a test with a text!
+                         """;
+        byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
+
+        // 1. WRITE
+        Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, contentBytes, cancellationToken);
+        // Guid mediaItemId = await FileStorageService.WriteFileAllTextAsync(scopeId, fileName, contentString, cancellationToken);
+
+        // TODO: get static path for ui to get the file without auth
+        // TODO: add caching for this endpoint
+        Uri staticAssetUrl = await MediaService.GetUrlForMediaItemAsync(mediaItemId, cancellationToken);
+
+        // 2. READ
+        // byte[] responseContentBytes = await FileStorageService.GetFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
+        // // string contentString = await FileStorageService.GetFileAllTextAsync(scopeId, fileName, cancellationToken);
+        //
+        // // 3. DELETE
+        // await FileStorageService.DeleteFileAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
+        //
+        // int i = 0;
+        /* */
     }
 }
