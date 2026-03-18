@@ -45,6 +45,8 @@ public class Recipe : INormalizable
 
     public virtual ICollection<Recipe2RecipeIngredient> Recipe2RecipeIngredient { get; set; } = new List<Recipe2RecipeIngredient>();
 
+    public virtual ICollection<Recipe2MediaItems> Recipe2MediaItem { get; set; } = new List<Recipe2MediaItems>();
+
     public virtual ICollection<RecipeStep> Steps { get; set; } = new List<RecipeStep>();
 
     public void Normalize(IStringNormalizer normalizer)
