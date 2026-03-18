@@ -10,6 +10,7 @@ public record RecipeDetailResponse(
     string NormalizedName,
     string? Description,
     int? Servings,
+    Guid[] MediaIds,
     RecipeIngredientResponse[] Ingredients,
     RecipeStepResponse[] Steps,
     int? DurationWorkingMinutes,

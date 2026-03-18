@@ -38,6 +38,8 @@ namespace HomeBook.Client.Models
         public int? DurationRestingMinutes { get; set; }
         /// <summary>The durationWorkingMinutes property</summary>
         public int? DurationWorkingMinutes { get; set; }
+        /// <summary>The heroMediaId property</summary>
+        public Guid? HeroMediaId { get; set; }
         /// <summary>The id property</summary>
         public Guid? Id { get; set; }
         /// <summary>The name property</summary>
@@ -105,6 +107,7 @@ namespace HomeBook.Client.Models
                 { "durationCookingMinutes", n => { DurationCookingMinutes = n.GetIntValue(); } },
                 { "durationRestingMinutes", n => { DurationRestingMinutes = n.GetIntValue(); } },
                 { "durationWorkingMinutes", n => { DurationWorkingMinutes = n.GetIntValue(); } },
+                { "heroMediaId", n => { HeroMediaId = n.GetGuidValue(); } },
                 { "id", n => { Id = n.GetGuidValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
                 { "normalizedName", n => { NormalizedName = n.GetStringValue(); } },
@@ -126,6 +129,7 @@ namespace HomeBook.Client.Models
             writer.WriteIntValue("durationCookingMinutes", DurationCookingMinutes);
             writer.WriteIntValue("durationRestingMinutes", DurationRestingMinutes);
             writer.WriteIntValue("durationWorkingMinutes", DurationWorkingMinutes);
+            writer.WriteGuidValue("heroMediaId", HeroMediaId);
             writer.WriteGuidValue("id", Id);
             writer.WriteStringValue("name", Name);
             writer.WriteStringValue("normalizedName", NormalizedName);

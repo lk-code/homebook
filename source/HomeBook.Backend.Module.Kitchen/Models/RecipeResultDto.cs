@@ -14,4 +14,5 @@ public record RecipeResultDto(
     string? Comments,
     string? Source,
     RecipeIngredientDto[] Ingredients,
-    RecipeStepDto[] Steps);
+    RecipeStepDto[] Steps,
+    Guid[] MediaIds);

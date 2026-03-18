@@ -24,6 +24,7 @@ public class RecipesRepository(
         // return with filter
         string normalizedFilter = stringNormalizer.Normalize(searchFilter);
         return await dbContext.Set<Recipe>()
+            .Include(r => r.Recipe2MediaItems)
             .Where(e => e.NormalizedName.Contains(normalizedFilter))
             .ToListAsync(cancellationToken);
     }
@@ -40,6 +41,7 @@ public class RecipesRepository(
         }
 
         Recipe? entity = await appDbContext.Set<Recipe>()
+            .Include(r => r.Recipe2MediaItems)
             .Include(r => r.Recipe2RecipeIngredients)
             .ThenInclude(ri => ri.RecipeIngredient)
             .Include(r => r.Steps)
