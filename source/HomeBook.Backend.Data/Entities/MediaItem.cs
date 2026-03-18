@@ -33,6 +33,6 @@ public class MediaItem
     [StringLength(250, MinimumLength = 1, ErrorMessage = "FileName must be between 1 and 250 characters long.")]
     public required string FileName { get; set; }
 
-    public virtual ICollection<Recipe2MediaItems> Recipe2MediaItems { get; set; } =
+    public virtual ICollection<Recipe2MediaItems> MediaItem2Recipes { get; set; } =
         new List<Recipe2MediaItems>();
 }

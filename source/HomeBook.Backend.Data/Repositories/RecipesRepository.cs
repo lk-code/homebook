@@ -40,7 +40,7 @@ public class RecipesRepository(
         }
 
         Recipe? entity = await appDbContext.Set<Recipe>()
-            .Include(r => r.Recipe2RecipeIngredient)
+            .Include(r => r.Recipe2RecipeIngredients)
             .ThenInclude(ri => ri.RecipeIngredient)
             .Include(r => r.Steps)
             .FirstOrDefaultAsync(r => r.Id == entityId, cancellationToken);
@@ -84,13 +84,16 @@ public class RecipesRepository(
 
             // 2. update Steps and Ingredients
             // remove all existing Steps and Ingredients
+            await dbContext.Recipe2MediaItems.Where(x => x.RecipeId == entity.Id)
+                .ExecuteDeleteAsync(cancellationToken);
             await dbContext.Recipe2RecipeIngredients.Where(x => x.RecipeId == entity.Id)
                 .ExecuteDeleteAsync(cancellationToken);
             await dbContext.RecipeSteps.Where(x => x.RecipeId == entity.Id)
                 .ExecuteDeleteAsync(cancellationToken);
 
             // insert new Steps and Ingredients
-            dbContext.Recipe2RecipeIngredients.AddRange(entity.Recipe2RecipeIngredient);
+            dbContext.Recipe2MediaItems.AddRange(entity.Recipe2MediaItems);
+            dbContext.Recipe2RecipeIngredients.AddRange(entity.Recipe2RecipeIngredients);
             dbContext.RecipeSteps.AddRange(entity.Steps);
 
             // 3. save changes
