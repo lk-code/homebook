@@ -11,4 +11,5 @@ public record RecipeRequest(
     int? DurationRestingMinutes,
     int? CaloriesKcal,
     string? Comments,
-    string? Source);
+    string? Source,
+    Guid[]? MediaIds);

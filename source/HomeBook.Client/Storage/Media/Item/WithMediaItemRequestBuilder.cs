@@ -8,28 +8,28 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace HomeBook.Client.Storage.Files.Item
+namespace HomeBook.Client.Storage.Media.Item
 {
     /// <summary>
-    /// Builds and executes requests for operations under \storage\files\{mediaId}
+    /// Builds and executes requests for operations under \storage\media\{mediaId}
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class WithMediaItemRequestBuilder : BaseRequestBuilder
     {
         /// <summary>
-        /// Instantiates a new <see cref="global::HomeBook.Client.Storage.Files.Item.WithMediaItemRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::HomeBook.Client.Storage.Media.Item.WithMediaItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public WithMediaItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/storage/files/{mediaId}", pathParameters)
+        public WithMediaItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/storage/media/{mediaId}", pathParameters)
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="global::HomeBook.Client.Storage.Files.Item.WithMediaItemRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::HomeBook.Client.Storage.Media.Item.WithMediaItemRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public WithMediaItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/storage/files/{mediaId}", rawUrl)
+        public WithMediaItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/storage/media/{mediaId}", rawUrl)
         {
         }
         /// <summary>
@@ -71,11 +71,11 @@ namespace HomeBook.Client.Storage.Files.Item
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
-        /// <returns>A <see cref="global::HomeBook.Client.Storage.Files.Item.WithMediaItemRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::HomeBook.Client.Storage.Media.Item.WithMediaItemRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public global::HomeBook.Client.Storage.Files.Item.WithMediaItemRequestBuilder WithUrl(string rawUrl)
+        public global::HomeBook.Client.Storage.Media.Item.WithMediaItemRequestBuilder WithUrl(string rawUrl)
         {
-            return new global::HomeBook.Client.Storage.Files.Item.WithMediaItemRequestBuilder(rawUrl, RequestAdapter);
+            return new global::HomeBook.Client.Storage.Media.Item.WithMediaItemRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

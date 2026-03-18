@@ -75,6 +75,7 @@ public partial class Overview : ComponentBase
             caloriesKcal,
             comments,
             source,
+            [],
             cancellationToken);
     }
 }

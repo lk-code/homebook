@@ -106,7 +106,7 @@ public class RecipeHandler
         {
             Guid userId = user.GetUserId();
 
-            return await HandleRecipeEditAsync(user.GetUserId(),
+            return await HandleRecipeEditAsync(userId,
                 null,
                 request,
                 recipesProvider,
@@ -140,7 +140,7 @@ public class RecipeHandler
         {
             Guid userId = user.GetUserId();
 
-            return await HandleRecipeEditAsync(user.GetUserId(),
+            return await HandleRecipeEditAsync(userId,
                 id,
                 request,
                 recipesProvider,

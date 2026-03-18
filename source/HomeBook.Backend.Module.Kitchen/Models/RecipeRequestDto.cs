@@ -6,6 +6,7 @@ public record RecipeRequestDto(
     string Name,
     string? Description,
     int? Servings,
+    Guid[] MediaIds,
     RecipeIngredientRequestDto[] Ingredients,
     RecipeStepRequestDto[] Steps,
     int? DurationWorkingMinutes,

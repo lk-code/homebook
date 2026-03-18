@@ -93,6 +93,7 @@ public partial class Edit : ComponentBase
 
     private async Task SaveRecipeAsync()
     {
+        CancellationToken cancellationToken = CancellationToken.None;
         Guid? recipeId = RecipeId == Guid.Empty ? null : RecipeId;
         await RecipeService.CreateOrUpdateRecipeAsync(recipeId,
             _recipe!.Name,
@@ -105,7 +106,9 @@ public partial class Edit : ComponentBase
             ToMinutes(_recipe.DurationRestingMinutes),
             _recipe.CaloriesKcal,
             _recipe.Comments,
-            _recipe.Source);
+            _recipe.Source,
+            _recipe.ImageMediaIds,
+            cancellationToken);
 
         if (recipeId is null)
             NavigationManager.NavigateTo("/Kitchen/Recipes");

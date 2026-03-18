@@ -23,7 +23,7 @@ public static class RecipeMappings
             recipe.CaloriesKcal,
             recipe.Comments,
             recipe.Source,
-            recipe.Recipe2RecipeIngredient.Select(i => i.ToDto()).ToArray(),
+            recipe.Recipe2RecipeIngredients.Select(i => i.ToDto()).ToArray(),
             recipe.Steps.Select(s => s.ToDto()).ToArray());
     }
 
@@ -122,6 +122,7 @@ public static class RecipeMappings
             r.Name,
             r.Description,
             r.Servings,
+            (r.MediaIds ?? []).ToArray(),
             (r.Ingredients ?? []).Select(i => i.ToDto()).ToArray(),
             (r.Steps ?? []).Select(i => i.ToDto()).ToArray(),
             r.DurationWorkingMinutes,
@@ -169,7 +170,7 @@ public static class RecipeMappings
             Comments = dto.Comments,
             Source = dto.Source,
             UserId = dto.UserId,
-            Recipe2RecipeIngredient = (dto.Ingredients ?? []).Select(i => i.ToEntity(dto.Id)).ToArray(),
+            Recipe2RecipeIngredients = (dto.Ingredients ?? []).Select(i => i.ToEntity(dto.Id)).ToArray(),
             Steps = (dto.Steps ?? []).Select(i => i.ToEntity(dto.Id)).ToArray(),
         };
 

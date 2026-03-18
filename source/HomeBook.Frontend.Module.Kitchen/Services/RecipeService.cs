@@ -68,6 +68,7 @@ public class RecipeService(
         int? caloriesKcal = null,
         string? comments = null,
         string? source = null,
+        List<Guid>? mediaIds = null,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -84,6 +85,7 @@ public class RecipeService(
             Servings = servings,
             Comments = comments,
             Source = source,
+            MediaIds = mediaIds?.Select(x => (Guid?)x).ToList(),
             Ingredients = (ingredients ?? []).Select(x => x.ToRequest()).ToList(),
             Steps = (steps ?? []).Select(x => x.ToRequest()).ToList()
         };
@@ -116,6 +118,7 @@ public class RecipeService(
         CancellationToken cancellationToken = default) =>
         await CreateOrUpdateRecipeAsync(null,
             name,
+            null,
             null,
             null,
             null,

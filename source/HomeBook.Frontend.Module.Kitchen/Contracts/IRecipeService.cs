@@ -37,6 +37,7 @@ public interface IRecipeService
     /// <param name="caloriesKcal"></param>
     /// <param name="comments"></param>
     /// <param name="source"></param>
+    /// <param name="mediaIds"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task CreateOrUpdateRecipeAsync(Guid? id,
@@ -51,6 +52,7 @@ public interface IRecipeService
         int? caloriesKcal = null,
         string? comments = null,
         string? source = null,
+        List<Guid>? mediaIds = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
