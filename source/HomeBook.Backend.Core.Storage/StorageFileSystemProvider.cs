@@ -112,25 +112,27 @@ public class StorageFileSystemProvider(
 
     /// <inheritdoc/>
     public async Task<Guid> WriteFileAllBytesAsync(Guid scopeId,
-        string filename,
+        string originalFilename,
         byte[] content,
         CancellationToken cancellationToken)
     {
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
-        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
+        string fileExt = Path.GetExtension(originalFilename);
+        string internalFileName = $"{Guid.NewGuid()}.{fileExt}";
+        string fullFilePath = GetFullStorageFilePath(scopeId, internalFileName);
 
         await fileSystemService.FileWriteAllBytesAsync(fullFilePath, content, cancellationToken);
 
         MediaItem? mediaItem = await mediaItemRepository.GetMediaItemByFilenameAsync(scopeId,
-            filename,
+            internalFileName,
             cancellationToken);
         if (mediaItem is not null)
             await mediaItemRepository.DeleteMediaItemAsync(mediaItem!.Id, cancellationToken);
 
         Guid mediaItemId = await mediaItemRepository.AddMediaItemAsync(scopeId,
-            filename,
+            internalFileName,
             cancellationToken);
 
         return mediaItemId;
@@ -138,25 +140,27 @@ public class StorageFileSystemProvider(
 
     /// <inheritdoc/>
     public async Task<Guid> WriteFileAllTextAsync(Guid scopeId,
-        string filename,
+        string originalFilename,
         string content,
         CancellationToken cancellationToken)
     {
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
-        string fullFilePath = GetFullStorageFilePath(scopeId, filename);
+        string fileExt = Path.GetExtension(originalFilename);
+        string internalFileName = $"{Guid.NewGuid()}.{fileExt}";
+        string fullFilePath = GetFullStorageFilePath(scopeId, internalFileName);
 
         await fileSystemService.FileWriteAllTextAsync(fullFilePath, content, cancellationToken);
 
         MediaItem? mediaItem = await mediaItemRepository.GetMediaItemByFilenameAsync(scopeId,
-            filename,
+            internalFileName,
             cancellationToken);
         if (mediaItem is not null)
             await mediaItemRepository.DeleteMediaItemAsync(mediaItem!.Id, cancellationToken);
 
         Guid mediaItemId = await mediaItemRepository.AddMediaItemAsync(scopeId,
-            filename,
+            internalFileName,
             cancellationToken);
 
         return mediaItemId;

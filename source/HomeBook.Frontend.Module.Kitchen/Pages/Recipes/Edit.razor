@@ -6,6 +6,7 @@
 @using HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components
 @using HomeBook.Frontend.Module.Kitchen.Resources
 @using HomeBook.Frontend.Modules.Abstractions
+@using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Localization
 
 @inject IRecipeService RecipeService
@@ -143,9 +144,35 @@
 
         <MudPaper Class="frosted-b4 text-dark mb-5">
 
-            <UiRecipeImageUpload/>
+            <MudFileUpload T="IBrowserFile"
+                           Accept="@_acceptedFileTypes"
+                           AppendMultipleFiles="true"
+                           MaximumFileCount="10"
+                           MaxFileSize="@(50 * 1024 * 1024)"
+                           OnFilesChanged="UploadRecipeImagesAsync"
+                           DragAndDrop="true">
+                <SelectedTemplate/>
+            </MudFileUpload>
 
         </MudPaper>
+
+        @* <MudPaper Class="frosted-b4 text-dark mb-5"> *@
+        @* *@
+        @*     @foreach(IBrowserFile image in _recipeImageFiles) *@
+        @*     { *@
+        @*         <div class="d-flex align-center justify-start flex-wrap gap-3"> *@
+        @*             <MudImage Src="@MediaService.GetFileUrl(image.FileName, FileStorageRegistration.RecipeImagesContainerName)" *@
+        @*                       Alt="@image.FileName" *@
+        @*                       Width="200px" *@
+        @*                       Height="200px" *@
+        @*                       Style="object-fit: cover;"/> *@
+        @*             <MudIconButton Icon="@HomeBookIcons.Icons8.Windows11.Outline.Trash" *@
+        @*                            Color="Color.Error" *@
+        @*                            OnClick="@(() => DeleteRecipeImageAsync(image))"/> *@
+        @*         </div> *@
+        @*     } *@
+        @* *@
+        @* </MudPaper> *@
 
         <MudPaper Class="frosted-b4 text-dark mb-5">
 
@@ -321,6 +348,7 @@
                 <MudSpacer/>
 
                 <MudButton Color="Color.Primary"
+                           Disabled="_isUploadingImage"
                            Variant="Variant.Filled"
                            OnClick="SaveRecipeAsync">
                     @Loc[nameof(Resources.Strings.RecipeEdit_SaveRecipeButton_Content)]
