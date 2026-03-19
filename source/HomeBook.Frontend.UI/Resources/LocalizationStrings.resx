@@ -141,10 +141,10 @@
         <value>Users</value>
     </data>
     <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
-        <value>Homebook Configuration</value>
+        <value>HomeBook Configuration</value>
     </data>
     <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
-        <value>Homebook Modules</value>
+        <value>HomeBook Modules</value>
     </data>
     <data name="Settings_NavMenu_DeveloperComponents_Text" xml:space="preserve">
         <value>Dev UI</value>
@@ -727,5 +727,11 @@
     </data>
     <data name="Settings_About_ExternalLink_ProjectWebsite_Href" xml:space="preserve">
         <value>https://homebook-app.github.io/</value>
+    </data>
+    <data name="Settings_NavMenu_HomebookStorage_Text" xml:space="preserve">
+        <value>HomeBook Storage</value>
+    </data>
+    <data name="Settings_Storage_StorageInformationsArea_Title" xml:space="preserve">
+        <value>Storage Informations</value>
     </data>
 </root>

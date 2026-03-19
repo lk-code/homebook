@@ -1454,5 +1454,17 @@ namespace HomeBook.Frontend.UI.Resources {
                 return ResourceManager.GetString("Settings_About_ExternalLink_ProjectWebsite_Href", resourceCulture);
             }
         }
+        
+        public static string Settings_NavMenu_HomebookStorage_Text {
+            get {
+                return ResourceManager.GetString("Settings_NavMenu_HomebookStorage_Text", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_StorageInformationsArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_StorageInformationsArea_Title", resourceCulture);
+            }
+        }
     }
 }

@@ -1,0 +1,112 @@
+@page "/Settings/Storage"
+
+@using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Core.Models.Setup
+@using HomeBook.Frontend.UI.Resources
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<LocalizationStrings> Loc
+
+<MudContainer>
+
+    <MudGrid>
+
+        <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
+
+            <SettingsNavMenu/>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="8" lg="9" xl="9" xxl="9">
+
+            <!-- Application Information -->
+            <MudPaper Class="pa-6 frosted-b8"
+                      Elevation="2">
+
+                <MudStack Row="true"
+                          Class="align-center mb-1"
+                          Spacing="2">
+                    <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.DoughnutChart"
+                             Size="Size.Large"
+                             Class="mr-2"/>
+                    <MudText Typo="Typo.h5"
+                             Color="Color.Primary">
+                        @Loc[nameof(LocalizationStrings.Settings_Storage_StorageInformationsArea_Title)]
+                    </MudText>
+                </MudStack>
+
+                <MudDivider Class="mb-4"/>
+
+                <MudChart ChartType="ChartType.Pie"
+                          T="double"
+                          @bind-SelectedIndex="_selectedStorageSegmentIndex"
+                          Width="100%"
+                          Height="300px"
+                          ChartSeries="@_storageUsageSeries"
+                          ChartLabels="@_storageUsageLabels"/>
+
+            </MudPaper>
+
+            <MudForm @ref="_form"
+                     Model="_configurationModel"
+                     @bind-IsValid="_isValid">
+
+                <MudCard>
+
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h5">
+                                @Loc[nameof(LocalizationStrings.Settings_Localization_PageTitle)]
+                            </MudText>
+                            <MudText Typo="Typo.caption">
+                                @Loc[nameof(LocalizationStrings.Settings_Localization_PageCaption)]
+                            </MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+
+                    <MudCardContent Class="pa-0">
+
+                        <UiSettingsItem Icon="@HomeBookIcons.Icons8.Windows11.Filled.Translation"
+                                        IconHexColor="var(--hb-settings-color-default-language)"
+                                        Title="@Loc[nameof(LocalizationStrings.Settings_Localization_DisplayLanguage_Title)]"
+                                        Caption="@Loc[nameof(LocalizationStrings.Settings_Localization_DisplayLanguage_Caption)]">
+                            <MudSelect @bind-Value="_configurationModel.Locale"
+                                       Variant="Variant.Outlined"
+                                       Margin="Margin.Dense"
+                                       Dense="true"
+                                       For="@(() => _configurationModel.Locale)"
+                                       Required="true"
+                                       Clearable="true">
+                                @foreach (LanguageViewModel language in _availableLanguages)
+                                {
+                                    <MudSelectItem Value="language.Key">@language.DisplayName</MudSelectItem>
+                                }
+                            </MudSelect>
+                        </UiSettingsItem>
+
+                    </MudCardContent>
+
+                    <MudCardActions Class="justify-end">
+                        <MudButton Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   OnClick="UpdateInstanceConfigurationAsync"
+                                   Disabled="@(!_isValid || _isLoading)">
+                            @if (_isLoading)
+                            {
+                                <MudProgressCircular Size="Size.Small"
+                                                     Indeterminate="true"
+                                                     Class="mr-2"/>
+                            }
+                            @Loc[nameof(LocalizationStrings.Settings_Localization_SaveChanges_Button)]
+                        </MudButton>
+                    </MudCardActions>
+
+                </MudCard>
+
+            </MudForm>
+
+        </MudItem>
+
+    </MudGrid>
+
+</MudContainer>
