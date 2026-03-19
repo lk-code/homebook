@@ -1,5 +1,8 @@
+using HomeBook.Frontend.Abstractions.Models;
+using HomeBook.Frontend.Core.Icons;
 using HomeBook.Frontend.Module.Kitchen.Mappings;
 using HomeBook.Frontend.Module.Kitchen.Models;
+using HomeBook.Frontend.Module.Kitchen.Resources;
 using HomeBook.Frontend.Module.Kitchen.ViewModels;
 using Microsoft.AspNetCore.Components;
 
@@ -9,6 +12,17 @@ public partial class Overview : ComponentBase
 {
     private List<RecipeViewModel> _recipes = [];
     private bool _isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        MenuService.UpdateMenuItems([
+            new MenuItem(Loc[nameof(Strings.StartMenuItem_MealPlan_Title)],
+                "/Kitchen/MealPlan",
+                HomeBookIcons.Icons8.Windows11.Outline.RestaurantMenu)
+        ]);
+
+        await base.OnInitializedAsync();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

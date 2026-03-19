@@ -1,5 +1,6 @@
 @page "/Kitchen/Recipes"
 
+@using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.Module.Kitchen.Contracts
 @using HomeBook.Frontend.Module.Kitchen.Resources
@@ -11,6 +12,7 @@
 @inject IRecipeService RecipeService
 @inject IStringLocalizer<Strings> Loc
 @inject IMediaService MediaService
+@inject IMenuService MenuService
 
 <MudContainer>
 
