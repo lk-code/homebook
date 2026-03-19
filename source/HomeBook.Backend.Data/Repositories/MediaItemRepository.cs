@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc/>
-public class MediaItemRepository(IDbContextFactory<AppDbContext> factory) : IMediaItemRepository
+public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
+    : IMediaItemRepository
 {
     /// <inheritdoc/>
     public async Task<Guid> AddMediaItemAsync(Guid scopeId,
@@ -70,5 +71,18 @@ public class MediaItemRepository(IDbContextFactory<AppDbContext> factory) : IMed
 
         await dbContext.MediaItems.Where(m => m.Id == id)
             .ExecuteDeleteAsync(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task<string?> GetFilenameByIdAsync(Guid id,
+        CancellationToken cancellationToken)
+    {
+        await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
+        string? entity = await dbContext.MediaItems
+            .Where(m => m.Id == id)
+            .Select(x => x.FileName)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        return entity;
     }
 }

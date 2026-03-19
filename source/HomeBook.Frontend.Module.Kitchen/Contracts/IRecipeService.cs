@@ -37,7 +37,7 @@ public interface IRecipeService
     /// <param name="caloriesKcal"></param>
     /// <param name="comments"></param>
     /// <param name="source"></param>
-    /// <param name="mediaIds"></param>
+    /// <param name="mediaItems"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task CreateOrUpdateRecipeAsync(Guid? id,
@@ -52,7 +52,7 @@ public interface IRecipeService
         int? caloriesKcal = null,
         string? comments = null,
         string? source = null,
-        List<Guid>? mediaIds = null,
+        RecipeMediaItemDto[]? mediaItems = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -83,4 +83,13 @@ public interface IRecipeService
     Task UpdateRecipeNameAsync(Guid recipeId,
         string name,
         CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="recipeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<List<Guid>> GetImagesByRecipeIdAsync(Guid recipeId,
+        CancellationToken cancellationToken);
 }

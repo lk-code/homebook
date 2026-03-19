@@ -15,4 +15,10 @@ public record RecipeResultDto(
     string? Source,
     RecipeIngredientDto[] Ingredients,
     RecipeStepDto[] Steps,
-    Guid[] MediaIds);
+    RecipeMediaItemDto[] MediaItems)
+{
+    public Guid[] MediaIds => MediaItems
+        .OrderBy(x => x.Index)
+        .Select(x => x.MediaItemId)
+        .ToArray();
+}

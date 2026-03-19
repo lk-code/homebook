@@ -1,8 +1,13 @@
+using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
+using HomeBook.Backend.Data.Exceptions;
 using HomeBook.Backend.Module.Kitchen.Contracts;
+using HomeBook.Backend.Module.Kitchen.Exceptions;
 using HomeBook.Backend.Module.Kitchen.Mappings;
 using HomeBook.Backend.Module.Kitchen.Models;
+using HomeBook.Backend.Modules.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Module.Kitchen.Provider;
@@ -11,7 +16,11 @@ namespace HomeBook.Backend.Module.Kitchen.Provider;
 public class RecipesProvider(
     ILogger<RecipesProvider> logger,
     IRecipesRepository recipesRepository,
-    IIngredientRepository ingredientRepository) : IRecipesProvider
+    IIngredientRepository ingredientRepository,
+    IStorageProvider storageProvider,
+    IMediaProvider mediaProvider,
+    [FromKeyedServices("HomeBook.Backend.Module.Kitchen.Module")]
+    IModule module) : IRecipesProvider
 {
     /// <inheritdoc/>
     public async Task<RecipeResultDto[]> GetRecipesAsync(string searchFilter,
@@ -41,6 +50,22 @@ public class RecipesProvider(
     {
         // TODO: validate dto
 
+        // get mediaIds which should be deleted because its not needed
+        Guid[] mediaIdsToDelete = [];
+        Guid[] originMediaIds = [];
+        Guid[] currentMediaIds = [];
+        if (requestDto.Id.HasValue)
+        {
+            originMediaIds = await GetImagesByRecipeIdAsync(requestDto.Id.Value,
+                cancellationToken);
+            currentMediaIds = requestDto.MediaItems
+                .Select(x => x.MediaItemId)
+                .ToArray();
+            mediaIdsToDelete = originMediaIds
+                .Except(currentMediaIds)
+                .ToArray();
+        }
+
         Recipe entity = requestDto.ToEntity();
         entity.Recipe2MediaItems = CreateMediaRelations(requestDto);
         entity.Recipe2RecipeIngredients = await CreateIngredientRelationsAsync(requestDto,
@@ -51,6 +76,28 @@ public class RecipesProvider(
         Guid entityId = await recipesRepository
             .CreateOrUpdateAsync(entity,
                 cancellationToken);
+
+        // delete not needed images
+        if (mediaIdsToDelete.Any())
+        {
+            string moduleKey = module.Key;
+            string scopeName = "RecipeImages";
+            Guid? recipeImagesStorageScopeId = await storageProvider.GetScopeIdByFullName($"{moduleKey}.{scopeName}",
+                cancellationToken);
+
+            foreach (Guid mediaIdToDelete in mediaIdsToDelete)
+            {
+                string? mediaItemFilename = await mediaProvider.GetFilenameByIdAsync(mediaIdToDelete,
+                    cancellationToken);
+                if (mediaItemFilename is null)
+                    continue;
+
+                await storageProvider.DeleteFileAsync(recipeImagesStorageScopeId.Value,
+                    mediaItemFilename,
+                    cancellationToken);
+            }
+        }
+
         return entityId;
     }
 
@@ -90,15 +137,33 @@ public class RecipesProvider(
             cancellationToken);
     }
 
+    /// <inheritdoc/>
+    public async Task<Guid[]> GetImagesByRecipeIdAsync(Guid id,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            return await recipesRepository.GetImagesByRecipeIdAsync(id,
+                cancellationToken);
+        }
+        catch (EntityNotFoundException err)
+        {
+            throw new RecipeNotFoundException("Recipe not found", err);
+        }
+    }
+
     private static Recipe2MediaItems[] CreateMediaRelations(RecipeRequestDto requestDto)
     {
-        return requestDto.MediaIds
-            .Distinct()
-            .Select(mediaId =>
+        return requestDto.MediaItems
+            .OrderBy(x => x.Index)
+            .GroupBy(x => x.MediaItemId)
+            .Select(group => group.First())
+            .Select((mediaItem, index) =>
             {
                 Recipe2MediaItems relation = new()
                 {
-                    MediaItemId = mediaId
+                    MediaItemId = mediaItem.MediaItemId,
+                    Index = index
                 };
 
                 if (requestDto.Id.HasValue)

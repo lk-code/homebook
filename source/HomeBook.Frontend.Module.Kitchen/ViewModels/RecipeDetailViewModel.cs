@@ -12,12 +12,13 @@ public class RecipeDetailViewModel
     public TimeSpan? DurationWorkingMinutes { get; set; }
     public TimeSpan? DurationCookingMinutes { get; set; }
     public TimeSpan? DurationRestingMinutes { get; set; }
-    public IList<IngredientViewModel> Ingredients { get; set; } = new List<IngredientViewModel>();
-    public IList<StepViewModel> Steps { get; set; } = new List<StepViewModel>();
+    public List<Guid> ImageMediaIds { get; set; } = [];
+    public List<MediaItemViewModel> ImageMediaItems { get; set; } = [];
+    public List<IngredientViewModel> Ingredients { get; set; } = [];
+    public List<StepViewModel> Steps { get; set; } = [];
     public string Image { get; set; } = string.Empty;
     public string Source { get; set; } = string.Empty;
     public string Comments { get; set; } = string.Empty;
-    public List<Guid> ImageMediaIds = [];
     public Uri? HeroImageUri { get; set; }
     public Guid? HeroMediaId { get; set; }
 

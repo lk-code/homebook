@@ -11,6 +11,7 @@ public record RecipeDetailResponse(
     string? Description,
     int? Servings,
     Guid[] MediaIds,
+    RecipeMediaItemResponse[] MediaItems,
     RecipeIngredientResponse[] Ingredients,
     RecipeStepResponse[] Steps,
     int? DurationWorkingMinutes,

@@ -183,12 +183,6 @@ namespace HomeBook.Frontend.Module.Kitchen.Resources {
             }
         }
         
-        public static string RecipeEdit_AbortButton_Content {
-            get {
-                return ResourceManager.GetString("RecipeEdit_AbortButton_Content", resourceCulture);
-            }
-        }
-        
         public static string RecipeEdit_SaveRecipeButton_Content {
             get {
                 return ResourceManager.GetString("RecipeEdit_SaveRecipeButton_Content", resourceCulture);

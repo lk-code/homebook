@@ -120,7 +120,7 @@ public class StorageFileSystemProvider(
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
         string fileExt = Path.GetExtension(originalFilename);
-        string internalFileName = $"{Guid.NewGuid()}.{fileExt}";
+        string internalFileName = $"{Guid.NewGuid()}{fileExt}";
         string fullFilePath = GetFullStorageFilePath(scopeId, internalFileName);
 
         await fileSystemService.FileWriteAllBytesAsync(fullFilePath, content, cancellationToken);
@@ -148,7 +148,7 @@ public class StorageFileSystemProvider(
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
         string fileExt = Path.GetExtension(originalFilename);
-        string internalFileName = $"{Guid.NewGuid()}.{fileExt}";
+        string internalFileName = $"{Guid.NewGuid()}{fileExt}";
         string fullFilePath = GetFullStorageFilePath(scopeId, internalFileName);
 
         await fileSystemService.FileWriteAllTextAsync(fullFilePath, content, cancellationToken);

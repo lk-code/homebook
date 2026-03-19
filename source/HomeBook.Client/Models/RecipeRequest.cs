@@ -54,6 +54,14 @@ namespace HomeBook.Client.Models
 #else
         public List<Guid?> MediaIds { get; set; }
 #endif
+        /// <summary>The mediaItems property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::HomeBook.Client.Models.CreateRecipeMediaItemRequest>? MediaItems { get; set; }
+#nullable restore
+#else
+        public List<global::HomeBook.Client.Models.CreateRecipeMediaItemRequest> MediaItems { get; set; }
+#endif
         /// <summary>The name property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -113,6 +121,7 @@ namespace HomeBook.Client.Models
                 { "durationWorkingMinutes", n => { DurationWorkingMinutes = n.GetIntValue(); } },
                 { "ingredients", n => { Ingredients = n.GetCollectionOfObjectValues<global::HomeBook.Client.Models.CreateRecipeIngredientRequest>(global::HomeBook.Client.Models.CreateRecipeIngredientRequest.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "mediaIds", n => { MediaIds = n.GetCollectionOfPrimitiveValues<Guid?>()?.AsList(); } },
+                { "mediaItems", n => { MediaItems = n.GetCollectionOfObjectValues<global::HomeBook.Client.Models.CreateRecipeMediaItemRequest>(global::HomeBook.Client.Models.CreateRecipeMediaItemRequest.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
                 { "servings", n => { Servings = n.GetIntValue(); } },
                 { "source", n => { Source = n.GetStringValue(); } },
@@ -134,6 +143,7 @@ namespace HomeBook.Client.Models
             writer.WriteIntValue("durationWorkingMinutes", DurationWorkingMinutes);
             writer.WriteCollectionOfObjectValues<global::HomeBook.Client.Models.CreateRecipeIngredientRequest>("ingredients", Ingredients);
             writer.WriteCollectionOfPrimitiveValues<Guid?>("mediaIds", MediaIds);
+            writer.WriteCollectionOfObjectValues<global::HomeBook.Client.Models.CreateRecipeMediaItemRequest>("mediaItems", MediaItems);
             writer.WriteStringValue("name", Name);
             writer.WriteIntValue("servings", Servings);
             writer.WriteStringValue("source", Source);

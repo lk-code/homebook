@@ -7,6 +7,7 @@ public record RecipeDetailDto(
     string NormalizedName,
     string Description,
     int? Servings,
+    RecipeMediaItemDto[] ImageMediaItems,
     Guid[] ImageMediaIds,
     Guid? HeroMediaId,
     RecipeIngredientDto[] Ingredients,

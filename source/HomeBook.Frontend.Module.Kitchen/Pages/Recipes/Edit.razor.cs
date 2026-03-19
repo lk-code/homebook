@@ -20,8 +20,10 @@ public partial class Edit : ComponentBase
     private string? _acceptedFileTypes = ".png, .jpg, .jpeg, .webp";
     private bool _isLoading = false;
     private RecipeDetailViewModel? _recipe = null;
+    private MudDropContainer<MediaItemViewModel>? _recipeImageDropContainer = null;
     private bool _nameEditMode = false;
     private bool _nameEditUpdate = false;
+    private const string RecipeImagesDropZoneIdentifier = "recipe-images";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -60,10 +62,12 @@ public partial class Edit : ComponentBase
                 // recipe not found
                 Snackbar.Add("+Recipe could not be found.", Severity.Error);
                 NavigationManager.NavigateTo("/Kitchen/Recipes");
+                return;
             }
 
             _recipe = recipeDto.ToViewModel();
-            int i = 0;
+            await LoadRecipeImagesAsync(recipeDto.ImageMediaItems,
+                cancellationToken);
         }
         catch (Exception)
         {
@@ -95,6 +99,7 @@ public partial class Edit : ComponentBase
     {
         CancellationToken cancellationToken = CancellationToken.None;
         Guid? recipeId = RecipeId == Guid.Empty ? null : RecipeId;
+
         await RecipeService.CreateOrUpdateRecipeAsync(recipeId,
             _recipe!.Name,
             _recipe.Description,
@@ -107,7 +112,9 @@ public partial class Edit : ComponentBase
             _recipe.CaloriesKcal,
             _recipe.Comments,
             _recipe.Source,
-            _recipe.ImageMediaIds.ToList(),
+            _recipe.ImageMediaItems
+                .Select(x => new RecipeMediaItemDto(x.Id, x.Index))
+                .ToArray(),
             cancellationToken);
 
         if (recipeId is null)
@@ -213,32 +220,34 @@ public partial class Edit : ComponentBase
             _isUploadingImage = true;
             StateHasChanged();
 
-            string fileName = args.File.Name;
-            using var stream = args.File.OpenReadStream((50 * 1024 * 1024));
-            using var ms = new MemoryStream();
-
-            await stream.CopyToAsync(ms);
-            byte[] fileContent = ms.ToArray();
-
-
-            // Upload file and save MediaId
             CancellationToken cancellationToken = CancellationToken.None;
             Guid? recipeImagesStorageScopeId = await FileStorageRegistration.GetScopeIdForModuleAsync(ModuleInstance,
                 "RecipeImages",
                 cancellationToken);
             if (recipeImagesStorageScopeId is null)
                 return;
-            Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value,
-                fileName,
-                fileContent,
-                cancellationToken);
-            Uri staticAssetUrl = await MediaService.GetUrlForMediaItemAsync(mediaItemId,
-                cancellationToken);
 
-            _recipe.ImageMediaIds.Add(mediaItemId);
+            IReadOnlyList<IBrowserFile> files = args.GetMultipleFiles(10);
+            foreach (IBrowserFile file in files)
+            {
+                using var stream = file.OpenReadStream((50 * 1024 * 1024));
+                using var ms = new MemoryStream();
+
+                await stream.CopyToAsync(ms);
+                byte[] fileContent = ms.ToArray();
+
+                Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId.Value,
+                    file.Name,
+                    fileContent,
+                    cancellationToken);
+
+                await AddRecipeImageAsync(mediaItemId, cancellationToken);
+            }
+
+            RefreshRecipeImageDropContainer();
             StateHasChanged();
         }
-        catch (Exception err)
+        catch (Exception)
         {
         }
         finally
@@ -246,33 +255,112 @@ public partial class Edit : ComponentBase
             _isUploadingImage = false;
             StateHasChanged();
         }
+    }
 
+    private async Task LoadRecipeImagesAsync(IEnumerable<RecipeMediaItemDto> mediaItems,
+        CancellationToken cancellationToken)
+    {
+        if (_recipe is null)
+            return;
 
-        /*
-        string fileName = "test.txt";
-        string content = """
-                         Hello World from the UI!
+        RecipeMediaItemDto[] orderedMediaItems = (mediaItems ?? [])
+            .OrderBy(x => x.Index)
+            .ToArray();
+        if (orderedMediaItems.Length == 0)
+        {
+            _recipe.ImageMediaItems = [];
+            NormalizeRecipeImageOrder();
+            return;
+        }
 
-                         this is a test with a text!
-                         """;
-        byte[] contentBytes = System.Text.Encoding.UTF8.GetBytes(content);
+        List<MediaItemViewModel> imageMediaItems = [];
+        foreach (RecipeMediaItemDto mediaItem in orderedMediaItems)
+            imageMediaItems.Add(await BuildMediaItemViewModelAsync(mediaItem, cancellationToken));
 
-        // 1. WRITE
-        Guid mediaItemId = await FileStorageService.WriteFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, contentBytes, cancellationToken);
-        // Guid mediaItemId = await FileStorageService.WriteFileAllTextAsync(scopeId, fileName, contentString, cancellationToken);
+        _recipe.ImageMediaItems = imageMediaItems;
+        NormalizeRecipeImageOrder();
+    }
 
-        // TODO: get static path for ui to get the file without auth
-        // TODO: add caching for this endpoint
-        Uri staticAssetUrl = await MediaService.GetUrlForMediaItemAsync(mediaItemId, cancellationToken);
+    private async Task AddRecipeImageAsync(Guid mediaItemId,
+        CancellationToken cancellationToken)
+    {
+        if (_recipe is null)
+            return;
 
-        // 2. READ
-        // byte[] responseContentBytes = await FileStorageService.GetFileAllBytesAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
-        // // string contentString = await FileStorageService.GetFileAllTextAsync(scopeId, fileName, cancellationToken);
-        //
-        // // 3. DELETE
-        // await FileStorageService.DeleteFileAsync(recipeImagesStorageScopeId!.Value, fileName, cancellationToken);
-        //
-        // int i = 0;
-        /* */
+        Uri absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItemId,
+            cancellationToken);
+        _recipe.ImageMediaItems.Add(new MediaItemViewModel(mediaItemId,
+            absoluteUri,
+            _recipe.ImageMediaItems.Count));
+        NormalizeRecipeImageOrder();
+    }
+
+    private async Task<MediaItemViewModel> BuildMediaItemViewModelAsync(RecipeMediaItemDto mediaItem,
+        CancellationToken cancellationToken)
+    {
+        Uri absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItem.MediaItemId,
+            cancellationToken);
+
+        return new MediaItemViewModel(mediaItem.MediaItemId,
+            absoluteUri,
+            mediaItem.Index);
+    }
+
+    private void RemoveRecipeImage(Guid mediaItemId)
+    {
+        if (_recipe is null)
+            return;
+
+        _recipe.ImageMediaItems.RemoveAll(x => x.Id == mediaItemId);
+        NormalizeRecipeImageOrder();
+        RefreshRecipeImageDropContainer();
+    }
+
+    private async Task OnRecipeImageDropped(MudItemDropInfo<MediaItemViewModel> dropInfo)
+    {
+        if (_recipe is null
+            || dropInfo.Item is null)
+            return;
+
+        List<MediaItemViewModel> orderedMediaItems = _recipe.ImageMediaItems.ToList();
+        int sourceIndex = orderedMediaItems.FindIndex(x => x.Id == dropInfo.Item.Id);
+        if (sourceIndex < 0)
+            return;
+
+        MediaItemViewModel movedItem = orderedMediaItems[sourceIndex];
+        orderedMediaItems.RemoveAt(sourceIndex);
+
+        int targetIndex = Math.Clamp(dropInfo.IndexInZone,
+            0,
+            orderedMediaItems.Count);
+        orderedMediaItems.Insert(targetIndex, movedItem);
+
+        _recipe.ImageMediaItems = orderedMediaItems;
+        StateHasChanged();
+
+        NormalizeRecipeImageOrder();
+        RefreshRecipeImageDropContainer();
+        StateHasChanged();
+    }
+
+    private void NormalizeRecipeImageOrder()
+    {
+        if (_recipe is null)
+            return;
+
+        for (int i = 0; i < _recipe.ImageMediaItems.Count; i++)
+            _recipe.ImageMediaItems[i].Index = i;
+
+        _recipe.ImageMediaIds = _recipe.ImageMediaItems
+            .Select(x => x.Id)
+            .ToList();
+        _recipe.HeroMediaId = _recipe.ImageMediaItems
+            .Select(x => (Guid?)x.Id)
+            .FirstOrDefault();
+    }
+
+    private void RefreshRecipeImageDropContainer()
+    {
+        _recipeImageDropContainer?.Refresh();
     }
 }

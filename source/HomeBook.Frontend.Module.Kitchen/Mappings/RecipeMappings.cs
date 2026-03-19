@@ -54,7 +54,12 @@ public static class RecipeMappings
             Image = TestImageMappings.PlaceholderImage,
             Source = r.Source,
             Comments = r.Comments,
-            ImageMediaIds = r.ImageMediaIds.ToList(),
+            ImageMediaIds = (r.ImageMediaItems.Length > 0
+                    ? r.ImageMediaItems
+                        .OrderBy(x => x.Index)
+                        .Select(x => x.MediaItemId)
+                    : r.ImageMediaIds)
+                .ToList(),
             HeroMediaId = r.HeroMediaId
         };
     }
@@ -99,8 +104,9 @@ public static class RecipeMappings
             r.NormalizedName!,
             r.Description!,
             r.Servings,
-            r.MediaIds.Where(x => x.HasValue).Select(x => (Guid)x).ToArray() ?? [],
-            r.MediaIds.FirstOrDefault(),
+            GetRecipeMediaItems(r),
+            GetRecipeMediaItems(r).Select(x => x.MediaItemId).ToArray(),
+            GetRecipeMediaItems(r).Select(x => (Guid?)x.MediaItemId).FirstOrDefault(),
             (r.Ingredients ?? []).Select(x => x.ToDto()).ToArray(),
             (r.Steps ?? []).Select(x => x.ToDto()).ToArray(),
             r.DurationWorkingMinutes,
@@ -109,6 +115,10 @@ public static class RecipeMappings
             r.CaloriesKcal,
             r.Comments!,
             r.Source!);
+
+    public static RecipeMediaItemDto ToDto(this HomeBook.Client.Models.RecipeMediaItemResponse r) =>
+        new(r.MediaItemId!.Value,
+            r.Index!.Value);
 
     public static RecipeIngredientDto ToDto(this RecipeIngredientResponse r) =>
         new(r.Name!,
@@ -119,6 +129,13 @@ public static class RecipeMappings
         new(r.Description!,
             r.Position!.Value,
             r.TimerDurationInSeconds);
+
+    public static CreateRecipeMediaItemRequest ToRequest(this RecipeMediaItemDto dto) =>
+        new()
+        {
+            MediaItemId = dto.MediaItemId,
+            Index = dto.Index
+        };
 
     public static CreateRecipeIngredientRequest ToRequest(this RecipeIngredientDto dto) =>
         new()
@@ -146,4 +163,20 @@ public static class RecipeMappings
         new(dto.Description,
             position,
             dto.TimerDurationInSeconds);
+
+    private static RecipeMediaItemDto[] GetRecipeMediaItems(this HomeBook.Client.Models.RecipeDetailResponse response)
+    {
+        RecipeMediaItemDto[] mediaItems = (response.MediaItems ?? [])
+            .Where(x => x.MediaItemId.HasValue && x.Index.HasValue)
+            .Select(x => x.ToDto())
+            .OrderBy(x => x.Index)
+            .ToArray();
+        if (mediaItems.Length > 0)
+            return mediaItems;
+
+        return (response.MediaIds ?? [])
+            .Where(x => x.HasValue)
+            .Select((x, index) => new RecipeMediaItemDto(x!.Value, index))
+            .ToArray();
+    }
 }

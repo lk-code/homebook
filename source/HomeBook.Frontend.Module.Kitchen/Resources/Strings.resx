@@ -87,9 +87,6 @@
     <data name="RecipeEdit_DurationAdditionalArea_Title" xml:space="preserve">
         <value>Duration &amp; Additional Information</value>
     </data>
-    <data name="RecipeEdit_AbortButton_Content" xml:space="preserve">
-        <value>Abort</value>
-    </data>
     <data name="RecipeEdit_SaveRecipeButton_Content" xml:space="preserve">
         <value>Save Recipe</value>
     </data>
@@ -131,6 +128,18 @@
     </data>
     <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
         <value>kcal</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_Title" xml:space="preserve">
+        <value>Images</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_EmptyState_Text" xml:space="preserve">
+        <value>No images uploaded yet.</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_ReorderHint_Text" xml:space="preserve">
+        <value>Drag and drop the images to set their order.</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_RemoveButton_Text" xml:space="preserve">
+        <value>Remove</value>
     </data>
     <data name="RecipeEditIngredients_Ingredients_Title" xml:space="preserve">
         <value>Ingredients</value>

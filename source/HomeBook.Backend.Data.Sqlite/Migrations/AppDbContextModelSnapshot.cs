@@ -117,6 +117,9 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.Property<Guid>("MediaItemId")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("Index")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("RecipeId", "MediaItemId");
 
                     b.HasIndex("MediaItemId");

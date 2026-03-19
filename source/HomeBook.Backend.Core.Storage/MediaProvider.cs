@@ -25,6 +25,12 @@ public class MediaProvider(IMediaItemRepository repository) : IMediaProvider
     }
 
     /// <inheritdoc/>
+    public async Task<string?> GetFilenameByIdAsync(Guid mediaItemId,
+        CancellationToken cancellationToken) =>
+        await repository.GetFilenameByIdAsync(mediaItemId,
+            cancellationToken);
+
+    /// <inheritdoc/>
     public async Task<MediaItemDto?> GetMediaItemByIdAsync(Guid mediaItemId,
         CancellationToken cancellationToken)
     {

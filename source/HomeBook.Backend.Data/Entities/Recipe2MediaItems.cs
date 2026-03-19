@@ -19,4 +19,7 @@ public class Recipe2MediaItems
 
     [ForeignKey(nameof(MediaItemId))]
     public MediaItem MediaItem { get; set; } = null!;
+
+    [Required]
+    public int Index { get; set; }
 }

@@ -1,6 +1,7 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
+using HomeBook.Backend.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeBook.Backend.Data.Repositories;
@@ -41,11 +42,13 @@ public class RecipesRepository(
         if (appDbContext is null)
         {
             await using AppDbContext newDbContext = await factory.CreateDbContextAsync(cancellationToken);
-            return await GetByIdAsync(entityId, cancellationToken, newDbContext);
+            return await GetByIdAsync(entityId,
+                cancellationToken,
+                newDbContext);
         }
 
         Recipe? entity = await appDbContext.Set<Recipe>()
-            .Include(r => r.Recipe2MediaItems)
+            .Include(r => r.Recipe2MediaItems.OrderBy(x => x.Index))
             .Include(r => r.Recipe2RecipeIngredients)
             .ThenInclude(ri => ri.RecipeIngredient)
             .Include(r => r.Steps)
@@ -88,7 +91,7 @@ public class RecipesRepository(
                     cancellationToken: cancellationToken);
 
             // 2. update related data
-            await UpdateMediaRelationsAsync(dbContext,
+            await ReplaceMediaRelationsAsync(dbContext,
                 entity,
                 cancellationToken);
             await UpdateIngredientRelationsAsync(dbContext,
@@ -195,40 +198,45 @@ public class RecipesRepository(
                 cancellationToken: cancellationToken);
     }
 
-    private static async Task UpdateMediaRelationsAsync(AppDbContext dbContext,
+    /// <inheritdoc />
+    public async Task<Guid[]> GetImagesByRecipeIdAsync(Guid id,
+        CancellationToken cancellationToken)
+    {
+        await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
+
+        Guid[]? entities = await dbContext.Recipes
+            .Where(r => r.Id == id)
+            .Select(r => r.Recipe2MediaItems
+                .OrderBy(x => x.Index)
+                .Select(x => x.MediaItemId)
+                .ToArray())
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (entities is null)
+            throw new EntityNotFoundException($"Recipe '{id}' was not found.");
+
+        return entities;
+    }
+
+    private static async Task ReplaceMediaRelationsAsync(AppDbContext dbContext,
         Recipe entity,
         CancellationToken cancellationToken)
     {
-        HashSet<Guid> requestedMediaIds = entity.Recipe2MediaItems
-            .Select(x => x.MediaItemId)
-            .ToHashSet();
-
-        Guid[] existingMediaIds = await dbContext.Recipe2MediaItems
+        await dbContext.Recipe2MediaItems
             .Where(x => x.RecipeId == entity.Id)
-            .Select(x => x.MediaItemId)
-            .ToArrayAsync(cancellationToken);
+            .ExecuteDeleteAsync(cancellationToken);
 
-        Guid[] mediaIdsToRemove = existingMediaIds
-            .Except(requestedMediaIds)
-            .ToArray();
-        if (mediaIdsToRemove.Length > 0)
-        {
-            await dbContext.Recipe2MediaItems
-                .Where(x => x.RecipeId == entity.Id && mediaIdsToRemove.Contains(x.MediaItemId))
-                .ExecuteDeleteAsync(cancellationToken);
-        }
+        if (!entity.Recipe2MediaItems.Any())
+            return;
 
-        Guid[] mediaIdsToAdd = requestedMediaIds
-            .Except(existingMediaIds)
-            .ToArray();
-        if (mediaIdsToAdd.Length > 0)
-        {
-            dbContext.Recipe2MediaItems.AddRange(mediaIdsToAdd.Select(mediaId => new Recipe2MediaItems
+        dbContext.Recipe2MediaItems.AddRange(entity.Recipe2MediaItems
+            .OrderBy(x => x.Index)
+            .Select(mediaItem => new Recipe2MediaItems
             {
                 RecipeId = entity.Id,
-                MediaItemId = mediaId
+                MediaItemId = mediaItem.MediaItemId,
+                Index = mediaItem.Index
             }));
-        }
     }
 
     private static async Task UpdateIngredientRelationsAsync(AppDbContext dbContext,

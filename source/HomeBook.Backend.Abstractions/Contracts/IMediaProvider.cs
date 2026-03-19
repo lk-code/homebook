@@ -19,6 +19,15 @@ public interface IMediaProvider
     /// <param name="mediaItemId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
+    Task<string?> GetFilenameByIdAsync(Guid mediaItemId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="mediaItemId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
     Task<MediaItemDto?> GetMediaItemByIdAsync(Guid mediaItemId,
         CancellationToken cancellationToken);
 }

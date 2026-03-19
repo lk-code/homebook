@@ -88,6 +88,39 @@ public class RecipeHandler
     }
 
     /// <summary>
+    /// returns recipe by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="logger"></param>
+    /// <param name="recipesProvider"></param>
+    /// <param name="userProvider"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IResult> HandleGetImagesByRecipeId(Guid id,
+        [FromServices] ILogger<RecipeHandler> logger,
+        [FromServices] IRecipesProvider recipesProvider,
+        [FromServices] IUserProvider userProvider,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            Guid[] imageMediaIds = await recipesProvider.GetImagesByRecipeIdAsync(id,
+                cancellationToken);
+            RecipeImagesResponse response = new(imageMediaIds);
+            return TypedResults.Ok(response);
+        }
+        catch (InvalidCastException err)
+        {
+            return TypedResults.NotFound();
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error while getting recipes");
+            return TypedResults.InternalServerError(err.Message);
+        }
+    }
+
+    /// <summary>
     ///
     /// </summary>
     /// <param name="user"></param>

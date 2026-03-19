@@ -25,8 +25,15 @@ public static class RecipeMappings
             r.Source,
             r.Recipe2RecipeIngredients.Select(i => i.ToDto()).ToArray(),
             r.Steps.Select(s => s.ToDto()).ToArray(),
-            r.Recipe2MediaItems.Select(x => x.MediaItemId).ToArray());
+            r.Recipe2MediaItems
+                .OrderBy(x => x.Index)
+                .Select(x => x.ToDto())
+                .ToArray());
     }
+
+    public static RecipeMediaItemDto ToDto(this Recipe2MediaItems relation) =>
+        new(relation.MediaItemId,
+            relation.Index);
 
     public static RecipeIngredientDto ToDto(this Data.Entities.Recipe2RecipeIngredient r2ri)
     {
@@ -57,8 +64,11 @@ public static class RecipeMappings
         }
 
         Guid? heroMediaId = null;
-        if (r.MediaIds.Any())
-            heroMediaId = r.MediaIds.First();
+        if (r.MediaItems.Any())
+            heroMediaId = r.MediaItems
+                .OrderBy(x => x.Index)
+                .Select(x => (Guid?)x.MediaItemId)
+                .FirstOrDefault();
 
         return new RecipeResponse(r.Id,
             username,
@@ -92,6 +102,10 @@ public static class RecipeMappings
             r.Description,
             r.Servings,
             r.MediaIds,
+            r.MediaItems
+                .OrderBy(x => x.Index)
+                .Select(x => x.ToResponse())
+                .ToArray(),
             r.Ingredients.Select(x => x.ToResponse()).ToArray(),
             r.Steps.Select(x => x.ToResponse()).ToArray(),
             r.DurationWorkingMinutes,
@@ -120,16 +134,30 @@ public static class RecipeMappings
             rs.TimerDurationInSeconds);
     }
 
+    public static RecipeMediaItemResponse ToResponse(this RecipeMediaItemDto mediaItem) =>
+        new(mediaItem.MediaItemId,
+            mediaItem.Index);
+
     public static RecipeRequestDto ToDto(this RecipeRequest r,
         Guid? recipeId,
         Guid userId)
     {
+        RecipeMediaItemRequestDto[] mediaItems = (r.MediaItems ?? [])
+            .Select(x => x.ToDto())
+            .ToArray();
+        if (mediaItems.Length == 0)
+        {
+            mediaItems = (r.MediaIds ?? [])
+                .Select((mediaItemId, index) => new RecipeMediaItemRequestDto(mediaItemId, index))
+                .ToArray();
+        }
+
         RecipeRequestDto dto = new(recipeId,
             userId,
             r.Name,
             r.Description,
             r.Servings,
-            (r.MediaIds ?? []).ToArray(),
+            mediaItems,
             (r.Ingredients ?? []).Select(i => i.ToDto()).ToArray(),
             (r.Steps ?? []).Select(i => i.ToDto()).ToArray(),
             r.DurationWorkingMinutes,
@@ -139,6 +167,14 @@ public static class RecipeMappings
             r.Comments,
             r.Source
         );
+
+        return dto;
+    }
+
+    public static RecipeMediaItemRequestDto ToDto(this CreateRecipeMediaItemRequest r)
+    {
+        RecipeMediaItemRequestDto dto = new(r.MediaItemId,
+            r.Index);
 
         return dto;
     }

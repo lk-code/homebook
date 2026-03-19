@@ -122,6 +122,9 @@ namespace HomeBook.Backend.Data.PostgreSql.Migrations
                     b.Property<Guid>("MediaItemId")
                         .HasColumnType("uuid");
 
+                    b.Property<int>("Index")
+                        .HasColumnType("integer");
+
                     b.HasKey("RecipeId", "MediaItemId");
 
                     b.HasIndex("MediaItemId");
