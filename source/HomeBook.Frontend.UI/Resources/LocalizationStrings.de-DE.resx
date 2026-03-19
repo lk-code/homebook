@@ -148,4 +148,175 @@
   <data name="UISetupStepper_DatabaseMigrationSetupStep_Title" xml:space="preserve">
     <value>Setup</value>
   </data>
+  <data name="AppSlogan" xml:space="preserve">
+    <value>Dein selbst gehosteter Haushalts- und Finanzplaner</value>
+  </data>
+  <data name="Logout_SuccessMessage" xml:space="preserve">
+    <value>Du wurdest erfolgreich abgemeldet!</value>
+  </data>
+  <data name="Logout_ErrorMessage" xml:space="preserve">
+    <value>Fehler beim Abmelden!</value>
+  </data>
+  <data name="UiLicenseDialog_Close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="UiLicenseDialog_AcceptContinue" xml:space="preserve">
+    <value>Akzeptieren und fortfahren</value>
+  </data>
+  <data name="UiLicenseDialog_Title" xml:space="preserve">
+    <value>HomeBook Projekt Lizenzen</value>
+  </data>
+  <data name="Settings_About_Version_Text_Template" xml:space="preserve">
+    <value>HomeBook Version: {0}</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Title" xml:space="preserve">
+    <value>Anwendung</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Backend_Text" xml:space="preserve">
+    <value>Backend:</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Database_Text" xml:space="preserve">
+    <value>Datenbank:</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_UI_Text" xml:space="preserve">
+    <value>UI:</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Deployment_Text" xml:space="preserve">
+    <value>Deployment Typ:</value>
+  </data>
+  <data name="Settings_About_LicensesArea_Title" xml:space="preserve">
+    <value>Lizenzen</value>
+  </data>
+  <data name="Settings_About_LicensesArea_ShowLicenses_Button_Text" xml:space="preserve">
+    <value>Zeige Projekt Lizenzen</value>
+  </data>
+  <data name="Settings_About_LicensesArea_Copyright_TextTemplate" xml:space="preserve">
+    <value>©{0} HomeBook. Alle Rechte vorbehalten.</value>
+  </data>
+  <data name="Settings_About_Error_MessageTemplate" xml:space="preserve">
+    <value>Das Laden der Systeminformationen ist fehlgeschlagen: {0}</value>
+  </data>
+  <data name="Settings_NavMenu_Developer_Text" xml:space="preserve">
+    <value>Entwickler</value>
+  </data>
+  <data name="Settings_Localization_PreferencesUpdated_Error_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Aktualisieren der Benutzereinstellungen: {0}</value>
+  </data>
+  <data name="Settings_Localization_LoadPreferences_Error_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Laden der Benutzereinstellungen: {0}</value>
+  </data>
+  <data name="Setup_Licenses_Title" xml:space="preserve">
+    <value>Projekt Lizenzen</value>
+  </data>
+  <data name="Setup_Licenses_AlreadyAccepted_Text" xml:space="preserve">
+    <value>Die Lizenzen wurden bereits akzeptiert (die Lizenzen können später erneut eingesehen werden).</value>
+  </data>
+  <data name="Setup_Licenses_Retry_Button_Text" xml:space="preserve">
+    <value>Erneut versuchen</value>
+  </data>
+  <data name="Setup_Licenses_ShowLicenses_Button_Text" xml:space="preserve">
+    <value>Zeige Lizenzen</value>
+  </data>
+  <data name="Setup_Licenses_AcceptContinue_Button_Text" xml:space="preserve">
+    <value>Akzeptieren und fortfahren</value>
+  </data>
+  <data name="Setup_Licenses_LoadingError_MessageTemplate" xml:space="preserve">
+    <value>Unbekannter Serverfehler beim Laden der Lizenzen: {0}</value>
+  </data>
+  <data name="Setup_BackendConnection_Title" xml:space="preserve">
+    <value>Serververbindung prüfen</value>
+  </data>
+  <data name="Setup_BackendConnection_ServerFound_Text" xml:space="preserve">
+    <value>Der Server wurde gefunden und ist bereit.</value>
+  </data>
+  <data name="Setup_BackendConnection_Retry_Button_Text" xml:space="preserve">
+    <value>Erneut versuchen</value>
+  </data>
+  <data name="Setup_BackendConnectionFailed_Message" xml:space="preserve">
+    <value>Es kann keine Verbindung zum Server hergestellt werden. Vergewissern Sie sich, dass der Server läuft und korrekt konfiguriert ist, und versuchen Sie es dann erneut.</value>
+  </data>
+  <data name="Setup_BackendConnection_CheckError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Überprüfen der Serververbindung: {0}</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_VersionError_Message" xml:space="preserve">
+    <value>Der Server hat keine gültige Version zurückgegeben.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_VersionMatchError_Message" xml:space="preserve">
+    <value>Die Serverversion stimmt nicht mit der App-Version überein. Bitte aktualisieren Sie HomeBook.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_SetupInProgressError_Message" xml:space="preserve">
+    <value>Die Einrichtung von HomeBook läuft bereits. Bitte warten Sie, bis die Einrichtung abgeschlossen ist, oder starten Sie die Einrichtung neu.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_UnknownError_Message" xml:space="preserve">
+    <value>Unbekannter Serverfehler bei der Überprüfung der Serveranforderungen. Bitte überprüfen Sie die Serverprotokolle.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_UnknownError_MessageTemplate" xml:space="preserve">
+    <value>Unbekannter Serverfehler bei der Überprüfung der Serveranforderungen: {0}</value>
+  </data>
+  <data name="Setup_Database_Title" xml:space="preserve">
+    <value>Datenbankkonfiguration</value>
+  </data>
+  <data name="Setup_Database_Provider_MessageTemplate" xml:space="preserve">
+    <value>Die Datenbank wurde als {0} erkannt und ist erreichbar.</value>
+  </data>
+  <data name="Setup_Database_Form_Host_Label" xml:space="preserve">
+    <value>Host</value>
+  </data>
+  <data name="Setup_Database_Form_Port_Label" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseName_Label" xml:space="preserve">
+    <value>Datenbank Name</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseUsername_Label" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="Setup_Database_Form_DatabasePassword_Label" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
+  <data name="Setup_Database_TestConnection_Button" xml:space="preserve">
+    <value>Speichern und Verbindung testen</value>
+  </data>
+  <data name="Setup_Database_Form_Host_HelperText" xml:space="preserve">
+    <value>Geben Sie den Hostnamen oder die IP-Adresse des Datenbankservers sowie dessen Port ein</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseName_HelperText" xml:space="preserve">
+    <value>Geben Sie den Namen der Datenbank ein</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseUsername_HelperText" xml:space="preserve">
+    <value>Geben Sie den Benutzernamen ein, um auf die Datenbank zuzugreifen</value>
+  </data>
+  <data name="Setup_Database_Form_DatabasePassword_HelperText" xml:space="preserve">
+    <value>Geben Sie das Passwort ein, um auf die Datenbank zuzugreifen</value>
+  </data>
+  <data name="Setup_Database_UnknownError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Herstellen der Verbindung zur Datenbank: {0}</value>
+  </data>
+  <data name="Setup_Database_Check_NotAvailableOrSupportedError_Message" xml:space="preserve">
+    <value>Es kann keine Verbindung zur Datenbank hergestellt werden. Stellen Sie sicher, dass der Server läuft und korrekt konfiguriert ist, und versuchen Sie es dann erneut.</value>
+  </data>
+  <data name="Setup_Database_Check_UnknownError_Message" xml:space="preserve">
+    <value>Unbekannter Fehler bei der Überprüfung der Datenbankverbindung.</value>
+  </data>
+  <data name="Setup_Database_Check_NotAvailableError_Message" xml:space="preserve">
+    <value>Die Datenbank ist nicht verfügbar.</value>
+  </data>
+  <data name="Setup_AdminUser_Title" xml:space="preserve">
+    <value>HomeBook Administrator</value>
+  </data>
+  <data name="Setup_AdminUser_ConfigurationFound_Text" xml:space="preserve">
+    <value>Es wurde eine Benutzerkonfiguration gefunden.</value>
+  </data>
+  <data name="Setup_AdminUser_ConfigurationSaved_Text" xml:space="preserve">
+    <value>Die Benutzerkonfiguration wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Username_Label" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Username_HelperText" xml:space="preserve">
+    <value>Geben Sie einen Benutzernamen für Ihr Homebook-Administratorkonto ein</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Password_Label" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
 </root>
