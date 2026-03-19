@@ -3,6 +3,7 @@
 
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.Module.Kitchen.Contracts
+@using HomeBook.Frontend.Module.Kitchen.ViewModels
 @using HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components
 @using HomeBook.Frontend.Module.Kitchen.Resources
 @using HomeBook.Frontend.Modules.Abstractions
@@ -156,23 +157,85 @@
 
         </MudPaper>
 
-        @* <MudPaper Class="frosted-b4 text-dark mb-5"> *@
-        @* *@
-        @*     @foreach(IBrowserFile image in _recipeImageFiles) *@
-        @*     { *@
-        @*         <div class="d-flex align-center justify-start flex-wrap gap-3"> *@
-        @*             <MudImage Src="@MediaService.GetFileUrl(image.FileName, FileStorageRegistration.RecipeImagesContainerName)" *@
-        @*                       Alt="@image.FileName" *@
-        @*                       Width="200px" *@
-        @*                       Height="200px" *@
-        @*                       Style="object-fit: cover;"/> *@
-        @*             <MudIconButton Icon="@HomeBookIcons.Icons8.Windows11.Outline.Trash" *@
-        @*                            Color="Color.Error" *@
-        @*                            OnClick="@(() => DeleteRecipeImageAsync(image))"/> *@
-        @*         </div> *@
-        @*     } *@
-        @* *@
-        @* </MudPaper> *@
+        <MudPaper Class="frosted-b4 text-dark mb-5 pa-4">
+
+            <MudText Typo="Typo.h6"
+                     Class="mb-4">
+                @Loc["RecipeEdit_ImageGallery_Title"]
+            </MudText>
+
+            <MudText Typo="Typo.body2"
+                     Class="mb-4 mud-text-secondary">
+                @Loc["RecipeEdit_ImageGallery_ReorderHint_Text"]
+            </MudText>
+
+            @if (_recipe.ImageMediaItems.Count == 0)
+            {
+                <MudText Typo="Typo.body2"
+                         Class="mud-text-secondary">
+                    @Loc["RecipeEdit_ImageGallery_EmptyState_Text"]
+                </MudText>
+            }
+            else
+            {
+                <MudDropContainer T="MediaItemViewModel"
+                                  @ref="_recipeImageDropContainer"
+                                  Items="_recipe.ImageMediaItems"
+                                  ItemsSelector="@((item, dropzone) => dropzone == RecipeImagesDropZoneIdentifier)"
+                                  ItemDropped="OnRecipeImageDropped"
+                                  DraggingClass="recipe-edit-image-drop-zone-dragging"
+                                  ItemDraggingClass="recipe-edit-image-card-dragging">
+
+                    <ChildContent>
+                        <MudDropZone T="MediaItemViewModel"
+                                     Identifier="@RecipeImagesDropZoneIdentifier"
+                                     AllowReorder="true"
+                                     Class="recipe-edit-image-drop-zone"/>
+                    </ChildContent>
+
+                    <ItemRenderer>
+
+                        <div class="recipe-edit-image-card-slot"
+                             @key="@($"{context.Id}:{context.Index}")">
+
+                            <MudPaper Class="pa-3 rounded-lg recipe-edit-image-card"
+                                      Style="background: linear-gradient(180deg, rgba(255,255,255,0.78) 0%, rgba(255,255,255,0.45) 100%);">
+                                <div class="d-flex align-center justify-space-between mb-3 gap-3">
+                                    <MudDragHandle T="MediaItemViewModel">
+                                        <div class="recipe-edit-image-drag-handle">
+                                            <MudIcon Icon="@Icons.Material.Filled.DragIndicator"
+                                                     Color="Color.Primary"/>
+                                        </div>
+                                    </MudDragHandle>
+                                </div>
+
+                                <MudImage Src="@context.AbsoluteUri.ToString()"
+                                          Alt="@_recipe.Name"
+                                          Class="rounded-lg"
+                                          Style="object-fit: cover; width: 100%; height: 220px;"/>
+
+                                <div class="d-flex justify-end mt-3">
+                                    <MudButton Variant="Variant.Filled"
+                                               Color="Color.Error"
+                                               Size="Size.Small"
+                                               StartIcon="@HomeBookIcons.Icons8.Windows11.Outline.Trash"
+                                               Class="rounded-pill px-4"
+                                               Style="backdrop-filter: blur(10px);"
+                                               OnClick="@(() => RemoveRecipeImage(context.Id))">
+                                        @Loc["RecipeEdit_ImageGallery_RemoveButton_Text"]
+                                    </MudButton>
+                                </div>
+
+                            </MudPaper>
+
+                        </div>
+
+                    </ItemRenderer>
+
+                </MudDropContainer>
+            }
+
+        </MudPaper>
 
         <MudPaper Class="frosted-b4 text-dark mb-5">
 
@@ -339,12 +402,6 @@
 
             <div class="d-flex align-center justify-space-between flex-grow-1 gap-3">
 
-                <MudButton Color="Color.Secondary"
-                           Variant="Variant.Text"
-                           OnClick="AbortEditingRecipe">
-                    @Loc[nameof(Resources.Strings.RecipeEdit_AbortButton_Content)]
-                </MudButton>
-
                 <MudSpacer/>
 
                 <MudButton Color="Color.Primary"
@@ -375,3 +432,96 @@
     }
 
 </MudContainer>
+
+<style>
+    .recipe-edit-image-drop-zone {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        min-height: 16rem;
+        padding: 0.25rem;
+        align-items: stretch;
+    }
+
+    .recipe-edit-image-drop-zone > .mud-drop-item,
+    .recipe-edit-image-drop-zone > .mud-drop-item-preview-start {
+        flex: 0 0 100%;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    @@media (min-width: 600px) {
+        .recipe-edit-image-drop-zone > .mud-drop-item,
+        .recipe-edit-image-drop-zone > .mud-drop-item-preview-start {
+            flex-basis: calc(50% - 0.5rem);
+            max-width: calc(50% - 0.5rem);
+        }
+    }
+
+    @@media (min-width: 960px) {
+        .recipe-edit-image-drop-zone > .mud-drop-item,
+        .recipe-edit-image-drop-zone > .mud-drop-item-preview-start {
+            flex-basis: calc(33.333% - 0.667rem);
+            max-width: calc(33.333% - 0.667rem);
+        }
+    }
+
+    @@media (min-width: 1280px) {
+        .recipe-edit-image-drop-zone > .mud-drop-item,
+        .recipe-edit-image-drop-zone > .mud-drop-item-preview-start {
+            flex-basis: calc(25% - 0.75rem);
+            max-width: calc(25% - 0.75rem);
+        }
+    }
+
+    .recipe-edit-image-card-slot {
+        width: 100%;
+    }
+
+    .recipe-edit-image-card {
+        height: 100%;
+        box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12);
+    }
+
+    .recipe-edit-image-order-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 3rem;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        background: rgba(25, 118, 210, 0.14);
+        color: rgb(25, 118, 210);
+        font-weight: 700;
+        letter-spacing: 0.02em;
+    }
+
+    .recipe-edit-image-drag-handle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(25, 118, 210, 0.18);
+        cursor: grab;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .recipe-edit-image-drag-handle:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+    }
+
+    .recipe-edit-image-drop-zone-dragging {
+        border-radius: 1rem;
+        background: rgba(25, 118, 210, 0.06);
+    }
+
+    .recipe-edit-image-card-dragging {
+        opacity: 0.75;
+        transform: rotate(-1.25deg) scale(0.98) !important;
+    }
+</style>

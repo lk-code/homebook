@@ -68,11 +68,16 @@ public class RecipeService(
         int? caloriesKcal = null,
         string? comments = null,
         string? source = null,
+        RecipeMediaItemDto[]? mediaItems = null,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
+        RecipeMediaItemDto[] orderedMediaItems = (mediaItems ?? [])
+            .OrderBy(x => x.Index)
+            .ToArray();
+
         RecipeRequest request = new()
         {
             Name = name,
@@ -84,6 +89,12 @@ public class RecipeService(
             Servings = servings,
             Comments = comments,
             Source = source,
+            MediaItems = orderedMediaItems
+                .Select(x => x.ToRequest())
+                .ToList(),
+            MediaIds = orderedMediaItems
+                .Select(x => (Guid?)x.MediaItemId)
+                .ToList(),
             Ingredients = (ingredients ?? []).Select(x => x.ToRequest()).ToList(),
             Steps = (steps ?? []).Select(x => x.ToRequest()).ToList()
         };
@@ -116,6 +127,7 @@ public class RecipeService(
         CancellationToken cancellationToken = default) =>
         await CreateOrUpdateRecipeAsync(null,
             name,
+            null,
             null,
             null,
             null,
@@ -162,5 +174,21 @@ public class RecipeService(
                     x.Headers.Add("Authorization", $"Bearer {token}");
                 },
                 cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task<List<Guid>> GetImagesByRecipeIdAsync(Guid recipeId,
+        CancellationToken cancellationToken)
+    {
+        string? token = await authenticationService.GetTokenAsync(cancellationToken);
+        RecipeImagesResponse? response = await backendClient.Modules.Homebook.Kitchen.Recipes[recipeId]
+            .Images
+            .GetAsync(x =>
+                {
+                    x.Headers.Add("Authorization", $"Bearer {token}");
+                },
+                cancellationToken);
+
+        return response?.ImageMediaIds?.Where(x => x.HasValue).Select(x => (Guid)x).ToList() ?? [];
     }
 }

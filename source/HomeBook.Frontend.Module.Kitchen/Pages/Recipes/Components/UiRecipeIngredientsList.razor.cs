@@ -6,10 +6,10 @@ namespace HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components;
 public partial class UiRecipeIngredientsList : ComponentBase
 {
     [Parameter]
-    public IList<IngredientViewModel> Ingredients { get; set; } = new List<IngredientViewModel>();
+    public List<IngredientViewModel> Ingredients { get; set; } = [];
 
     [Parameter]
-    public EventCallback<IList<IngredientViewModel>> IngredientsChanged { get; set; }
+    public EventCallback<List<IngredientViewModel>> IngredientsChanged { get; set; }
 
     [Parameter]
     public bool ReadOnly { get; set; }
@@ -22,7 +22,7 @@ public partial class UiRecipeIngredientsList : ComponentBase
     protected override void OnParametersSet()
     {
         if (Ingredients is null)
-            Ingredients = new List<IngredientViewModel>();
+            Ingredients = [];
     }
 
     private async Task AddIngredient()

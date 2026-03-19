@@ -3,14 +3,16 @@
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.Module.Kitchen.Contracts
 @using HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components
+@using HomeBook.Frontend.Modules.Abstractions
 @using Humanizer
 
 @inject IRecipeService RecipeService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
+@inject IMediaService MediaService
 
 @if (!_isLoading
-     && _recipe != null)
+     && _recipeVM != null)
 {
     <MudContainer>
 
@@ -29,7 +31,7 @@
                 <MudSpacer/>
 
                 <MudText Typo="Typo.h5">
-                    @_recipe.Name
+                    @_recipeVM.Name
                 </MudText>
 
                 <MudSpacer/>
@@ -47,64 +49,69 @@
 
         <MudGrid Class="mb-5">
 
-            <MudItem xs="12" md="5">
-                <MudCard Class="frosted-b1 border-0">
-                    <MudCardMedia Image="@_recipe.Image"
-                                  Height="260"/>
-                </MudCard>
-            </MudItem>
+            @if (_recipeVM.HeroImageUri is not null)
+            {
+                <MudItem xs="12" md="5">
+                    <MudCard Class="frosted-b1 border-0">
+                        <MudImage Src="@_recipeVM.HeroImageUri.ToString()"
+                                  Alt="@_recipeVM.Name"
+                                  Class="rounded"/>
+                    </MudCard>
+                </MudItem>
+            }
+
 
             <MudItem xs="12" md="7">
                 <MudPaper Class="frosted-b8 text-dark pa-3">
-                    @if (!string.IsNullOrWhiteSpace(_recipe.Description))
+                    @if (!string.IsNullOrWhiteSpace(_recipeVM.Description))
                     {
-                        <MudText Typo="Typo.body1">@_recipe.Description</MudText>
+                        <MudText Typo="Typo.body1">@_recipeVM.Description</MudText>
                     }
 
                     <MudGrid Class="mt-3">
-                        @if (_recipe.Duration is not null)
+                        @if (_recipeVM.Duration is not null)
                         {
                             <MudItem xs="12" sm="6">
                                 <MudText Typo="Typo.h6">+Gesamtdauer</MudText>
-                                <MudText Typo="Typo.body2">@_recipe.Duration.Value.Humanize()</MudText>
+                                <MudText Typo="Typo.body2">@_recipeVM.Duration.Value.Humanize()</MudText>
                             </MudItem>
                         }
-                        @if (_recipe.NumberOfServings > 0)
+                        @if (_recipeVM.NumberOfServings > 0)
                         {
                             <MudItem xs="12" sm="6">
                                 <MudText Typo="Typo.h6">+Portionen</MudText>
-                                <MudText Typo="Typo.body2">@_recipe.NumberOfServings</MudText>
+                                <MudText Typo="Typo.body2">@_recipeVM.NumberOfServings</MudText>
                             </MudItem>
                         }
-                        @if (_recipe.CaloriesKcal is > 0)
+                        @if (_recipeVM.CaloriesKcal is > 0)
                         {
                             <MudItem xs="12" sm="6">
                                 <MudText Typo="Typo.h6">+Kalorien/Portion</MudText>
-                                <MudText Typo="Typo.body2">@_recipe.CaloriesKcal</MudText>
+                                <MudText Typo="Typo.body2">@_recipeVM.CaloriesKcal</MudText>
                             </MudItem>
                         }
                     </MudGrid>
 
                     <MudGrid Class="mt-3">
-                        @if (_recipe.DurationWorkingMinutes is not null)
+                        @if (_recipeVM.DurationWorkingMinutes is not null)
                         {
                             <MudItem xs="12" sm="6">
                                 <MudText Typo="Typo.h6">+Arbeitszeit</MudText>
-                                <MudText Typo="Typo.body2">@_recipe.DurationWorkingMinutes.Value.Humanize()</MudText>
+                                <MudText Typo="Typo.body2">@_recipeVM.DurationWorkingMinutes.Value.Humanize()</MudText>
                             </MudItem>
                         }
-                        @if (_recipe.DurationCookingMinutes is not null)
+                        @if (_recipeVM.DurationCookingMinutes is not null)
                         {
                             <MudItem xs="12" sm="6">
                                 <MudText Typo="Typo.h6">+Koch/Backzeit</MudText>
-                                <MudText Typo="Typo.body2">@_recipe.DurationCookingMinutes.Value.Humanize()</MudText>
+                                <MudText Typo="Typo.body2">@_recipeVM.DurationCookingMinutes.Value.Humanize()</MudText>
                             </MudItem>
                         }
-                        @if (_recipe.DurationRestingMinutes is not null)
+                        @if (_recipeVM.DurationRestingMinutes is not null)
                         {
                             <MudItem xs="12" sm="6">
                                 <MudText Typo="Typo.h6">+Ruhezeit</MudText>
-                                <MudText Typo="Typo.body2">@_recipe.DurationRestingMinutes.Value.Humanize()</MudText>
+                                <MudText Typo="Typo.body2">@_recipeVM.DurationRestingMinutes.Value.Humanize()</MudText>
                             </MudItem>
                         }
                     </MudGrid>
@@ -113,28 +120,28 @@
         </MudGrid>
 
         <MudPaper Class="frosted-b8 text-dark mb-5">
-            <UiRecipeIngredientsList Ingredients="@_recipe.Ingredients"
+            <UiRecipeIngredientsList Ingredients="@_recipeVM.Ingredients"
                                      ReadOnly="true"/>
         </MudPaper>
 
         <MudPaper Class="frosted-b8 text-dark mb-5">
-            <UiRecipeStepsList Steps="@_recipe.Steps"
+            <UiRecipeStepsList Steps="@_recipeVM.Steps"
                                ReadOnly="true"/>
         </MudPaper>
 
-        @if (!string.IsNullOrWhiteSpace(_recipe.Comments)
-             || !string.IsNullOrWhiteSpace(_recipe.Source))
+        @if (!string.IsNullOrWhiteSpace(_recipeVM.Comments)
+             || !string.IsNullOrWhiteSpace(_recipeVM.Source))
         {
             <MudPaper Class="frosted-b4 text-dark mb-5 pa-3">
-                @if (!string.IsNullOrWhiteSpace(_recipe.Comments))
+                @if (!string.IsNullOrWhiteSpace(_recipeVM.Comments))
                 {
                     <MudText Typo="Typo.h6">+Kommentar</MudText>
-                    <MudText Typo="Typo.body2" Class="mb-3">@_recipe.Comments</MudText>
+                    <MudText Typo="Typo.body2" Class="mb-3">@_recipeVM.Comments</MudText>
                 }
-                @if (!string.IsNullOrWhiteSpace(_recipe.Source))
+                @if (!string.IsNullOrWhiteSpace(_recipeVM.Source))
                 {
                     <MudText Typo="Typo.h6">+Quelle</MudText>
-                    <MudText Typo="Typo.body2">@_recipe.Source</MudText>
+                    <MudText Typo="Typo.body2">@_recipeVM.Source</MudText>
                 }
             </MudPaper>
         }

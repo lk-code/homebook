@@ -43,7 +43,9 @@ public class Recipe : INormalizable
 
     public virtual User? User { get; set; }
 
-    public virtual ICollection<Recipe2RecipeIngredient> Recipe2RecipeIngredient { get; set; } = new List<Recipe2RecipeIngredient>();
+    public virtual ICollection<Recipe2RecipeIngredient> Recipe2RecipeIngredients { get; set; } = new List<Recipe2RecipeIngredient>();
+
+    public virtual ICollection<Recipe2MediaItems> Recipe2MediaItems { get; set; } = new List<Recipe2MediaItems>();
 
     public virtual ICollection<RecipeStep> Steps { get; set; } = new List<RecipeStep>();
 

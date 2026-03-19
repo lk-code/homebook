@@ -2,6 +2,8 @@ using System.Security.Claims;
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.Search;
+using HomeBook.Backend.Data;
+using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Sqlite;
 using HomeBook.Backend.Data.Sqlite.Extensions;
 using HomeBook.Backend.Extensions;
@@ -13,6 +15,7 @@ using HomeBook.UnitTests.TestCore.Backend;
 using HomeBook.UnitTests.TestCore.Helper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -115,7 +118,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         // create recipes
         var createRecipeResult1 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -131,25 +134,27 @@ public class KitchenRecipeHandlerE2ETests : TestBase
                 null,
                 null,
                 null,
+                null,
+                null,
                 null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult2.ShouldBeOfType<Ok>();
         var createRecipeResult3 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Pancakes", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Pancakes", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult3.ShouldBeOfType<Ok>();
         var createRecipeResult4 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult4.ShouldBeOfType<Ok>();
         var createRecipeResult5 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -289,13 +294,15 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         // create recipes
         var createRecipeResult1 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult1.ShouldBeOfType<Ok>();
         var createRecipeResult2 = await RecipeHandler.HandleCreateRecipe(testuser,
             new RecipeRequest("Nana's Italian Roulade",
+                null,
+                null,
                 null,
                 null,
                 null,
@@ -333,19 +340,21 @@ public class KitchenRecipeHandlerE2ETests : TestBase
                 null,
                 2750,
                 "Dies ist ein Test-Kommentar",
-                "Das habe ich mir selbst ausgedacht"),
+                "Das habe ich mir selbst ausgedacht",
+                [],
+                []),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult3.ShouldBeOfType<Ok>();
         var createRecipeResult4 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult4.ShouldBeOfType<Ok>();
         var createRecipeResult5 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -495,7 +504,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         // create recipes
         var createRecipeResult1 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -534,7 +543,9 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             10,
             1200,
             "Best served warm with a side of fries",
-            "https://www.a-random-recipe-source.com/awesome-gyros-wrap"
+            "https://www.a-random-recipe-source.com/awesome-gyros-wrap",
+            [],
+            []
         );
         var updateResult1 = await RecipeHandler.HandleUpdateRecipe(recipeId,
             testuser,
@@ -555,14 +566,16 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         recipesResponse3.Value.Recipes.Length.ShouldBe(1);
         recipesResponse3.Value.Recipes.ShouldContain(r => r.Name == "Awesome Gyros Wrap"
                                                           && r.NormalizedName == "awesome-gyros-wrap"
-                                                          && r.Description == "Delicious homemade gyros wrap with fresh ingredients"
+                                                          && r.Description
+                                                          == "Delicious homemade gyros wrap with fresh ingredients"
                                                           && r.Servings == 4
                                                           && r.DurationWorkingMinutes == 25
                                                           && r.DurationCookingMinutes == 45
                                                           && r.DurationRestingMinutes == 10
                                                           && r.CaloriesKcal == 1200
                                                           && r.Comments == "Best served warm with a side of fries"
-                                                          && r.Source == "https://www.a-random-recipe-source.com/awesome-gyros-wrap");
+                                                          && r.Source
+                                                          == "https://www.a-random-recipe-source.com/awesome-gyros-wrap");
 
         var recipeDetailsResult = await RecipeHandler.HandleGetRecipeById(recipeId,
             _loggerFactory.CreateLogger<RecipeHandler>(),
@@ -584,29 +597,177 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         recipeDetailsResponse.Value.Source.ShouldBe("https://www.a-random-recipe-source.com/awesome-gyros-wrap");
         recipeDetailsResponse.Value.Ingredients.Length.ShouldBe(3);
         recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Gyros"
-                                                                  && i.NormalizedName == "gyros"
-                                                                  && i.Quantity == 500
-                                                                  && i.Unit == "Gramm");
+                                                                   && i.NormalizedName == "gyros"
+                                                                   && i.Quantity == 500
+                                                                   && i.Unit == "Gramm");
         recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Pita Bread"
-                                                                  && i.NormalizedName == "pita-bread"
-                                                                  && i.Quantity == 4
-                                                                  && i.Unit == "Stück");
+                                                                   && i.NormalizedName == "pita-bread"
+                                                                   && i.Quantity == 4
+                                                                   && i.Unit == "Stück");
         recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Tzatziki Sauce"
-                                                                  && i.NormalizedName == "tzatziki-sauce"
-                                                                  && i.Quantity == 200
-                                                                  && i.Unit == "Gramm");
+                                                                   && i.NormalizedName == "tzatziki-sauce"
+                                                                   && i.Quantity == 200
+                                                                   && i.Unit == "Gramm");
         recipeDetailsResponse.Value.Steps.Length.ShouldBe(4);
         recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 0
-                                                            && s.Description == "Prepare the gyros meat."
-                                                            && s.TimerDurationInSeconds == null);
+                                                             && s.Description == "Prepare the gyros meat."
+                                                             && s.TimerDurationInSeconds == null);
         recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 1
-                                                            && s.Description == "Warm the pita bread."
-                                                            && s.TimerDurationInSeconds == 360);
+                                                             && s.Description == "Warm the pita bread."
+                                                             && s.TimerDurationInSeconds == 360);
         recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 2
-                                                            && s.Description == "Assemble the wrap with meat and sauce."
-                                                            && s.TimerDurationInSeconds == null);
+                                                             && s.Description
+                                                             == "Assemble the wrap with meat and sauce."
+                                                             && s.TimerDurationInSeconds == null);
         recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 3
-                                                            && s.Description == "Serve and enjoy!"
-                                                            && s.TimerDurationInSeconds == null);
+                                                             && s.Description == "Serve and enjoy!"
+                                                             && s.TimerDurationInSeconds == null);
+    }
+
+    [Test]
+    public async Task UpdateRecipeRelations_UpdatesOnlyJoinRelationsAndReplacesSteps()
+    {
+        // Arrange
+        CancellationToken cancellationToken = CancellationToken.None;
+        string testUserName = "testuser";
+        string testUserPassword = "s3cr3tP@ssw0rd!";
+
+        SearchRegistrationFactory srf = new();
+        IConfigurationRoot configuration = CreateTestConfiguration();
+        IServiceCollection serviceCollection = CreateTestServiceProvider(configuration);
+        IServiceProvider serviceProvider = serviceCollection
+            .AddBackendDataSqlite(configuration)
+            .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
+            .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
+            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .BuildServiceProvider();
+
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
+        await databaseMigrator.MigrateAsync(cancellationToken);
+
+        IUserProvider userProvider = serviceProvider.GetRequiredService<IUserProvider>();
+        Guid testUserId = await userProvider.CreateUserAsync(testUserName,
+            testUserPassword,
+            cancellationToken);
+        ClaimsPrincipal testuser = UserHelper.CreateTestUser(testUserId,
+            testUserName);
+
+        IRecipesProvider recipesProvider = serviceProvider.GetRequiredService<IRecipesProvider>();
+        IStorageProvider storageProvider = serviceProvider.GetRequiredService<IStorageProvider>();
+        IMediaItemRepository mediaItemRepository = serviceProvider.GetRequiredService<IMediaItemRepository>();
+        IDbContextFactory<AppDbContext> dbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+        Guid scopeId = await storageProvider.RegisterStorageScopeAsync("unittests/kitchen/recipe-relations",
+            "UNITTESTS",
+            cancellationToken);
+        Guid mediaId1 = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            "recipe-image-1.jpg",
+            cancellationToken);
+        Guid mediaId2 = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            "recipe-image-2.jpg",
+            cancellationToken);
+        Guid mediaId3 = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            "recipe-image-3.jpg",
+            cancellationToken);
+
+        var createResult = await RecipeHandler.HandleCreateRecipe(testuser,
+            new RecipeRequest("Tomato Soup",
+                "Classic tomato soup",
+                2,
+                [
+                    new CreateRecipeIngredientRequest("Tomatoes", 6, "Pieces"),
+                    new CreateRecipeIngredientRequest("Salt", 1, "Teaspoon")
+                ],
+                [
+                    new CreateRecipeStepRequest("Cut the tomatoes.", 0, null),
+                    new CreateRecipeStepRequest("Cook everything for 20 minutes.", 1, 1200)
+                ],
+                10,
+                20,
+                0,
+                320,
+                null,
+                null,
+                [],
+                [mediaId1, mediaId2]),
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            cancellationToken);
+        createResult.ShouldBeOfType<Ok>();
+
+        var listAfterCreateResult = await RecipeHandler.HandleGetRecipes("",
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            userProvider,
+            cancellationToken);
+        var listAfterCreateResponse = listAfterCreateResult.ShouldBeOfType<Ok<RecipesListResponse>>();
+        listAfterCreateResponse.Value.ShouldNotBeNull();
+        Guid recipeId = listAfterCreateResponse.Value.Recipes.Single(r => r.Name == "Tomato Soup").Id;
+
+        var updateResult = await RecipeHandler.HandleUpdateRecipe(recipeId,
+            testuser,
+            new RecipeRequest("Tomato Soup Deluxe",
+                "Classic tomato soup with basil",
+                4,
+                [
+                    new CreateRecipeIngredientRequest("Tomatoes", 8, "Pieces"),
+                    new CreateRecipeIngredientRequest("Basil", 5, "Leaves")
+                ],
+                [
+                    new CreateRecipeStepRequest("Blend the tomatoes with basil.", 0, null),
+                    new CreateRecipeStepRequest("Serve with olive oil.", 1, null),
+                    new CreateRecipeStepRequest("Enjoy immediately.", 2, null)
+                ],
+                15,
+                25,
+                0,
+                410,
+                "Use ripe tomatoes.",
+                "https://example.invalid/tomato-soup-deluxe",
+                [],
+                [mediaId2, mediaId3]),
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            cancellationToken);
+        updateResult.ShouldBeOfType<Ok>();
+
+        var recipeDetailsResult = await RecipeHandler.HandleGetRecipeById(recipeId,
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            userProvider,
+            cancellationToken);
+        var recipeDetailsResponse = recipeDetailsResult.ShouldBeOfType<Ok<RecipeDetailResponse>>();
+        recipeDetailsResponse.Value.ShouldNotBeNull();
+        recipeDetailsResponse.Value.Name.ShouldBe("Tomato Soup Deluxe");
+        recipeDetailsResponse.Value.MediaIds.Length.ShouldBe(2);
+        recipeDetailsResponse.Value.MediaIds.ShouldContain(mediaId2);
+        recipeDetailsResponse.Value.MediaIds.ShouldContain(mediaId3);
+        recipeDetailsResponse.Value.MediaIds.ShouldNotContain(mediaId1);
+        recipeDetailsResponse.Value.Ingredients.Length.ShouldBe(2);
+        recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Tomatoes"
+                                                                   && i.Quantity == 8
+                                                                   && i.Unit == "Pieces");
+        recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Basil"
+                                                                   && i.Quantity == 5
+                                                                   && i.Unit == "Leaves");
+        recipeDetailsResponse.Value.Ingredients.ShouldNotContain(i => i.Name == "Salt");
+        recipeDetailsResponse.Value.Steps.Length.ShouldBe(3);
+        recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 0
+                                                             && s.Description == "Blend the tomatoes with basil.");
+        recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 1
+                                                             && s.Description == "Serve with olive oil.");
+        recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 2
+                                                             && s.Description == "Enjoy immediately.");
+
+        await using AppDbContext dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        (await dbContext.Recipe2MediaItems.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(2);
+        (await dbContext.Recipe2RecipeIngredients.CountAsync(x => x.RecipeId == recipeId, cancellationToken))
+            .ShouldBe(2);
+        (await dbContext.RecipeSteps.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(3);
+        (await dbContext.RecipeIngredients.CountAsync(cancellationToken)).ShouldBe(3);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "tomatoes", cancellationToken))
+            .ShouldBe(1);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "salt", cancellationToken)).ShouldBe(1);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "basil", cancellationToken)).ShouldBe(1);
     }
 }

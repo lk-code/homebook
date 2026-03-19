@@ -15,4 +15,5 @@ public record RecipeResponse(
     int? DurationRestingMinutes,
     int? CaloriesKcal,
     string? Comments,
-    string? Source);
+    string? Source,
+    Guid? HeroMediaId);

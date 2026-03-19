@@ -48,6 +48,22 @@ namespace HomeBook.Client.Models
 #else
         public List<global::HomeBook.Client.Models.RecipeIngredientResponse> Ingredients { get; set; }
 #endif
+        /// <summary>The mediaIds property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<Guid?>? MediaIds { get; set; }
+#nullable restore
+#else
+        public List<Guid?> MediaIds { get; set; }
+#endif
+        /// <summary>The mediaItems property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::HomeBook.Client.Models.RecipeMediaItemResponse>? MediaItems { get; set; }
+#nullable restore
+#else
+        public List<global::HomeBook.Client.Models.RecipeMediaItemResponse> MediaItems { get; set; }
+#endif
         /// <summary>The name property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -123,6 +139,8 @@ namespace HomeBook.Client.Models
                 { "durationWorkingMinutes", n => { DurationWorkingMinutes = n.GetIntValue(); } },
                 { "id", n => { Id = n.GetGuidValue(); } },
                 { "ingredients", n => { Ingredients = n.GetCollectionOfObjectValues<global::HomeBook.Client.Models.RecipeIngredientResponse>(global::HomeBook.Client.Models.RecipeIngredientResponse.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "mediaIds", n => { MediaIds = n.GetCollectionOfPrimitiveValues<Guid?>()?.AsList(); } },
+                { "mediaItems", n => { MediaItems = n.GetCollectionOfObjectValues<global::HomeBook.Client.Models.RecipeMediaItemResponse>(global::HomeBook.Client.Models.RecipeMediaItemResponse.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
                 { "normalizedName", n => { NormalizedName = n.GetStringValue(); } },
                 { "servings", n => { Servings = n.GetIntValue(); } },
@@ -146,6 +164,8 @@ namespace HomeBook.Client.Models
             writer.WriteIntValue("durationWorkingMinutes", DurationWorkingMinutes);
             writer.WriteGuidValue("id", Id);
             writer.WriteCollectionOfObjectValues<global::HomeBook.Client.Models.RecipeIngredientResponse>("ingredients", Ingredients);
+            writer.WriteCollectionOfPrimitiveValues<Guid?>("mediaIds", MediaIds);
+            writer.WriteCollectionOfObjectValues<global::HomeBook.Client.Models.RecipeMediaItemResponse>("mediaItems", MediaItems);
             writer.WriteStringValue("name", Name);
             writer.WriteStringValue("normalizedName", NormalizedName);
             writer.WriteIntValue("servings", Servings);

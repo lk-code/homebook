@@ -20,6 +20,25 @@ public class IngredientRepository(
 
         entity.Normalize(stringNormalizer);
 
+        if (entity.Id != Guid.Empty)
+        {
+            RecipeIngredient? existingById = await GetByIdAsync(entity.Id,
+                cancellationToken,
+                dbContext);
+
+            if (existingById is not null)
+            {
+                await dbContext.RecipeIngredients
+                    .Where(u => u.Id == entity.Id)
+                    .ExecuteUpdateAsync(s => s
+                            .SetProperty(u => u.Name, entity.Name)
+                            .SetProperty(u => u.NormalizedName, entity.NormalizedName),
+                        cancellationToken: cancellationToken);
+
+                return entity.Id;
+            }
+        }
+
         RecipeIngredient? existing = await GetByName(entity.Name,
             cancellationToken,
             dbContext);
@@ -27,19 +46,11 @@ public class IngredientRepository(
         if (existing is null)
         {
             dbContext.Add(entity);
-        }
-        else
-        {
-            await dbContext.RecipeIngredients
-                .Where(u => u.Id == entity.Id)
-                .ExecuteUpdateAsync(s => s
-                        .SetProperty(u => u.Name, entity.Name)
-                        .SetProperty(u => u.NormalizedName, entity.NormalizedName),
-                    cancellationToken: cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return entity.Id;
         }
 
-        await dbContext.SaveChangesAsync(cancellationToken);
-        return entity.Id;
+        return existing.Id;
     }
 
     /// <inheritdoc />

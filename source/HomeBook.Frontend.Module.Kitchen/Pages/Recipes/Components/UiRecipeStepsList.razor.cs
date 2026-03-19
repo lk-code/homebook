@@ -6,10 +6,10 @@ namespace HomeBook.Frontend.Module.Kitchen.Pages.Recipes.Components;
 public partial class UiRecipeStepsList : ComponentBase
 {
     [Parameter]
-    public IList<StepViewModel> Steps { get; set; } = new List<StepViewModel>();
+    public List<StepViewModel> Steps { get; set; } = [];
 
     [Parameter]
-    public EventCallback<IList<StepViewModel>> StepsChanged { get; set; }
+    public EventCallback<List<StepViewModel>> StepsChanged { get; set; }
 
     [Parameter]
     public bool ReadOnly { get; set; }
@@ -21,7 +21,7 @@ public partial class UiRecipeStepsList : ComponentBase
     protected override void OnParametersSet()
     {
         if (Steps is null)
-            Steps = new List<StepViewModel>();
+            Steps = [];
     }
 
     private async Task AddStep()

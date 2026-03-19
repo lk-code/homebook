@@ -92,6 +92,18 @@
     <data name="RecipeEdit_CaloriesPerServing_AdornmentText" xml:space="preserve">
         <value>Kcal</value>
     </data>
+    <data name="RecipeEdit_ImageGallery_Title" xml:space="preserve">
+        <value>Grafiken</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_EmptyState_Text" xml:space="preserve">
+        <value>Noch keine Grafiken hochgeladen.</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_ReorderHint_Text" xml:space="preserve">
+        <value>Ziehe die Grafiken per Drag and Drop, um ihre Reihenfolge festzulegen.</value>
+    </data>
+    <data name="RecipeEdit_ImageGallery_RemoveButton_Text" xml:space="preserve">
+        <value>Entfernen</value>
+    </data>
     <data name="RecipeEditIngredients_IngredientName_Placeholder" xml:space="preserve">
         <value>Zutat</value>
     </data>

@@ -109,6 +109,24 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.ToTable("Recipes");
                 });
 
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe2MediaItems", b =>
+                {
+                    b.Property<Guid>("RecipeId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("MediaItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Index")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("RecipeId", "MediaItemId");
+
+                    b.HasIndex("MediaItemId");
+
+                    b.ToTable("Recipe2MediaItems");
+                });
+
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe2RecipeIngredient", b =>
                 {
                     b.Property<Guid>("RecipeId")
@@ -318,16 +336,35 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe2MediaItems", b =>
+                {
+                    b.HasOne("HomeBook.Backend.Data.Entities.MediaItem", "MediaItem")
+                        .WithMany("MediaItem2Recipes")
+                        .HasForeignKey("MediaItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HomeBook.Backend.Data.Entities.Recipe", "Recipe")
+                        .WithMany("Recipe2MediaItems")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MediaItem");
+
+                    b.Navigation("Recipe");
+                });
+
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe2RecipeIngredient", b =>
                 {
                     b.HasOne("HomeBook.Backend.Data.Entities.RecipeIngredient", "RecipeIngredient")
-                        .WithMany("Recipe2RecipeIngredients")
+                        .WithMany("RecipeIngredient2Recipes")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HomeBook.Backend.Data.Entities.Recipe", "Recipe")
-                        .WithMany("Recipe2RecipeIngredient")
+                        .WithMany("Recipe2RecipeIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -370,16 +407,23 @@ namespace HomeBook.Backend.Data.Sqlite.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("HomeBook.Backend.Data.Entities.MediaItem", b =>
+                {
+                    b.Navigation("MediaItem2Recipes");
+                });
+
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.Recipe", b =>
                 {
-                    b.Navigation("Recipe2RecipeIngredient");
+                    b.Navigation("Recipe2MediaItems");
+
+                    b.Navigation("Recipe2RecipeIngredients");
 
                     b.Navigation("Steps");
                 });
 
             modelBuilder.Entity("HomeBook.Backend.Data.Entities.RecipeIngredient", b =>
                 {
-                    b.Navigation("Recipe2RecipeIngredients");
+                    b.Navigation("RecipeIngredient2Recipes");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,7 +22,7 @@ public class RecipeIngredient : INormalizable
     [MaxLength(100)]
     public string NormalizedName { get; set; } = null!;
 
-    public virtual ICollection<Recipe2RecipeIngredient> Recipe2RecipeIngredients { get; set; } =
+    public virtual ICollection<Recipe2RecipeIngredient> RecipeIngredient2Recipes { get; set; } =
         new List<Recipe2RecipeIngredient>();
 
 

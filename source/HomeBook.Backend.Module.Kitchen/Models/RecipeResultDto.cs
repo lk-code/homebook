@@ -14,4 +14,11 @@ public record RecipeResultDto(
     string? Comments,
     string? Source,
     RecipeIngredientDto[] Ingredients,
-    RecipeStepDto[] Steps);
+    RecipeStepDto[] Steps,
+    RecipeMediaItemDto[] MediaItems)
+{
+    public Guid[] MediaIds => MediaItems
+        .OrderBy(x => x.Index)
+        .Select(x => x.MediaItemId)
+        .ToArray();
+}

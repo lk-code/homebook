@@ -6,6 +6,7 @@ using HomeBook.Frontend.Modules.Abstractions;
 namespace HomeBook.Frontend.Services;
 
 public class MediaService(
+    IConfiguration configuration,
     IAuthenticationService authenticationService,
     BackendClient backendClient) : IMediaService
 {
@@ -22,7 +23,11 @@ public class MediaService(
                 },
                 cancellationToken);
 
-        Uri.TryCreate(response?.MediaUri, UriKind.Absolute, out Uri? mediaUri);
+        string mediaHost = configuration["Backend:Host"];
+        string mediaLink = response?.MediaUri;
+        string absoluteMediaLink = $"{mediaHost}{mediaLink}";
+
+        Uri.TryCreate(absoluteMediaLink, UriKind.Absolute, out Uri? mediaUri);
 
         return mediaUri;
     }

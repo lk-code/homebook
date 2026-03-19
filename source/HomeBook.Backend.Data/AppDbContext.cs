@@ -19,6 +19,7 @@ public class AppDbContext(
     public DbSet<RecipeStep> RecipeSteps { get; set; } = null!;
     public DbSet<StorageScopeRegistration> StorageScopeRegistrations { get; set; } = null!;
     public DbSet<MediaItem> MediaItems { get; set; } = null!;
+    public DbSet<Recipe2MediaItems> Recipe2MediaItems { get; set; } = null!;
 
     private readonly IEnumerable<SaveChangesInterceptor>? _saveChangesInterceptors = saveChangesInterceptors;
 
