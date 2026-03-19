@@ -6,35 +6,35 @@ namespace HomeBook.Frontend.Module.Kitchen.Mappings;
 
 public static class RecipeMappings
 {
-    public static RecipeDetailViewModel ToViewModel(this RecipeDetailDto recipe)
+    public static RecipeDetailViewModel ToViewModel(this RecipeDetailDto r)
     {
-        int? durationInMinutes = recipe.DurationWorkingMinutes
-                                 + recipe.DurationCookingMinutes
-                                 + recipe.DurationRestingMinutes;
+        int? durationInMinutes = r.DurationWorkingMinutes
+                                 + r.DurationCookingMinutes
+                                 + r.DurationRestingMinutes;
         TimeSpan? duration = durationInMinutes.HasValue
             ? TimeSpan.FromMinutes(durationInMinutes.Value)
             : null;
 
         return new RecipeDetailViewModel
         {
-            Id = recipe.Id,
-            Username = recipe.Username,
-            Name = recipe.Name,
-            Description = recipe.Description,
-            Servings = recipe.Servings,
-            NumberOfServings = recipe.Servings ?? 1,
-            CaloriesKcal = recipe.CaloriesKcal,
+            Id = r.Id,
+            Username = r.Username,
+            Name = r.Name,
+            Description = r.Description,
+            Servings = r.Servings,
+            NumberOfServings = r.Servings ?? 1,
+            CaloriesKcal = r.CaloriesKcal,
             Duration = duration,
-            DurationWorkingMinutes = recipe.DurationWorkingMinutes.HasValue
-                ? TimeSpan.FromMinutes(recipe.DurationWorkingMinutes.Value)
+            DurationWorkingMinutes = r.DurationWorkingMinutes.HasValue
+                ? TimeSpan.FromMinutes(r.DurationWorkingMinutes.Value)
                 : null,
-            DurationCookingMinutes = recipe.DurationCookingMinutes.HasValue
-                ? TimeSpan.FromMinutes(recipe.DurationCookingMinutes.Value)
+            DurationCookingMinutes = r.DurationCookingMinutes.HasValue
+                ? TimeSpan.FromMinutes(r.DurationCookingMinutes.Value)
                 : null,
-            DurationRestingMinutes = recipe.DurationRestingMinutes.HasValue
-                ? TimeSpan.FromMinutes(recipe.DurationRestingMinutes.Value)
+            DurationRestingMinutes = r.DurationRestingMinutes.HasValue
+                ? TimeSpan.FromMinutes(r.DurationRestingMinutes.Value)
                 : null,
-            Ingredients = recipe.Ingredients
+            Ingredients = r.Ingredients
                 .Select(x => new IngredientViewModel
                 {
                     Name = x.Name,
@@ -43,7 +43,7 @@ public static class RecipeMappings
                     AdditionalText = null
                 })
                 .ToList(),
-            Steps = recipe.Steps
+            Steps = r.Steps
                 .OrderBy(x => x.Position)
                 .Select(x => new StepViewModel
                 {
@@ -52,28 +52,30 @@ public static class RecipeMappings
                 })
                 .ToList(),
             Image = TestImageMappings.PlaceholderImage,
-            Source = recipe.Source,
-            Comments = recipe.Comments
+            Source = r.Source,
+            Comments = r.Comments,
+            ImageMediaIds = r.ImageMediaIds.ToList(),
+            HeroMediaId = r.HeroMediaId
         };
     }
 
-    public static RecipeViewModel ToViewModel(this RecipeDto recipe)
+    public static RecipeViewModel ToViewModel(this RecipeDto r)
     {
-        TimeSpan? duration = recipe.DurationInMinutes.HasValue
-            ? TimeSpan.FromMinutes(recipe.DurationInMinutes.Value)
+        TimeSpan? duration = r.DurationInMinutes.HasValue
+            ? TimeSpan.FromMinutes(r.DurationInMinutes.Value)
             : null;
 
         return new RecipeViewModel
         {
-            Id = recipe.Id,
-            Username = recipe.Username,
-            Name = recipe.Name,
-            Description = recipe.Description,
-            Servings = recipe.Servings,
-            CaloriesKcal = recipe.CaloriesKcal,
+            Id = r.Id,
+            Username = r.Username,
+            Name = r.Name,
+            Description = r.Description,
+            Servings = r.Servings,
+            CaloriesKcal = r.CaloriesKcal,
             Duration = duration,
-            Ingredients = recipe.Ingredients,
-            Image = TestImageMappings.PlaceholderImage
+            Ingredients = r.Ingredients,
+            HeroMediaId = r.HeroMediaId,
         };
     }
 
@@ -86,7 +88,8 @@ public static class RecipeMappings
             r.Servings,
             r.CaloriesKcal,
             r.DurationCookingMinutes,
-            "");
+            "",
+            r.HeroMediaId);
 
     public static RecipeDetailDto ToDto(this HomeBook.Client.Models.RecipeDetailResponse r) =>
         new(
@@ -96,6 +99,8 @@ public static class RecipeMappings
             r.NormalizedName!,
             r.Description!,
             r.Servings,
+            r.MediaIds.Where(x => x.HasValue).Select(x => (Guid)x).ToArray() ?? [],
+            r.MediaIds.FirstOrDefault(),
             (r.Ingredients ?? []).Select(x => x.ToDto()).ToArray(),
             (r.Steps ?? []).Select(x => x.ToDto()).ToArray(),
             r.DurationWorkingMinutes,

@@ -7,6 +7,8 @@ public record RecipeDetailDto(
     string NormalizedName,
     string Description,
     int? Servings,
+    Guid[] ImageMediaIds,
+    Guid? HeroMediaId,
     RecipeIngredientDto[] Ingredients,
     RecipeStepDto[] Steps,
     int? DurationWorkingMinutes,

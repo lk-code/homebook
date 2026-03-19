@@ -42,6 +42,9 @@ public class RecipesProvider(
         // TODO: validate dto
 
         Recipe entity = requestDto.ToEntity();
+        entity.Recipe2MediaItems = CreateMediaRelations(requestDto);
+        entity.Recipe2RecipeIngredients = await CreateIngredientRelationsAsync(requestDto,
+            cancellationToken);
 
         // TODO: validate entity
 
@@ -85,5 +88,61 @@ public class RecipesProvider(
         await recipesRepository.UpdateRecipeNameAsync(id,
             name,
             cancellationToken);
+    }
+
+    private static Recipe2MediaItems[] CreateMediaRelations(RecipeRequestDto requestDto)
+    {
+        return requestDto.MediaIds
+            .Distinct()
+            .Select(mediaId =>
+            {
+                Recipe2MediaItems relation = new()
+                {
+                    MediaItemId = mediaId
+                };
+
+                if (requestDto.Id.HasValue)
+                    relation.RecipeId = requestDto.Id.Value;
+
+                return relation;
+            })
+            .ToArray();
+    }
+
+    private async Task<Recipe2RecipeIngredient[]> CreateIngredientRelationsAsync(RecipeRequestDto requestDto,
+        CancellationToken cancellationToken)
+    {
+        List<Recipe2RecipeIngredient> relations = [];
+
+        foreach (RecipeIngredientRequestDto ingredient in requestDto.Ingredients)
+        {
+            Guid ingredientId = await ingredientRepository.CreateOrUpdateAsync(new RecipeIngredient
+                {
+                    Name = ingredient.Name
+                },
+                cancellationToken);
+
+            Recipe2RecipeIngredient? existingRelation = relations.FirstOrDefault(r => r.IngredientId == ingredientId);
+            if (existingRelation is not null)
+            {
+                existingRelation.Quantity = ingredient.Quantity;
+                existingRelation.Unit = ingredient.Unit;
+                continue;
+            }
+
+            Recipe2RecipeIngredient relation = new()
+            {
+                IngredientId = ingredientId,
+                Quantity = ingredient.Quantity,
+                Unit = ingredient.Unit
+            };
+
+            if (requestDto.Id.HasValue)
+                relation.RecipeId = requestDto.Id.Value;
+
+            relations.Add(relation);
+        }
+
+        return relations.ToArray();
     }
 }

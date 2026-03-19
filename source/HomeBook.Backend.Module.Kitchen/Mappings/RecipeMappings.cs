@@ -56,7 +56,9 @@ public static class RecipeMappings
             username = userInfo?.Username;
         }
 
-        Guid? heroMediaId = r.MediaIds.FirstOrDefault();
+        Guid? heroMediaId = null;
+        if (r.MediaIds.Any())
+            heroMediaId = r.MediaIds.First();
 
         return new RecipeResponse(r.Id,
             username,

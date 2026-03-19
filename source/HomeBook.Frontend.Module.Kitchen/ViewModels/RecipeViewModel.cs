@@ -10,7 +10,8 @@ public class RecipeViewModel
     public int? CaloriesKcal { get; set; }
     public TimeSpan? Duration { get; set; }
     public string Ingredients { get; set; } = string.Empty;
-    public string Image { get; set; } = string.Empty;
+    public Uri? HeroImageUri { get; set; }
+    public Guid? HeroMediaId { get; set; }
 
     public bool HasAnnotations => Duration.HasValue || Servings.HasValue;
 }

@@ -12,7 +12,7 @@ public partial class View : ComponentBase
     public Guid RecipeId { get; set; }
 
     private bool _isLoading = false;
-    private RecipeDetailViewModel? _recipe = null;
+    private RecipeDetailViewModel? _recipeVM = null;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -41,7 +41,11 @@ public partial class View : ComponentBase
                 NavigationManager.NavigateTo("/Kitchen/Recipes");
             }
 
-            _recipe = recipeDto.ToViewModel();
+            _recipeVM = recipeDto.ToViewModel();
+            if (_recipeVM.HeroMediaId.HasValue)
+                _recipeVM.HeroImageUri = await MediaService
+                    .GetUrlForMediaItemAsync(recipeDto.HeroMediaId!.Value,
+                        cancellationToken);
         }
         catch (Exception)
         {

@@ -18,6 +18,8 @@ public class RecipeDetailViewModel
     public string Source { get; set; } = string.Empty;
     public string Comments { get; set; } = string.Empty;
     public List<Guid> ImageMediaIds = [];
+    public Uri? HeroImageUri { get; set; }
+    public Guid? HeroMediaId { get; set; }
 
     public int NumberOfServings { get; set; }
 

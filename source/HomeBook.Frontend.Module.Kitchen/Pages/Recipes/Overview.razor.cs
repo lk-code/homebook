@@ -31,9 +31,15 @@ public partial class Overview : ComponentBase
             IEnumerable<RecipeDto> recipes = await RecipeService.GetRecipesAsync(string.Empty,
                 cancellationToken);
             _recipes.Clear();
-            foreach (RecipeDto recipe in recipes)
+            foreach (RecipeDto recipeDto in recipes)
             {
-                _recipes.Add(recipe.ToViewModel());
+                RecipeViewModel vm = recipeDto.ToViewModel();
+                if (vm.HeroMediaId.HasValue)
+                    vm.HeroImageUri = await MediaService
+                        .GetUrlForMediaItemAsync(recipeDto.HeroMediaId!.Value,
+                            cancellationToken);
+
+                _recipes.Add(vm);
             }
         }
         catch (Exception)

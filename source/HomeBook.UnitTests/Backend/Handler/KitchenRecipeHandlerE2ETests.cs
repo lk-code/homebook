@@ -2,6 +2,8 @@ using System.Security.Claims;
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.Search;
+using HomeBook.Backend.Data;
+using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Sqlite;
 using HomeBook.Backend.Data.Sqlite.Extensions;
 using HomeBook.Backend.Extensions;
@@ -13,6 +15,7 @@ using HomeBook.UnitTests.TestCore.Backend;
 using HomeBook.UnitTests.TestCore.Helper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -615,5 +618,148 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 3
                                                              && s.Description == "Serve and enjoy!"
                                                              && s.TimerDurationInSeconds == null);
+    }
+
+    [Test]
+    public async Task UpdateRecipeRelations_UpdatesOnlyJoinRelationsAndReplacesSteps()
+    {
+        // Arrange
+        CancellationToken cancellationToken = CancellationToken.None;
+        string testUserName = "testuser";
+        string testUserPassword = "s3cr3tP@ssw0rd!";
+
+        SearchRegistrationFactory srf = new();
+        IConfigurationRoot configuration = CreateTestConfiguration();
+        IServiceCollection serviceCollection = CreateTestServiceProvider(configuration);
+        IServiceProvider serviceProvider = serviceCollection
+            .AddBackendDataSqlite(configuration)
+            .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
+            .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
+            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .BuildServiceProvider();
+
+        var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;
+        await databaseMigrator.MigrateAsync(cancellationToken);
+
+        IUserProvider userProvider = serviceProvider.GetRequiredService<IUserProvider>();
+        Guid testUserId = await userProvider.CreateUserAsync(testUserName,
+            testUserPassword,
+            cancellationToken);
+        ClaimsPrincipal testuser = UserHelper.CreateTestUser(testUserId,
+            testUserName);
+
+        IRecipesProvider recipesProvider = serviceProvider.GetRequiredService<IRecipesProvider>();
+        IStorageProvider storageProvider = serviceProvider.GetRequiredService<IStorageProvider>();
+        IMediaItemRepository mediaItemRepository = serviceProvider.GetRequiredService<IMediaItemRepository>();
+        IDbContextFactory<AppDbContext> dbContextFactory = serviceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+
+        Guid scopeId = await storageProvider.RegisterStorageScopeAsync("unittests/kitchen/recipe-relations",
+            "UNITTESTS",
+            cancellationToken);
+        Guid mediaId1 = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            "recipe-image-1.jpg",
+            cancellationToken);
+        Guid mediaId2 = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            "recipe-image-2.jpg",
+            cancellationToken);
+        Guid mediaId3 = await mediaItemRepository.AddMediaItemAsync(scopeId,
+            "recipe-image-3.jpg",
+            cancellationToken);
+
+        var createResult = await RecipeHandler.HandleCreateRecipe(testuser,
+            new RecipeRequest("Tomato Soup",
+                "Classic tomato soup",
+                2,
+                [
+                    new CreateRecipeIngredientRequest("Tomatoes", 6, "Pieces"),
+                    new CreateRecipeIngredientRequest("Salt", 1, "Teaspoon")
+                ],
+                [
+                    new CreateRecipeStepRequest("Cut the tomatoes.", 0, null),
+                    new CreateRecipeStepRequest("Cook everything for 20 minutes.", 1, 1200)
+                ],
+                10,
+                20,
+                0,
+                320,
+                null,
+                null,
+                [mediaId1, mediaId2]),
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            cancellationToken);
+        createResult.ShouldBeOfType<Ok>();
+
+        var listAfterCreateResult = await RecipeHandler.HandleGetRecipes("",
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            userProvider,
+            cancellationToken);
+        var listAfterCreateResponse = listAfterCreateResult.ShouldBeOfType<Ok<RecipesListResponse>>();
+        listAfterCreateResponse.Value.ShouldNotBeNull();
+        Guid recipeId = listAfterCreateResponse.Value.Recipes.Single(r => r.Name == "Tomato Soup").Id;
+
+        var updateResult = await RecipeHandler.HandleUpdateRecipe(recipeId,
+            testuser,
+            new RecipeRequest("Tomato Soup Deluxe",
+                "Classic tomato soup with basil",
+                4,
+                [
+                    new CreateRecipeIngredientRequest("Tomatoes", 8, "Pieces"),
+                    new CreateRecipeIngredientRequest("Basil", 5, "Leaves")
+                ],
+                [
+                    new CreateRecipeStepRequest("Blend the tomatoes with basil.", 0, null),
+                    new CreateRecipeStepRequest("Serve with olive oil.", 1, null),
+                    new CreateRecipeStepRequest("Enjoy immediately.", 2, null)
+                ],
+                15,
+                25,
+                0,
+                410,
+                "Use ripe tomatoes.",
+                "https://example.invalid/tomato-soup-deluxe",
+                [mediaId2, mediaId3]),
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            cancellationToken);
+        updateResult.ShouldBeOfType<Ok>();
+
+        var recipeDetailsResult = await RecipeHandler.HandleGetRecipeById(recipeId,
+            _loggerFactory.CreateLogger<RecipeHandler>(),
+            recipesProvider,
+            userProvider,
+            cancellationToken);
+        var recipeDetailsResponse = recipeDetailsResult.ShouldBeOfType<Ok<RecipeDetailResponse>>();
+        recipeDetailsResponse.Value.ShouldNotBeNull();
+        recipeDetailsResponse.Value.Name.ShouldBe("Tomato Soup Deluxe");
+        recipeDetailsResponse.Value.MediaIds.Length.ShouldBe(2);
+        recipeDetailsResponse.Value.MediaIds.ShouldContain(mediaId2);
+        recipeDetailsResponse.Value.MediaIds.ShouldContain(mediaId3);
+        recipeDetailsResponse.Value.MediaIds.ShouldNotContain(mediaId1);
+        recipeDetailsResponse.Value.Ingredients.Length.ShouldBe(2);
+        recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Tomatoes"
+                                                                   && i.Quantity == 8
+                                                                   && i.Unit == "Pieces");
+        recipeDetailsResponse.Value.Ingredients.ShouldContain(i => i.Name == "Basil"
+                                                                   && i.Quantity == 5
+                                                                   && i.Unit == "Leaves");
+        recipeDetailsResponse.Value.Ingredients.ShouldNotContain(i => i.Name == "Salt");
+        recipeDetailsResponse.Value.Steps.Length.ShouldBe(3);
+        recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 0
+                                                             && s.Description == "Blend the tomatoes with basil.");
+        recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 1
+                                                             && s.Description == "Serve with olive oil.");
+        recipeDetailsResponse.Value.Steps.ShouldContain(s => s.Position == 2
+                                                             && s.Description == "Enjoy immediately.");
+
+        await using AppDbContext dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
+        (await dbContext.Recipe2MediaItems.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(2);
+        (await dbContext.Recipe2RecipeIngredients.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(2);
+        (await dbContext.RecipeSteps.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(3);
+        (await dbContext.RecipeIngredients.CountAsync(cancellationToken)).ShouldBe(3);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "tomatoes", cancellationToken)).ShouldBe(1);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "salt", cancellationToken)).ShouldBe(1);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "basil", cancellationToken)).ShouldBe(1);
     }
 }

@@ -16,17 +16,21 @@ public class RecipesRepository(
     {
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
+        var baseQuery = dbContext.Set<Recipe>()
+            .Include(r => r.Recipe2MediaItems);
+
         // return all without filter
         if (string.IsNullOrWhiteSpace(searchFilter))
-            return await dbContext.Set<Recipe>()
+            return await baseQuery
                 .ToListAsync(cancellationToken);
 
         // return with filter
         string normalizedFilter = stringNormalizer.Normalize(searchFilter);
-        return await dbContext.Set<Recipe>()
-            .Include(r => r.Recipe2MediaItems)
+        List<Recipe> entities = await baseQuery
             .Where(e => e.NormalizedName.Contains(normalizedFilter))
             .ToListAsync(cancellationToken);
+
+        return entities;
     }
 
     /// <inheritdoc />
@@ -56,11 +60,10 @@ public class RecipesRepository(
     {
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
-        Recipe? existing = await GetByIdAsync(entity.Id,
-            cancellationToken,
-            dbContext);
+        bool exists = await dbContext.Recipes
+            .AnyAsync(r => r.Id == entity.Id, cancellationToken);
 
-        if (existing is null)
+        if (!exists)
         {
             dbContext.Add(entity);
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -84,19 +87,16 @@ public class RecipesRepository(
                         .SetProperty(u => u.UserId, entity.UserId),
                     cancellationToken: cancellationToken);
 
-            // 2. update Steps and Ingredients
-            // remove all existing Steps and Ingredients
-            await dbContext.Recipe2MediaItems.Where(x => x.RecipeId == entity.Id)
-                .ExecuteDeleteAsync(cancellationToken);
-            await dbContext.Recipe2RecipeIngredients.Where(x => x.RecipeId == entity.Id)
-                .ExecuteDeleteAsync(cancellationToken);
-            await dbContext.RecipeSteps.Where(x => x.RecipeId == entity.Id)
-                .ExecuteDeleteAsync(cancellationToken);
-
-            // insert new Steps and Ingredients
-            dbContext.Recipe2MediaItems.AddRange(entity.Recipe2MediaItems);
-            dbContext.Recipe2RecipeIngredients.AddRange(entity.Recipe2RecipeIngredients);
-            dbContext.RecipeSteps.AddRange(entity.Steps);
+            // 2. update related data
+            await UpdateMediaRelationsAsync(dbContext,
+                entity,
+                cancellationToken);
+            await UpdateIngredientRelationsAsync(dbContext,
+                entity,
+                cancellationToken);
+            await ReplaceStepsAsync(dbContext,
+                entity,
+                cancellationToken);
 
             // 3. save changes
             await dbContext.SaveChangesAsync(cancellationToken);
@@ -193,5 +193,124 @@ public class RecipesRepository(
                     .SetProperty(r => r.Name, name)
                     .SetProperty(r => r.NormalizedName, stringNormalizer.Normalize(name)),
                 cancellationToken: cancellationToken);
+    }
+
+    private static async Task UpdateMediaRelationsAsync(AppDbContext dbContext,
+        Recipe entity,
+        CancellationToken cancellationToken)
+    {
+        HashSet<Guid> requestedMediaIds = entity.Recipe2MediaItems
+            .Select(x => x.MediaItemId)
+            .ToHashSet();
+
+        Guid[] existingMediaIds = await dbContext.Recipe2MediaItems
+            .Where(x => x.RecipeId == entity.Id)
+            .Select(x => x.MediaItemId)
+            .ToArrayAsync(cancellationToken);
+
+        Guid[] mediaIdsToRemove = existingMediaIds
+            .Except(requestedMediaIds)
+            .ToArray();
+        if (mediaIdsToRemove.Length > 0)
+        {
+            await dbContext.Recipe2MediaItems
+                .Where(x => x.RecipeId == entity.Id && mediaIdsToRemove.Contains(x.MediaItemId))
+                .ExecuteDeleteAsync(cancellationToken);
+        }
+
+        Guid[] mediaIdsToAdd = requestedMediaIds
+            .Except(existingMediaIds)
+            .ToArray();
+        if (mediaIdsToAdd.Length > 0)
+        {
+            dbContext.Recipe2MediaItems.AddRange(mediaIdsToAdd.Select(mediaId => new Recipe2MediaItems
+            {
+                RecipeId = entity.Id,
+                MediaItemId = mediaId
+            }));
+        }
+    }
+
+    private static async Task UpdateIngredientRelationsAsync(AppDbContext dbContext,
+        Recipe entity,
+        CancellationToken cancellationToken)
+    {
+        Dictionary<Guid, Recipe2RecipeIngredient> requestedIngredientsById = entity.Recipe2RecipeIngredients
+            .GroupBy(x => x.IngredientId)
+            .ToDictionary(group => group.Key, group => group.Last());
+
+        List<Recipe2RecipeIngredient> existingRelations = await dbContext.Recipe2RecipeIngredients
+            .AsNoTracking()
+            .Where(x => x.RecipeId == entity.Id)
+            .ToListAsync(cancellationToken);
+
+        HashSet<Guid> existingIngredientIds = existingRelations
+            .Select(x => x.IngredientId)
+            .ToHashSet();
+
+        Guid[] ingredientIdsToRemove = existingIngredientIds
+            .Except(requestedIngredientsById.Keys)
+            .ToArray();
+        if (ingredientIdsToRemove.Length > 0)
+        {
+            await dbContext.Recipe2RecipeIngredients
+                .Where(x => x.RecipeId == entity.Id && ingredientIdsToRemove.Contains(x.IngredientId))
+                .ExecuteDeleteAsync(cancellationToken);
+        }
+
+        foreach (Recipe2RecipeIngredient existingRelation in existingRelations)
+        {
+            if (!requestedIngredientsById.TryGetValue(existingRelation.IngredientId, out Recipe2RecipeIngredient? requestedRelation))
+                continue;
+
+            if (existingRelation.Quantity == requestedRelation.Quantity
+                && existingRelation.Unit == requestedRelation.Unit)
+                continue;
+
+            await dbContext.Recipe2RecipeIngredients
+                .Where(x => x.RecipeId == entity.Id && x.IngredientId == existingRelation.IngredientId)
+                .ExecuteUpdateAsync(x => x
+                        .SetProperty(r => r.Quantity, requestedRelation.Quantity)
+                        .SetProperty(r => r.Unit, requestedRelation.Unit),
+                    cancellationToken: cancellationToken);
+        }
+
+        Guid[] ingredientIdsToAdd = requestedIngredientsById.Keys
+            .Except(existingIngredientIds)
+            .ToArray();
+        if (ingredientIdsToAdd.Length > 0)
+        {
+            dbContext.Recipe2RecipeIngredients.AddRange(ingredientIdsToAdd.Select(ingredientId =>
+            {
+                Recipe2RecipeIngredient requestedRelation = requestedIngredientsById[ingredientId];
+                return new Recipe2RecipeIngredient
+                {
+                    RecipeId = entity.Id,
+                    IngredientId = ingredientId,
+                    Quantity = requestedRelation.Quantity,
+                    Unit = requestedRelation.Unit
+                };
+            }));
+        }
+    }
+
+    private static async Task ReplaceStepsAsync(AppDbContext dbContext,
+        Recipe entity,
+        CancellationToken cancellationToken)
+    {
+        await dbContext.RecipeSteps
+            .Where(x => x.RecipeId == entity.Id)
+            .ExecuteDeleteAsync(cancellationToken);
+
+        if (!entity.Steps.Any())
+            return;
+
+        dbContext.RecipeSteps.AddRange(entity.Steps.Select(step => new RecipeStep
+        {
+            RecipeId = entity.Id,
+            Position = step.Position,
+            Description = step.Description,
+            TimerDurationInSeconds = step.TimerDurationInSeconds
+        }));
     }
 }

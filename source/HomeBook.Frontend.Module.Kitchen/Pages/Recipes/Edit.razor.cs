@@ -107,7 +107,7 @@ public partial class Edit : ComponentBase
             _recipe.CaloriesKcal,
             _recipe.Comments,
             _recipe.Source,
-            _recipe.ImageMediaIds,
+            _recipe.ImageMediaIds.ToList(),
             cancellationToken);
 
         if (recipeId is null)
@@ -151,24 +151,6 @@ public partial class Edit : ComponentBase
             _nameEditUpdate = false;
             StateHasChanged();
         }
-    }
-
-    private Task UpdateRecipeImageMediaIdsAsync(IList<Guid> imageMediaIds)
-    {
-        if (_recipe is null)
-            return Task.CompletedTask;
-
-        _recipe.ImageMediaIds = imageMediaIds.ToList();
-        return Task.CompletedTask;
-    }
-
-    private Task UpdateRecipePreviewImageAsync(string? previewImageUrl)
-    {
-        if (_recipe is null)
-            return Task.CompletedTask;
-
-        _recipe.Image = previewImageUrl ?? string.Empty;
-        return Task.CompletedTask;
     }
 
     private static int GetDurationHours(TimeSpan? duration) => duration.HasValue ? (int)duration.Value.TotalHours : 0;
