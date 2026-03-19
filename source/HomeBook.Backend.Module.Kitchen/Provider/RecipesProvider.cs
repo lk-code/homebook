@@ -89,9 +89,10 @@ public class RecipesProvider(
             {
                 string? mediaItemFilename = await mediaProvider.GetFilenameByIdAsync(mediaIdToDelete,
                     cancellationToken);
-                if (mediaItemFilename is null)
+                if (mediaItemFilename is null
+                    || !recipeImagesStorageScopeId.HasValue)
                     continue;
-
+                
                 await storageProvider.DeleteFileAsync(recipeImagesStorageScopeId.Value,
                     mediaItemFilename,
                     cancellationToken);

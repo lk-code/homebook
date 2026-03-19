@@ -118,7 +118,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         // create recipes
         var createRecipeResult1 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -135,25 +135,26 @@ public class KitchenRecipeHandlerE2ETests : TestBase
                 null,
                 null,
                 null,
+                null,
                 null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult2.ShouldBeOfType<Ok>();
         var createRecipeResult3 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Pancakes", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Pancakes", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult3.ShouldBeOfType<Ok>();
         var createRecipeResult4 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult4.ShouldBeOfType<Ok>();
         var createRecipeResult5 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -293,13 +294,14 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         // create recipes
         var createRecipeResult1 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult1.ShouldBeOfType<Ok>();
         var createRecipeResult2 = await RecipeHandler.HandleCreateRecipe(testuser,
             new RecipeRequest("Nana's Italian Roulade",
+                null,
                 null,
                 null,
                 null,
@@ -339,19 +341,20 @@ public class KitchenRecipeHandlerE2ETests : TestBase
                 2750,
                 "Dies ist ein Test-Kommentar",
                 "Das habe ich mir selbst ausgedacht",
+                [],
                 []),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult3.ShouldBeOfType<Ok>();
         var createRecipeResult4 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Pasta à la Roma", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
         createRecipeResult4.ShouldBeOfType<Ok>();
         var createRecipeResult5 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Rührei mit Kräutern", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -501,7 +504,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         // create recipes
         var createRecipeResult1 = await RecipeHandler.HandleCreateRecipe(testuser,
-            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null),
+            new RecipeRequest("Gyros-Pita", null, null, null, null, null, null, null, null, null, null, null, null),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
             cancellationToken);
@@ -541,6 +544,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             1200,
             "Best served warm with a side of fries",
             "https://www.a-random-recipe-source.com/awesome-gyros-wrap",
+            [],
             []
         );
         var updateResult1 = await RecipeHandler.HandleUpdateRecipe(recipeId,
@@ -684,6 +688,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
                 320,
                 null,
                 null,
+                [],
                 [mediaId1, mediaId2]),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
@@ -719,6 +724,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
                 410,
                 "Use ripe tomatoes.",
                 "https://example.invalid/tomato-soup-deluxe",
+                [],
                 [mediaId2, mediaId3]),
             _loggerFactory.CreateLogger<RecipeHandler>(),
             recipesProvider,
@@ -755,10 +761,12 @@ public class KitchenRecipeHandlerE2ETests : TestBase
 
         await using AppDbContext dbContext = await dbContextFactory.CreateDbContextAsync(cancellationToken);
         (await dbContext.Recipe2MediaItems.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(2);
-        (await dbContext.Recipe2RecipeIngredients.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(2);
+        (await dbContext.Recipe2RecipeIngredients.CountAsync(x => x.RecipeId == recipeId, cancellationToken))
+            .ShouldBe(2);
         (await dbContext.RecipeSteps.CountAsync(x => x.RecipeId == recipeId, cancellationToken)).ShouldBe(3);
         (await dbContext.RecipeIngredients.CountAsync(cancellationToken)).ShouldBe(3);
-        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "tomatoes", cancellationToken)).ShouldBe(1);
+        (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "tomatoes", cancellationToken))
+            .ShouldBe(1);
         (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "salt", cancellationToken)).ShouldBe(1);
         (await dbContext.RecipeIngredients.CountAsync(x => x.NormalizedName == "basil", cancellationToken)).ShouldBe(1);
     }
