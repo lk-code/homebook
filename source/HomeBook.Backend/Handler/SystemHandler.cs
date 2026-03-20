@@ -3,12 +3,36 @@ using HomeBook.Backend.Requests;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeBook.Backend.Handler;
 
 public static class SystemHandler
 {
+    public static async Task<IResult> HandleGetSystemStorageInfo(
+        [FromServices] ISystemStorageService systemStorageService,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            StorageSize storageInformation = await systemStorageService.GetStorageSizeInformationsAsync(cancellationToken);
+            long totalSizeBytes = storageInformation.TotalSizeBytes;
+            long usedSizeBytes = storageInformation.UsedSizeBytes;
+            long freeSizeBytes = storageInformation.FreeSizeBytes;
+
+            GetSystemStorageInfoResponse response = new(totalSizeBytes,
+                usedSizeBytes,
+                freeSizeBytes);
+            return TypedResults.Ok(response);
+        }
+        catch (Exception)
+        {
+            return TypedResults.Problem("An error occurred while retrieving system storage informations.",
+                statusCode: 500);
+        }
+    }
+
     public static IResult HandleGetSystemInfo([FromServices] IConfiguration configuration,
         CancellationToken cancellationToken)
     {

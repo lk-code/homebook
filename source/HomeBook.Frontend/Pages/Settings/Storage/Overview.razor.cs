@@ -1,6 +1,5 @@
-using HomeBook.Frontend.Core.Models.Setup;
-using HomeBook.Frontend.Core.Models.UserPreferences;
-using HomeBook.Frontend.UI.Resources;
+using HomeBook.Frontend.Abstractions.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -11,18 +10,13 @@ public partial class Overview : ComponentBase
     private int _selectedStorageSegmentIndex = -1;
     private List<ChartSeries<double>> _storageUsageSeries = [];
     private string[] _storageUsageLabels = [];
+    private StorageUsageModel? _storageUsage = null;
 
-    private MudForm _form = new();
-    private readonly UserPreferenceLocalizationViewModel _configurationModel = new();
-    private bool _isValid;
-    private readonly List<LanguageViewModel> _availableLanguages = [];
-    private bool _isLoading;
-
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        // TODO: Hier die echten UsedSpace- und FreeSpace-Werte laden, sobald sie
-        // im Backend-Response oder Provider verfuegbar sind, und an ReadStorageUsage(...) uebergeben.
-        StorageUsageModel storageUsage = ReadStorageUsage();
+        StorageUsageModel storageUsage = await ReadStorageUsage();
+        _storageUsage = storageUsage;
+        StateHasChanged();
 
         _storageUsageSeries =
         [
@@ -38,17 +32,19 @@ public partial class Overview : ComponentBase
         ];
 
         _storageUsageLabels = CreateStorageUsageLabels(storageUsage);
-
-        return Task.CompletedTask;
+        StateHasChanged();
     }
 
-    private static StorageUsageModel ReadStorageUsage(double? usedSpace = null,
-        double? freeSpace = null)
+    private async Task<StorageUsageModel> ReadStorageUsage()
     {
-        double resolvedUsedSpace = usedSpace ?? 320d;
-        double resolvedFreeSpace = freeSpace ?? 680d;
+        CancellationToken cancellationToken = CancellationToken.None;
+        StorageSize storageUsage = await SystemStorageProvider.GetStorageUsageAsync(cancellationToken);
 
-        return new StorageUsageModel(resolvedUsedSpace, resolvedFreeSpace);
+        long totalSpaceBytes = storageUsage.TotalSizeBytes;
+        long usedSpaceBytes = storageUsage.UsedSizeBytes;
+        long freeSpaceBytes = storageUsage.FreeSizeBytes;
+
+        return new StorageUsageModel(totalSpaceBytes, usedSpaceBytes, freeSpaceBytes);
     }
 
     private static string[] CreateStorageUsageLabels(StorageUsageModel storageUsage)
@@ -62,34 +58,13 @@ public partial class Overview : ComponentBase
 
         return
         [
-            $"Used ({storageUsage.UsedSpace / totalSpace:P0})",
-            $"Free ({storageUsage.FreeSpace / totalSpace:P0})"
+            $"Used ({storageUsage.UsedSpace.Bytes().Humanize()})",
+            $"Free ({storageUsage.FreeSpace.Bytes().Humanize()})"
         ];
     }
 
-    private sealed record StorageUsageModel(double UsedSpace, double FreeSpace);
-
-    private async Task UpdateInstanceConfigurationAsync()
-    {
-        if (!_isValid)
-            return;
-
-        try
-        {
-            _isLoading = true;
-
-            // Validate form before proceeding
-            await _form.Validate();
-            if (!_form.IsValid)
-                return;
-        }
-        catch (Exception err)
-        {
-
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-    }
+    private sealed record StorageUsageModel(
+        long CompleteSpace,
+        long UsedSpace,
+        long FreeSpace);
 }
