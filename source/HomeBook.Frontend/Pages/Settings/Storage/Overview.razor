@@ -66,6 +66,40 @@
 
                 </MudStack>
 
+                @if (_storageUsage is not null
+                     && _storageUsage.StorageSizeTypes.Any())
+                {
+                    <MudStack Class="mt-5"
+                              Spacing="2">
+
+                        <MudList T="string">
+
+                            @foreach (StorageSizeTypeModel storageSizeType in _storageUsage.StorageSizeTypes)
+                            {
+                                <MudListItem Class="py-0"
+                                    Text="@string.Format($"{storageSizeType.ModuleName} - {storageSizeType.StorageSizeBytes.Bytes().Humanize()}")"
+                                    Expanded>
+
+                                    <NestedList>
+
+                                        @foreach (StorageSizeTypeModel moduleScopes in storageSizeType.Children)
+                                        {
+                                            <MudListItem Class="py-0">
+                                                @moduleScopes.ScopeKey
+                                                - @moduleScopes.StorageSizeBytes.Bytes().Humanize()
+                                            </MudListItem>
+                                        }
+
+                                    </NestedList>
+
+                                </MudListItem>
+                            }
+
+                        </MudList>
+
+                    </MudStack>
+                }
+
             </MudPaper>
 
         </MudItem>

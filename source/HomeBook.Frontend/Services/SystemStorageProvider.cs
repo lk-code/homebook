@@ -24,6 +24,13 @@ public class SystemStorageProvider(
 
         return new(response?.Total ?? 0,
             response?.Used ?? 0,
-            response?.Free ?? 0);
+            response?.Free ?? 0,
+            (response?.StorageByType ?? []).Select(x => new MediaStorageSizeType(
+                x.ScopeKey,
+                x.ModuleKey,
+                x.ModuleName,
+                (x.StorageSizeBytes ?? 0)
+            ))
+            .ToArray());
     }
 }

@@ -43,8 +43,41 @@ public partial class Overview : ComponentBase
         long totalSpaceBytes = storageUsage.TotalSizeBytes;
         long usedSpaceBytes = storageUsage.UsedSizeBytes;
         long freeSpaceBytes = storageUsage.FreeSizeBytes;
+        MediaStorageSizeType[] storageTypes = storageUsage.StorageSizeTypes;
 
-        return new StorageUsageModel(totalSpaceBytes, usedSpaceBytes, freeSpaceBytes);
+        List<(string ModuleKey, string ModuleName)> modules = storageTypes
+            .Select(s => (s.ModuleKey, s.ModuleName))
+            .Distinct()
+            .ToList();
+        List<StorageSizeTypeModel> moduleItems = new();
+        foreach (var module in modules)
+        {
+            var storageTypesForModule = storageTypes
+                .Where(s => s.ModuleKey == module.ModuleKey)
+                .ToArray();
+
+            long moduleSizeBytes = storageTypesForModule.Sum(s => s.StorageSizeBytes);
+            StorageSizeTypeModel[] moduleStorageTypes = storageTypesForModule.Select(s =>
+                    new StorageSizeTypeModel(
+                        s.ScopeKey,
+                        s.ModuleKey,
+                        s.ModuleName,
+                        s.StorageSizeBytes,
+                        null))
+                .ToArray();
+            moduleItems.Add(new StorageSizeTypeModel(
+                null,
+                module.ModuleKey,
+                module.ModuleName,
+                moduleSizeBytes,
+                moduleStorageTypes));
+        }
+
+        return new StorageUsageModel(totalSpaceBytes,
+            usedSpaceBytes,
+            freeSpaceBytes,
+            moduleItems
+                .ToArray());
     }
 
     private static string[] CreateStorageUsageLabels(StorageUsageModel storageUsage)
@@ -66,5 +99,13 @@ public partial class Overview : ComponentBase
     private sealed record StorageUsageModel(
         long CompleteSpace,
         long UsedSpace,
-        long FreeSpace);
+        long FreeSpace,
+        StorageSizeTypeModel[] StorageSizeTypes);
+
+    private sealed record StorageSizeTypeModel(
+        string? ScopeKey,
+        string ModuleKey,
+        string ModuleName,
+        long StorageSizeBytes,
+        StorageSizeTypeModel[]? Children);
 }

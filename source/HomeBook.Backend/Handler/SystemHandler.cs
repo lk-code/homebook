@@ -16,14 +16,27 @@ public static class SystemHandler
     {
         try
         {
-            StorageSize storageInformation = await systemStorageService.GetStorageSizeInformationsAsync(cancellationToken);
+            StorageSize storageInformation = await systemStorageService
+                .GetStorageSizeInformationsAsync(cancellationToken);
             long totalSizeBytes = storageInformation.TotalSizeBytes;
             long usedSizeBytes = storageInformation.UsedSizeBytes;
             long freeSizeBytes = storageInformation.FreeSizeBytes;
 
+            List<MediaStorageSizeType> storageByType = await systemStorageService
+                .GetStorageSizeTypeAsync(cancellationToken);
+            MediaStorageSizeTypeResponse[]? mediaStorageSizes = (storageByType ?? [])
+                .Select(x =>
+                    new MediaStorageSizeTypeResponse(
+                        x.ScopeKey,
+                        x.ModuleKey,
+                        x.ModuleName,
+                        x.StorageSizeBytes))
+                .ToArray();
+
             GetSystemStorageInfoResponse response = new(totalSizeBytes,
                 usedSizeBytes,
-                freeSizeBytes);
+                freeSizeBytes,
+                mediaStorageSizes);
             return TypedResults.Ok(response);
         }
         catch (Exception)
