@@ -1,4 +1,5 @@
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.EnvironmentHandler;
 
 namespace HomeBook.Backend.Services;
@@ -41,4 +42,20 @@ public class NativeFileService : IApplicationPathProvider, IFileSystemService
 
     /// <inheritdoc />
     public void DeleteFile(string path) => File.Delete(path);
+
+    /// <inheritdoc />
+    public Task<List<FileInformation>> GetFilesInDirectoryAsync(string storagePath,
+        CancellationToken cancellationToken)
+    {
+        List<FileInformation> files = Directory
+            .EnumerateFiles(storagePath, "*", SearchOption.AllDirectories)
+            .Select(path =>
+            {
+                FileInfo info = new(path);
+                return new FileInformation(info.FullName, info.Length);
+            })
+            .ToList();
+
+        return Task.FromResult(files);
+    }
 }

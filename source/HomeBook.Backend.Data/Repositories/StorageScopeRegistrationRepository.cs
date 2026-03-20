@@ -10,6 +10,17 @@ public class StorageScopeRegistrationRepository(IDbContextFactory<AppDbContext> 
     : IStorageScopeRegistrationRepository
 {
     /// <inheritdoc/>
+    public async Task<List<StorageScopeRegistration>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
+
+        List<StorageScopeRegistration> entities = await dbContext.Set<StorageScopeRegistration>()
+            .ToListAsync(cancellationToken);
+
+        return entities;
+    }
+
+    /// <inheritdoc/>
     public async Task<StorageScopeRegistration?> GetByFullScopeNameAsync(string fullScopeName,
         CancellationToken cancellationToken)
     {

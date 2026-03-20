@@ -99,6 +99,7 @@ public static class ServiceCollectionExtensions
         InstanceStatus instanceStatus)
     {
         // Register the file service
+        services.AddScoped<ISystemStorageService, SystemStorageService>();
         services.AddSingleton<IApplicationPathProvider, NativeFileService>();
         services.AddSingleton<IFileSystemService, NativeFileService>();
         services.AddBackendDatabaseMigrators(configuration, instanceStatus);

@@ -92,7 +92,7 @@ public class RecipesProvider(
                 if (mediaItemFilename is null
                     || !recipeImagesStorageScopeId.HasValue)
                     continue;
-                
+
                 await storageProvider.DeleteFileAsync(recipeImagesStorageScopeId.Value,
                     mediaItemFilename,
                     cancellationToken);

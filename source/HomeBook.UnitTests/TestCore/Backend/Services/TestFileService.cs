@@ -1,5 +1,6 @@
 using System.Text;
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.Services;
 
 namespace HomeBook.UnitTests.TestCore.Backend.Services;
@@ -98,6 +99,14 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
     public void DeleteFile(string path)
     {
         _fileContents.Remove(NormalizePath(path));
+    }
+
+    public async Task<List<FileInformation>> GetFilesInDirectoryAsync(string storagePath,
+        CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+
+        return [];
     }
 
     // Additional methods for managing the virtual file system
