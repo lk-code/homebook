@@ -46,12 +46,12 @@
   <data name="Settings_NavMenu_Users_Text" xml:space="preserve">
         <value>Benutzer</value>
   </data>
-  <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
-        <value>Homebook Einstellungen</value>
-  </data>
-  <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
-        <value>Homebook Module</value>
-  </data>
+    <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
+        <value>HomeBook Einstellungen</value>
+    </data>
+    <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
+        <value>HomeBook Module</value>
+    </data>
   <data name="Settings_NavMenu_DeveloperComponents_Text" xml:space="preserve">
         <value>Dev UI</value>
   </data>
@@ -319,4 +319,7 @@
   <data name="Setup_AdminUser_Form_Password_Label" xml:space="preserve">
     <value>Passwort</value>
   </data>
+    <data name="Settings_NavMenu_HomebookStorage_Text" xml:space="preserve">
+        <value>HomeBook Speicher</value>
+    </data>
 </root>

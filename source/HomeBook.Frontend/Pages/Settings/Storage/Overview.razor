@@ -1,0 +1,109 @@
+@page "/Settings/Storage"
+
+@using HomeBook.Frontend.Abstractions.Contracts
+@using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.UI.Resources
+@using Humanizer
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<LocalizationStrings> Loc
+@inject ISystemStorageProvider SystemStorageProvider
+
+<MudContainer>
+
+    <MudGrid>
+
+        <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
+
+            <SettingsNavMenu/>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="8" lg="9" xl="9" xxl="9">
+
+            <!-- Application Information -->
+            <MudPaper Class="pa-6 frosted-b8"
+                      Elevation="2">
+
+                <MudStack Row="true"
+                          Class="align-center mb-1"
+                          Spacing="2">
+                    <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.DoughnutChart"
+                             Size="Size.Large"
+                             Class="mr-2"/>
+                    <MudText Typo="Typo.h5"
+                             Color="Color.Primary">
+                        @Loc[nameof(LocalizationStrings.Settings_Storage_StorageInformationsArea_Title)]
+                    </MudText>
+                </MudStack>
+
+                <MudDivider Class="mb-4"/>
+
+                <MudStack Spacing="2">
+
+                    <MudChart ChartType="ChartType.Pie"
+                              T="double"
+                              @bind-SelectedIndex="_selectedStorageSegmentIndex"
+                              Width="100%"
+                              Height="140px"
+                              i
+                              LegendPosition="Position.End"
+                              ChartSeries="@_storageUsageSeries"
+                              ChartLabels="@_storageUsageLabels"/>
+
+                    <MudStack Row="true" Class="align-center">
+                        <MudIcon Icon="@HomeBookIcons.Icons8.Windows11.Filled.ChartPie"
+                                 Size="Size.Small"
+                                 Color="Color.Primary"/>
+                        @if (_storageUsage is not null)
+                        {
+                            <MudText Typo="Typo.body2">
+                                <strong>@Loc[nameof(LocalizationStrings.Settings_Storage_UsedSpace_Title)]:</strong>
+                                <span>@string.Format(Loc[nameof(LocalizationStrings.Settings_Storage_UsedSpace_Text)], _storageUsage.FreeSpace.Bytes().Humanize(), _storageUsage.CompleteSpace.Bytes().Humanize())</span>
+                            </MudText>
+                        }
+                    </MudStack>
+
+                </MudStack>
+
+                @if (_storageUsage is not null
+                     && _storageUsage.StorageSizeTypes.Any())
+                {
+                    <MudStack Class="mt-5"
+                              Spacing="2">
+
+                        <MudList T="string">
+
+                            @foreach (StorageSizeTypeModel storageSizeType in _storageUsage.StorageSizeTypes)
+                            {
+                                <MudListItem Class="py-0"
+                                    Text="@string.Format($"{storageSizeType.ModuleName} - {storageSizeType.StorageSizeBytes.Bytes().Humanize()}")"
+                                    Expanded>
+
+                                    <NestedList>
+
+                                        @foreach (StorageSizeTypeModel moduleScopes in storageSizeType.Children)
+                                        {
+                                            <MudListItem Class="py-0">
+                                                @moduleScopes.ScopeKey
+                                                - @moduleScopes.StorageSizeBytes.Bytes().Humanize()
+                                            </MudListItem>
+                                        }
+
+                                    </NestedList>
+
+                                </MudListItem>
+                            }
+
+                        </MudList>
+
+                    </MudStack>
+                }
+
+            </MudPaper>
+
+        </MudItem>
+
+    </MudGrid>
+
+</MudContainer>
