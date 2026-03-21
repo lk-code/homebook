@@ -9,12 +9,26 @@ public interface ISystemStorageService
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<StorageSize> GetStorageSizeInformationsAsync(CancellationToken cancellationToken);
+    Task<List<MediaStorageSizeType>> GetMediaStorageUsageAsync(CancellationToken cancellationToken);
 
     /// <summary>
     ///
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<MediaStorageSizeType>> GetStorageSizeTypeAsync(CancellationToken cancellationToken);
+    Task<StorageUsage> GetCacheStorageUsageAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<StorageUsage> GetLogsStorageUsageAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<StorageUsage> GetTempDataStorageUsageAsync(CancellationToken cancellationToken);
 }

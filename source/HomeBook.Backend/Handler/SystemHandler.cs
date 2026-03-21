@@ -4,6 +4,7 @@ using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models;
+using HomeBook.Backend.Mappings;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Logging;
@@ -14,20 +15,20 @@ public class SystemHandler
 {
     public static async Task<IResult> HandleGetSystemStorageInfo(
         [FromServices] ISystemStorageService systemStorageService,
-        CancellationToken cancellationToken,
-        [FromServices] ILogger<SystemHandler>? logger = null)
+        [FromServices] ILogger<SystemHandler> logger,
+        CancellationToken cancellationToken)
     {
-        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
-            StorageSize storageInformation = await systemStorageService
-                .GetStorageSizeInformationsAsync(cancellationToken);
-            long totalSizeBytes = storageInformation.TotalSizeBytes;
-            long usedSizeBytes = storageInformation.UsedSizeBytes;
-            long freeSizeBytes = storageInformation.FreeSizeBytes;
+            StorageUsage cacheUsedSpace = await systemStorageService
+                .GetCacheStorageUsageAsync(cancellationToken);
+            StorageUsage logsUsedSpace = await systemStorageService
+                .GetLogsStorageUsageAsync(cancellationToken);
+            StorageUsage tempUsedSpace = await systemStorageService
+                .GetTempDataStorageUsageAsync(cancellationToken);
 
             List<MediaStorageSizeType> storageByType = await systemStorageService
-                .GetStorageSizeTypeAsync(cancellationToken);
+                .GetMediaStorageUsageAsync(cancellationToken);
             MediaStorageSizeTypeResponse[]? mediaStorageSizes = (storageByType ?? [])
                 .Select(x =>
                     new MediaStorageSizeTypeResponse(
@@ -37,9 +38,9 @@ public class SystemHandler
                         x.StorageSizeBytes))
                 .ToArray();
 
-            GetSystemStorageInfoResponse response = new(totalSizeBytes,
-                usedSizeBytes,
-                freeSizeBytes,
+            GetSystemStorageInfoResponse response = new(cacheUsedSpace.ToResponse(),
+                logsUsedSpace.ToResponse(),
+                tempUsedSpace.ToResponse(),
                 mediaStorageSizes);
             return TypedResults.Ok(response);
         }

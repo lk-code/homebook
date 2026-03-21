@@ -12,5 +12,5 @@ public interface ISystemStorageProvider
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<StorageSize> GetStorageUsageAsync(CancellationToken cancellationToken = default);
+    Task<StorageUsageInformations> GetStorageUsageAsync(CancellationToken cancellationToken = default);
 }

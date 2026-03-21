@@ -1,6 +1,6 @@
 namespace HomeBook.Frontend.Abstractions.Models;
 
-public record MediaStorageSizeType(
+public record MediaStorageUsageInformation(
     string ScopeKey,
     string ModuleKey,
     string ModuleName,

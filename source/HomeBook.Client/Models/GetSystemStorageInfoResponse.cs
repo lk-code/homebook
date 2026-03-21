@@ -14,20 +14,38 @@ namespace HomeBook.Client.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>The free property</summary>
-        public long? Free { get; set; }
-        /// <summary>The storageByType property</summary>
+        /// <summary>The cache property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse>? StorageByType { get; set; }
+        public global::HomeBook.Client.Models.StorageUsageResponse? Cache { get; set; }
 #nullable restore
 #else
-        public List<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse> StorageByType { get; set; }
+        public global::HomeBook.Client.Models.StorageUsageResponse Cache { get; set; }
 #endif
-        /// <summary>The total property</summary>
-        public long? Total { get; set; }
-        /// <summary>The used property</summary>
-        public long? Used { get; set; }
+        /// <summary>The logs property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::HomeBook.Client.Models.StorageUsageResponse? Logs { get; set; }
+#nullable restore
+#else
+        public global::HomeBook.Client.Models.StorageUsageResponse Logs { get; set; }
+#endif
+        /// <summary>The mediaStorage property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse>? MediaStorage { get; set; }
+#nullable restore
+#else
+        public List<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse> MediaStorage { get; set; }
+#endif
+        /// <summary>The temp property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::HomeBook.Client.Models.StorageUsageResponse? Temp { get; set; }
+#nullable restore
+#else
+        public global::HomeBook.Client.Models.StorageUsageResponse Temp { get; set; }
+#endif
         /// <summary>
         /// Instantiates a new <see cref="global::HomeBook.Client.Models.GetSystemStorageInfoResponse"/> and sets the default values.
         /// </summary>
@@ -53,10 +71,10 @@ namespace HomeBook.Client.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "free", n => { Free = n.GetLongValue(); } },
-                { "storageByType", n => { StorageByType = n.GetCollectionOfObjectValues<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse>(global::HomeBook.Client.Models.MediaStorageSizeTypeResponse.CreateFromDiscriminatorValue)?.AsList(); } },
-                { "total", n => { Total = n.GetLongValue(); } },
-                { "used", n => { Used = n.GetLongValue(); } },
+                { "cache", n => { Cache = n.GetObjectValue<global::HomeBook.Client.Models.StorageUsageResponse>(global::HomeBook.Client.Models.StorageUsageResponse.CreateFromDiscriminatorValue); } },
+                { "logs", n => { Logs = n.GetObjectValue<global::HomeBook.Client.Models.StorageUsageResponse>(global::HomeBook.Client.Models.StorageUsageResponse.CreateFromDiscriminatorValue); } },
+                { "mediaStorage", n => { MediaStorage = n.GetCollectionOfObjectValues<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse>(global::HomeBook.Client.Models.MediaStorageSizeTypeResponse.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "temp", n => { Temp = n.GetObjectValue<global::HomeBook.Client.Models.StorageUsageResponse>(global::HomeBook.Client.Models.StorageUsageResponse.CreateFromDiscriminatorValue); } },
             };
         }
         /// <summary>
@@ -66,10 +84,10 @@ namespace HomeBook.Client.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteLongValue("free", Free);
-            writer.WriteCollectionOfObjectValues<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse>("storageByType", StorageByType);
-            writer.WriteLongValue("total", Total);
-            writer.WriteLongValue("used", Used);
+            writer.WriteObjectValue<global::HomeBook.Client.Models.StorageUsageResponse>("cache", Cache);
+            writer.WriteObjectValue<global::HomeBook.Client.Models.StorageUsageResponse>("logs", Logs);
+            writer.WriteCollectionOfObjectValues<global::HomeBook.Client.Models.MediaStorageSizeTypeResponse>("mediaStorage", MediaStorage);
+            writer.WriteObjectValue<global::HomeBook.Client.Models.StorageUsageResponse>("temp", Temp);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

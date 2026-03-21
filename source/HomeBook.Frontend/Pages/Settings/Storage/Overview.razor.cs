@@ -1,5 +1,6 @@
 using HomeBook.Frontend.Abstractions.Models;
-using Humanizer;
+using HomeBook.Frontend.UI.Resources;
+using HomeBook.Frontend.ViewModels.Settings.Storage;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
@@ -8,104 +9,116 @@ namespace HomeBook.Frontend.Pages.Settings.Storage;
 public partial class Overview : ComponentBase
 {
     private int _selectedStorageSegmentIndex = -1;
-    private List<ChartSeries<double>> _storageUsageSeries = [];
+    private readonly List<ChartSeries<double>> _storageUsageSeries = [];
     private string[] _storageUsageLabels = [];
-    private StorageUsageModel? _storageUsage = null;
+    private StorageUsageInformations? _storageUsageInformations = null;
+    private readonly List<StorageEntryViewModel> _storageEntries = [];
 
     protected override async Task OnInitializedAsync()
     {
-        StorageUsageModel storageUsage = await ReadStorageUsage();
-        _storageUsage = storageUsage;
+        // load storage usage
+        _storageUsageInformations = await LoadStorageUsageAsync();
         StateHasChanged();
 
-        _storageUsageSeries =
-        [
-            new ChartSeries<double>
-            {
-                Name = "Storage",
-                Data = new ChartData<double>(
-                [
-                    storageUsage.UsedSpace,
-                    storageUsage.FreeSpace
-                ])
-            }
-        ];
+        // load data for list
+        PrepareForStorageUsageList(_storageUsageInformations);
+        StateHasChanged();
 
-        _storageUsageLabels = CreateStorageUsageLabels(storageUsage);
+        // load data for chart
+        PrepareForStorageUsageChart(_storageEntries);
         StateHasChanged();
     }
 
-    private async Task<StorageUsageModel> ReadStorageUsage()
+    private void PrepareForStorageUsageChart(List<StorageEntryViewModel> storageEntries)
     {
-        CancellationToken cancellationToken = CancellationToken.None;
-        StorageSize storageUsage = await SystemStorageProvider.GetStorageUsageAsync(cancellationToken);
+        _storageUsageSeries.Clear();
 
-        long totalSpaceBytes = storageUsage.TotalSizeBytes;
-        long usedSpaceBytes = storageUsage.UsedSizeBytes;
-        long freeSpaceBytes = storageUsage.FreeSizeBytes;
-        MediaStorageSizeType[] storageTypes = storageUsage.StorageSizeTypes;
+        List<double> storageUsages = [];
+        List<string> storageUsageLabels = [];
+        foreach (StorageEntryViewModel se in storageEntries)
+        {
+            storageUsageLabels.Add(se.Title);
+            storageUsages.Add(se.UsageSizeBytes);
+        }
 
-        List<(string ModuleKey, string ModuleName)> modules = storageTypes
+        _storageUsageSeries.Add(new ChartSeries<double>
+        {
+            Name = Loc[nameof(LocalizationStrings.Settings_Storage_UsageChart_Usage_Title)],
+            Data = new ChartData<double>(storageUsages)
+        });
+
+        _storageUsageLabels = storageUsageLabels.ToArray();
+        StateHasChanged();
+    }
+
+    private string GetTranslation(string key) =>
+        key.ToLowerInvariant() switch
+        {
+            "media" => Loc[nameof(LocalizationStrings.Settings_Storage_UsageType_Media_Title)],
+            "cache" => Loc[nameof(LocalizationStrings.Settings_Storage_UsageType_Cache_Title)],
+            "logs" => Loc[nameof(LocalizationStrings.Settings_Storage_UsageType_Logs_Title)],
+            "temp" => Loc[nameof(LocalizationStrings.Settings_Storage_UsageType_Temp_Title)],
+            _ => $"unknown translation key: {key}"
+        };
+
+    private void PrepareForStorageUsageList(StorageUsageInformations su)
+    {
+        _storageEntries.Clear();
+
+        // add cache storage
+        _storageEntries.Add(new StorageEntryViewModel(GetTranslation(su.CacheStorage.StorageKey),
+            su.CacheStorage.UsageSizeBytes));
+
+        // add logs storage
+        _storageEntries.Add(new StorageEntryViewModel(GetTranslation(su.LogStorage.StorageKey),
+            su.LogStorage.UsageSizeBytes));
+
+        // add temp-data storage
+        _storageEntries.Add(new StorageEntryViewModel(GetTranslation(su.TempDataStorage.StorageKey),
+            su.TempDataStorage.UsageSizeBytes));
+
+        // add media storage
+        List<(string ModuleKey, string ModuleName)> modules = su.MediaStorage
             .Select(s => (s.ModuleKey, s.ModuleName))
             .Distinct()
             .ToList();
-        List<StorageSizeTypeModel> moduleItems = new();
-        foreach (var module in modules)
+        long mediaTotalUsedSpace = 0;
+        List<StorageEntryViewModel> mediaSubEntries = [];
+        foreach ((string ModuleKey, string ModuleName) module in modules)
         {
-            var storageTypesForModule = storageTypes
+            // module level
+            long moduleSizeBytes = 0;
+            List<StorageEntryViewModel> moduleSubEntries = [];
+
+            // load all scopes for module
+            MediaStorageUsageInformation[] moduleStorages = su.MediaStorage
                 .Where(s => s.ModuleKey == module.ModuleKey)
                 .ToArray();
+            foreach (MediaStorageUsageInformation moduleStorage in moduleStorages)
+            {
+                moduleSizeBytes += moduleStorage.StorageSizeBytes;
+                moduleSubEntries.Add(new(moduleStorage.ScopeKey,
+                    moduleStorage.StorageSizeBytes));
+            }
 
-            long moduleSizeBytes = storageTypesForModule.Sum(s => s.StorageSizeBytes);
-            StorageSizeTypeModel[] moduleStorageTypes = storageTypesForModule.Select(s =>
-                    new StorageSizeTypeModel(
-                        s.ScopeKey,
-                        s.ModuleKey,
-                        s.ModuleName,
-                        s.StorageSizeBytes,
-                        null))
-                .ToArray();
-            moduleItems.Add(new StorageSizeTypeModel(
-                null,
-                module.ModuleKey,
-                module.ModuleName,
+            StorageEntryViewModel mediaSubEntry = new($"{module.ModuleName}",
                 moduleSizeBytes,
-                moduleStorageTypes));
+                moduleSubEntries);
+            mediaTotalUsedSpace += moduleSizeBytes;
+            mediaSubEntries.Add(mediaSubEntry);
         }
 
-        return new StorageUsageModel(totalSpaceBytes,
-            usedSpaceBytes,
-            freeSpaceBytes,
-            moduleItems
-                .ToArray());
+        StorageEntryViewModel mediaStorageEntry = new(GetTranslation("media"),
+            mediaTotalUsedSpace,
+            mediaSubEntries);
+        _storageEntries.Add(mediaStorageEntry);
     }
 
-    private static string[] CreateStorageUsageLabels(StorageUsageModel storageUsage)
+    private async Task<StorageUsageInformations> LoadStorageUsageAsync()
     {
-        double totalSpace = storageUsage.UsedSpace + storageUsage.FreeSpace;
+        CancellationToken cancellationToken = CancellationToken.None;
+        StorageUsageInformations storageUsage = await SystemStorageProvider.GetStorageUsageAsync(cancellationToken);
 
-        if (totalSpace <= 0)
-        {
-            return ["Used", "Free"];
-        }
-
-        return
-        [
-            $"Used ({storageUsage.UsedSpace.Bytes().Humanize()})",
-            $"Free ({storageUsage.FreeSpace.Bytes().Humanize()})"
-        ];
+        return storageUsage;
     }
-
-    private sealed record StorageUsageModel(
-        long CompleteSpace,
-        long UsedSpace,
-        long FreeSpace,
-        StorageSizeTypeModel[] StorageSizeTypes);
-
-    private sealed record StorageSizeTypeModel(
-        string? ScopeKey,
-        string ModuleKey,
-        string ModuleName,
-        long StorageSizeBytes,
-        StorageSizeTypeModel[]? Children);
 }
