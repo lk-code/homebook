@@ -24,6 +24,9 @@ public class MediaService(
                 cancellationToken);
 
         string mediaHost = configuration["Backend:Host"];
+        if (string.IsNullOrEmpty(mediaHost))
+            mediaHost = configuration["Frontend:Host"];
+
         string mediaLink = response?.MediaUri;
         string absoluteMediaLink = $"{mediaHost}{mediaLink}";
 
