@@ -3,7 +3,7 @@
 @using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.UI.Resources
-@using Humanizer
+@using HomeBook.Frontend.ViewModels.Settings.Storage
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<LocalizationStrings> Loc
@@ -46,53 +46,59 @@
                               @bind-SelectedIndex="_selectedStorageSegmentIndex"
                               Width="100%"
                               Height="140px"
-                              i
                               LegendPosition="Position.End"
                               ChartSeries="@_storageUsageSeries"
                               ChartLabels="@_storageUsageLabels"/>
 
-                    <MudStack Row="true" Class="align-center">
-                        <MudIcon Icon="@HomeBookIcons.Icons8.Windows11.Filled.ChartPie"
-                                 Size="Size.Small"
-                                 Color="Color.Primary"/>
-                        @if (_storageUsage is not null)
-                        {
-                            <MudText Typo="Typo.body2">
-                                <strong>@Loc[nameof(LocalizationStrings.Settings_Storage_UsedSpace_Title)]:</strong>
-                                <span>@string.Format(Loc[nameof(LocalizationStrings.Settings_Storage_UsedSpace_Text)], _storageUsage.FreeSpace.Bytes().Humanize(), _storageUsage.CompleteSpace.Bytes().Humanize())</span>
-                            </MudText>
-                        }
-                    </MudStack>
-
                 </MudStack>
 
-                @if (_storageUsage is not null
-                     && _storageUsage.StorageSizeTypes.Any())
+                @if (_storageEntries.Any())
                 {
                     <MudStack Class="mt-5"
                               Spacing="2">
 
                         <MudList T="string">
 
-                            @foreach (StorageSizeTypeModel storageSizeType in _storageUsage.StorageSizeTypes)
+                            @foreach (StorageEntryViewModel se in _storageEntries)
                             {
-                                <MudListItem Class="py-0"
-                                    Text="@string.Format($"{storageSizeType.ModuleName} - {storageSizeType.StorageSizeBytes.Bytes().Humanize()}")"
-                                    Expanded>
+                                @if (!se.SubEntries.Any())
+                                {
+                                    <MudListItem Class="py-0"
+                                                 Text="@string.Format($"{se.Title} - {se.UsageSizeFormatted}")"/>
+                                }
+                                else
+                                {
+                                    <MudListItem Class="py-0"
+                                                 Text="@string.Format($"{se.Title} - {se.UsageSizeFormatted}")"
+                                                 ExpandIconColor="Color.Transparent"
+                                                 Expanded>
 
-                                    <NestedList>
+                                        <NestedList>
 
-                                        @foreach (StorageSizeTypeModel moduleScopes in storageSizeType.Children)
-                                        {
-                                            <MudListItem Class="py-0">
-                                                @moduleScopes.ScopeKey
-                                                - @moduleScopes.StorageSizeBytes.Bytes().Humanize()
-                                            </MudListItem>
-                                        }
+                                            @foreach (StorageEntryViewModel seLevel2 in se.SubEntries)
+                                            {
+                                                <MudListItem Class="py-0"
+                                                             Text="@string.Format($"{seLevel2.Title} - {seLevel2.UsageSizeFormatted}")"
+                                                             ExpandIconColor="Color.Transparent"
+                                                             Expanded>
 
-                                    </NestedList>
+                                                    <NestedList>
 
-                                </MudListItem>
+                                                        @foreach (StorageEntryViewModel seLevel3 in seLevel2.SubEntries)
+                                                        {
+                                                            <MudListItem Class="py-0 ps-13"
+                                                                         Text="@string.Format($"{seLevel3.Title} - {seLevel3.UsageSizeFormatted}")"/>
+                                                        }
+
+                                                    </NestedList>
+
+                                                </MudListItem>
+                                            }
+
+                                        </NestedList>
+
+                                    </MudListItem>
+                                }
                             }
 
                         </MudList>

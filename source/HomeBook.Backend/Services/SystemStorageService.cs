@@ -17,31 +17,12 @@ public class SystemStorageService(
     : ISystemStorageService
 {
     /// <inheritdoc />
-    public async Task<StorageSize> GetStorageSizeInformationsAsync(CancellationToken cancellationToken)
-    {
-        logger.LogInformation("Retrieving system storage information");
-
-        DriveInfo drive = DriveInfo.GetDrives()
-            .First(d => d.IsReady
-                        && d.Name == Path.GetPathRoot(Environment.SystemDirectory));
-
-        long totalBytes = drive.TotalSize;
-        long freeBytes = drive.AvailableFreeSpace;
-        long usedBytes = (totalBytes - freeBytes);
-
-        StorageSize storageSize = new(totalBytes,
-            usedBytes,
-            freeBytes);
-        return storageSize;
-    }
-
-    /// <inheritdoc />
-    public async Task<List<MediaStorageSizeType>> GetStorageSizeTypeAsync(CancellationToken cancellationToken)
+    public async Task<List<MediaStorageSizeType>> GetMediaStorageUsageAsync(CancellationToken cancellationToken)
     {
         logger.LogInformation("Retrieving storage usage grouped by scope");
 
-        List<StorageScopeRegistration> entities =
-            await storageScopeRegistrationRepository.GetAllAsync(cancellationToken);
+        List<StorageScopeRegistration> entities = await storageScopeRegistrationRepository
+            .GetAllAsync(cancellationToken);
 
         List<IModule> registeredModules = serviceProvider.GetServices<IModule>()
             .ToList();
@@ -64,9 +45,8 @@ public class SystemStorageService(
 
             // get all files in storage
             string storagePath = Path.Combine(applicationPathProvider.StorageDirectory, scopeId.ToString());
-            List<FileInformation> files = await fileSystemService.GetFilesInDirectoryAsync(storagePath,
+            long storageSizeBytes = await GetStorageSizeByPathAsync(storagePath,
                 cancellationToken);
-            long storageSizeBytes = files.Sum(x => x.SizeBytes);
 
             MediaStorageSizeType storageSizeType = new(scopeKey,
                 moduleKey,
@@ -77,5 +57,47 @@ public class SystemStorageService(
         }
 
         return result;
+    }
+
+    /// <inheritdoc />
+    public async Task<StorageUsage> GetCacheStorageUsageAsync(CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Retrieving storage usage for cache directory");
+        string path = applicationPathProvider.CacheDirectory;
+        long storageSizeBytes = await GetStorageSizeByPathAsync(path,
+            cancellationToken);
+
+        return new StorageUsage("cache", storageSizeBytes);
+    }
+
+    /// <inheritdoc />
+    public async Task<StorageUsage> GetLogsStorageUsageAsync(CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Retrieving storage usage for logs directory");
+        string path = applicationPathProvider.LogDirectory;
+        long storageSizeBytes = await GetStorageSizeByPathAsync(path,
+            cancellationToken);
+
+        return new StorageUsage("logs", storageSizeBytes);
+    }
+
+    /// <inheritdoc />
+    public async Task<StorageUsage> GetTempDataStorageUsageAsync(CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Retrieving storage usage for temp data directory");
+        string path = applicationPathProvider.TempDirectory;
+        long storageSizeBytes = await GetStorageSizeByPathAsync(path,
+            cancellationToken);
+
+        return new StorageUsage("temp", storageSizeBytes);
+    }
+
+    private async Task<long> GetStorageSizeByPathAsync(string storagePath,
+        CancellationToken cancellationToken)
+    {
+        List<FileInformation> files = await fileSystemService.GetFilesInDirectoryAsync(storagePath,
+            cancellationToken);
+        long storageSizeBytes = files.Sum(x => x.SizeBytes);
+        return storageSizeBytes;
     }
 }

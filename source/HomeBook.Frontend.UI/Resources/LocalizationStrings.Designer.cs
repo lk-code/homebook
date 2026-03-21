@@ -1478,5 +1478,35 @@ namespace HomeBook.Frontend.UI.Resources {
                 return ResourceManager.GetString("Settings_Storage_UsedSpace_Text", resourceCulture);
             }
         }
+        
+        public static string Settings_Storage_UsageChart_Usage_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageChart_Usage_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Media_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Media_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Cache_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Cache_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Temp_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Temp_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Logs_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Logs_Title", resourceCulture);
+            }
+        }
     }
 }

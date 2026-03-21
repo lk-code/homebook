@@ -740,4 +740,19 @@
     <data name="Settings_Storage_UsedSpace_Text" xml:space="preserve">
         <value>{0} of {1} available</value>
     </data>
+    <data name="Settings_Storage_UsageChart_Usage_Title" xml:space="preserve">
+        <value>Usage</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
+        <value>Media Storage</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
+        <value>Cache</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Temp_Title" xml:space="preserve">
+        <value>Temp</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Logs_Title" xml:space="preserve">
+        <value>Logs</value>
+    </data>
 </root>
