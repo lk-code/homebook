@@ -3,6 +3,7 @@ using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Modules.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Services;
 
@@ -11,12 +12,15 @@ public class SystemStorageService(
     IServiceProvider serviceProvider,
     IStorageScopeRegistrationRepository storageScopeRegistrationRepository,
     IApplicationPathProvider applicationPathProvider,
-    IFileSystemService fileSystemService)
+    IFileSystemService fileSystemService,
+    ILogger<SystemStorageService> logger)
     : ISystemStorageService
 {
     /// <inheritdoc />
     public async Task<StorageSize> GetStorageSizeInformationsAsync(CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving system storage information");
+
         DriveInfo drive = DriveInfo.GetDrives()
             .First(d => d.IsReady
                         && d.Name == Path.GetPathRoot(Environment.SystemDirectory));
@@ -34,6 +38,8 @@ public class SystemStorageService(
     /// <inheritdoc />
     public async Task<List<MediaStorageSizeType>> GetStorageSizeTypeAsync(CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving storage usage grouped by scope");
+
         List<StorageScopeRegistration> entities =
             await storageScopeRegistrationRepository.GetAllAsync(cancellationToken);
 

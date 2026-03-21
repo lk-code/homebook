@@ -29,7 +29,7 @@ public class RuntimeConfigurationProvider(
         }
         catch (JsonException ex)
         {
-            logger.LogError(ex, "Failed to parse JSON from configuration file: {Path}", appSettingsPath);
+            logger.LogError(ex, "Failed to parse runtime configuration");
             throw new InvalidOperationException($"Invalid JSON in configuration file: {appSettingsPath}", ex);
         }
 
@@ -49,7 +49,7 @@ public class RuntimeConfigurationProvider(
 
         await fileSystemService.FileWriteAllTextAsync(appSettingsPath, updatedJson, cancellationToken);
 
-        logger.LogInformation("Successfully updated configuration key '{Key}'", key);
+        logger.LogInformation("Successfully updated runtime configuration");
     }
 
     private static Dictionary<string, object> ConvertJsonElementToDictionary(JsonElement element)

@@ -14,6 +14,8 @@ public class UserRepository(
     public async Task<User> CreateUserAsync(User user,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Creating user");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         dbContext.Add(user);
         await dbContext.SaveChangesAsync(cancellationToken);
@@ -25,6 +27,8 @@ public class UserRepository(
     public async Task<bool> ContainsUserAsync(string username,
         CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Checking whether user exists");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         return (await GetUserByUsernameAsync(username, cancellationToken)) is not null;
     }
@@ -34,6 +38,8 @@ public class UserRepository(
         CancellationToken cancellationToken = default,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving user");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         return await dbContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
@@ -43,6 +49,8 @@ public class UserRepository(
         CancellationToken cancellationToken = default,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving user by username");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         return await dbContext.Set<User>().FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
     }
@@ -50,6 +58,8 @@ public class UserRepository(
     /// <inheritdoc />
     public async Task<IEnumerable<User>> GetAllAsync(CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving all users from repository");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         return await dbContext.Users.ToListAsync(cancellationToken);
     }
@@ -61,7 +71,7 @@ public class UserRepository(
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         dbContext.Update(user);
 
-        logger.LogInformation("SaveChangesAsync via UpdateUserAsync for user {UserId}", user.Id);
+        logger.LogInformation("Persisting user update");
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -83,7 +93,7 @@ public class UserRepository(
 
         dbContext.Update(user);
 
-        logger.LogInformation("SaveChangesAsync via UpdateAsyncfor user {UserId}", user.Id);
+        logger.LogInformation("Persisting user update");
 
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -102,7 +112,7 @@ public class UserRepository(
 
         dbContext.Remove(user);
 
-        logger.LogInformation("SaveChangesAsync via DeleteAsync for user {UserId}", user.Id);
+        logger.LogInformation("Deleting user");
 
         await dbContext.SaveChangesAsync(cancellationToken);
 

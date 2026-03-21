@@ -1,9 +1,10 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Sqlite;
 
-public class SqliteProbe : IDatabaseProbe
+public class SqliteProbe(ILogger<SqliteProbe> logger) : IDatabaseProbe
 {
     /// <inheritdoc />
     public string ProviderName { get; } = "SQLITE";
@@ -25,6 +26,8 @@ public class SqliteProbe : IDatabaseProbe
     {
         try
         {
+            logger.LogInformation("Checking SQLite connectivity");
+
             string connectionString = ConnectionStringBuilder.Build(filePath);
 
             await using SqliteConnection connection = new(connectionString);
@@ -38,8 +41,9 @@ public class SqliteProbe : IDatabaseProbe
 
             return isConnected;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "SQLite connectivity check failed");
             return false;
         }
     }

@@ -26,27 +26,27 @@ public class AccountProvider(
 
         try
         {
+            logger.LogInformation($"try to login user: {username}");
+
             // Benutzer aus der Datenbank laden
             User? user = await userRepository.GetUserByUsernameAsync(username, cancellationToken);
             if (user == null)
             {
-                logger.LogWarning("Login failed: User '{Username}' not found", username);
+                logger.LogWarning($"Login failed because the user {username} could not be resolved");
                 return null;
             }
 
             // Prüfen ob der Benutzer deaktiviert ist
             if (user.Disabled.HasValue)
             {
-                logger.LogWarning("Login failed: User '{Username}' is disabled", username);
+                logger.LogWarning($"Login failed because the account {username} is disabled");
                 return null;
             }
 
             // Hash-Provider basierend auf dem gespeicherten Hash-Typ erstellen
             if (!hashProviderFactory.IsSupported(user.PasswordHashType))
             {
-                logger.LogError("Unsupported hash algorithm '{HashType}' for user '{Username}'",
-                    user.PasswordHashType,
-                    username);
+                logger.LogError("Login failed because the configured hash algorithm is unsupported");
                 return null;
             }
 
@@ -55,7 +55,7 @@ public class AccountProvider(
             // Passwort verifizieren
             if (!hashProvider.Verify(password, user.PasswordHash))
             {
-                logger.LogWarning("Login failed: Invalid password for user '{Username}'", username);
+                logger.LogWarning("Login failed because the password verification did not succeed");
                 return null;
             }
 
@@ -64,12 +64,12 @@ public class AccountProvider(
                 user.Username,
                 user.IsAdmin);
 
-            logger.LogInformation("Token generated for user '{Username}'", username);
+            logger.LogInformation($"Login for user {username}completed successfully");
             return tokenResult;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error during login for user '{Username}'", username);
+            logger.LogError(ex, $"Error during login user {username}");
             return null;
         }
     }

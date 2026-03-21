@@ -20,16 +20,16 @@ public class DatabaseManager(ILogger<DatabaseManager> logger) : IDatabaseManager
         {
             string connectionString = $"Host={databaseHost};Port={databasePort};Database={databaseName};Username={databaseUserName};Password={databaseUserPassword};Timeout=5;";
 
-            logger.LogInformation("Checking PostgreSQL database availability with connection string: {ConnectionString}", connectionString);
+            logger.LogInformation("Checking PostgreSQL database availability");
 
             await using NpgsqlConnection connection = new(connectionString);
             await connection.OpenAsync(cancellationToken);
 
             return true;
         }
-        catch(Exception err)
+        catch (Exception err)
         {
-            logger.LogError(err, "Error while checking postgresql database availability");
+            logger.LogError(err, "Error while checking PostgreSQL database availability");
 
             return false;
         }

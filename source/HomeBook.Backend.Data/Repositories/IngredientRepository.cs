@@ -4,18 +4,22 @@ using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc />
 public class IngredientRepository(
     IDbContextFactory<AppDbContext> factory,
-    IStringNormalizer stringNormalizer) : IIngredientRepository
+    IStringNormalizer stringNormalizer,
+    ILogger<IngredientRepository> logger) : IIngredientRepository
 {
     /// <inheritdoc />
     public async Task<Guid> CreateOrUpdateAsync(RecipeIngredient entity,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating or updating ingredient");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         entity.Normalize(stringNormalizer);
@@ -58,6 +62,8 @@ public class IngredientRepository(
         CancellationToken cancellationToken,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving ingredient");
+
         if (appDbContext is null)
         {
             await using AppDbContext newDbContext = await factory.CreateDbContextAsync(cancellationToken);
@@ -75,6 +81,8 @@ public class IngredientRepository(
         CancellationToken cancellationToken,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving ingredient by name");
+
         if (appDbContext is null)
         {
             await using AppDbContext newDbContext = await factory.CreateDbContextAsync(cancellationToken);

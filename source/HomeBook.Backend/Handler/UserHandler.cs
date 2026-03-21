@@ -38,7 +38,7 @@ public class UserHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while getting user preference");
+            logger.LogError(err, "Error while retrieving user locale preference");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -70,7 +70,7 @@ public class UserHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while updating user preference");
+            logger.LogError(err, "Error while updating user locale preference");
             return TypedResults.InternalServerError(err.Message);
         }
     }

@@ -1,17 +1,22 @@
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc />
-public class SavingGoalsRepository(IDbContextFactory<AppDbContext> factory)
+public class SavingGoalsRepository(
+    IDbContextFactory<AppDbContext> factory,
+    ILogger<SavingGoalsRepository> logger)
     : ISavingGoalsRepository
 {
     /// <inheritdoc />
     public async Task<IEnumerable<SavingGoal>> GetAllSavingGoalsAsync(Guid userId,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving saving goals");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         List<SavingGoal> entities = await dbContext.Set<SavingGoal>()
@@ -26,6 +31,8 @@ public class SavingGoalsRepository(IDbContextFactory<AppDbContext> factory)
         CancellationToken cancellationToken,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving saving goal");
+
         if (appDbContext is null)
         {
             await using AppDbContext newDbContext = await factory.CreateDbContextAsync(cancellationToken);
@@ -44,6 +51,8 @@ public class SavingGoalsRepository(IDbContextFactory<AppDbContext> factory)
         SavingGoal entity,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating or updating saving goal");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         SavingGoal? existing = await GetByIdAsync(userId,
@@ -69,6 +78,8 @@ public class SavingGoalsRepository(IDbContextFactory<AppDbContext> factory)
         Guid entityId,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Deleting saving goal");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         await dbContext.Set<SavingGoal>()

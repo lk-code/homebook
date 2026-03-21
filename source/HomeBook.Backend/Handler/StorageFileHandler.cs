@@ -4,13 +4,15 @@ using HomeBook.Backend.DTOs.Responses.Storage;
 using Microsoft.AspNetCore.Mvc;
 using HomeBook.Backend.Requests;
 using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
-public static class StorageFileHandler
+public class StorageFileHandler
 {
     // GET - Read file content
     public static async Task<IResult> HandleGetFileByIdMedia(Guid mediaId,
+        [FromServices] ILogger<StorageFileHandler> logger,
         [FromServices] IMediaProvider mediaProvider,
         [FromServices] IStorageProvider storageProvider,
         CancellationToken cancellationToken)
@@ -42,7 +44,7 @@ public static class StorageFileHandler
         }
         catch (Exception err)
         {
-            // TODO: log and return error
+            logger.LogError(err, "Error while retrieving media file");
             return TypedResults.Problem();
         }
     }
@@ -50,6 +52,7 @@ public static class StorageFileHandler
     // GET - Read file content
     public static async Task<IResult> HandleGetFile([FromQuery] string filename,
         [FromQuery] Guid scopeId,
+        [FromServices] ILogger<StorageFileHandler> logger,
         [FromServices] IStorageProvider storageProvider,
         CancellationToken cancellationToken)
     {
@@ -72,13 +75,14 @@ public static class StorageFileHandler
         }
         catch (Exception err)
         {
-            // TODO: log and return error
+            logger.LogError(err, "Error while retrieving file");
             return TypedResults.Problem();
         }
     }
 
     // POST - Create/Update file
     public static async Task<IResult> HandlePostFile([FromBody] FilePostRequest request,
+        [FromServices] ILogger<StorageFileHandler> logger,
         [FromServices] IStorageProvider storageProvider,
         CancellationToken cancellationToken)
     {
@@ -100,7 +104,7 @@ public static class StorageFileHandler
         }
         catch (Exception err)
         {
-            // TODO: log and return error
+            logger.LogError(err, "Error while writing file");
             return TypedResults.Problem();
         }
     }
@@ -108,6 +112,7 @@ public static class StorageFileHandler
     // DELETE - Delete file
     public static async Task<IResult> HandleDeleteFile([FromQuery] string filename,
         [FromQuery] Guid scopeId,
+        [FromServices] ILogger<StorageFileHandler> logger,
         [FromServices] IStorageProvider storageProvider,
         CancellationToken cancellationToken)
     {
@@ -128,7 +133,7 @@ public static class StorageFileHandler
         }
         catch (Exception err)
         {
-            // TODO: log and return error
+            logger.LogError(err, "Error while deleting file");
             return TypedResults.Problem();
         }
     }

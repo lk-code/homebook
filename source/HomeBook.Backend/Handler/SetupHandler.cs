@@ -51,7 +51,7 @@ public class SetupHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while checking setup availability");
+            logger.LogError(err, "Error while retrieving setup availability");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -83,7 +83,7 @@ public class SetupHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while checking setup availability");
+            logger.LogError(err, "Error while retrieving license information");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -124,13 +124,13 @@ public class SetupHandler
         }
         catch (ValidationException err)
         {
-            logger.LogError(err, "Validation error while getting database configuration");
+            logger.LogError(err, "Validation error while retrieving database configuration");
             string[] errors = err.Errors.Select(x => $"{x.PropertyName}, {x.ErrorMessage}").ToArray();
             return TypedResults.BadRequest(errors);
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while checking database configuration");
+            logger.LogError(err, "Error while retrieving database configuration");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -197,7 +197,7 @@ public class SetupHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while migrating database");
+            logger.LogError(err, "Error while retrieving pre-configured user");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -225,7 +225,7 @@ public class SetupHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while migrating database");
+            logger.LogError(err, "Error while retrieving setup configuration");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -302,7 +302,7 @@ public class SetupHandler
         }
         catch (ValidationException err)
         {
-            logger.LogError(err, "Validation error while checking database configuration");
+            logger.LogError(err, "Validation error while starting setup");
             return TypedResults.BadRequest(err.Errors.Select(x => x.ErrorMessage).ToArray());
         }
         catch (Exception err)

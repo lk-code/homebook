@@ -7,13 +7,16 @@ namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc />
 public class UserPreferenceRepository(
-    IDbContextFactory<AppDbContext> factory) : IUserPreferenceRepository
+    IDbContextFactory<AppDbContext> factory,
+    ILogger<UserPreferenceRepository> logger) : IUserPreferenceRepository
 {
     /// <inheritdoc />
     public async Task<UserPreference?> GetPreferenceForUserByKeyAsync(Guid userId,
         string key,
         CancellationToken cancellationToken)
     {
+        logger.LogDebug("Retrieving user preference");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         UserPreference? userPreference = await dbContext.Set<UserPreference>()
@@ -26,6 +29,8 @@ public class UserPreferenceRepository(
     public async Task SetPreferenceForUserByKeyAsync(UserPreference entity,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Setting user preference");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         UserPreference? existingEntity = await dbContext.Set<UserPreference>()

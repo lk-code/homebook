@@ -51,11 +51,11 @@ public class UpdateHandlerTests
 
         // Act
         var result = await UpdateHandler.HandleStartUpdate(
-            _loggerFactory.CreateLogger<SetupHandler>(),
             _setupInstanceManager,
             _hostApplicationLifetime,
             _updateProcessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _loggerFactory.CreateLogger<UpdateHandler>());
 
         // Assert
         var response = result.ShouldBeOfType<Conflict>();
@@ -75,11 +75,11 @@ public class UpdateHandlerTests
 
         // Act
         var result = await UpdateHandler.HandleStartUpdate(
-            _loggerFactory.CreateLogger<SetupHandler>(),
             _setupInstanceManager,
             _hostApplicationLifetime,
             _updateProcessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _loggerFactory.CreateLogger<UpdateHandler>());
 
         // Assert
         var response = result.ShouldBeOfType<Ok>();

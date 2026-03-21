@@ -1,12 +1,14 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
-public static class StorageScopeHandler
+public class StorageScopeHandler
 {
     // GET - Get scope ID by scope name
     public static async Task<IResult> HandleGetScopeIdByName([FromQuery] string name,
+        [FromServices] ILogger<StorageScopeHandler> logger,
         [FromServices] IStorageProvider storageProvider,
         CancellationToken cancellationToken)
     {
@@ -22,9 +24,9 @@ public static class StorageScopeHandler
 
             return TypedResults.Ok(scopeId.Value);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // TODO: log and return error
+            logger.LogError(ex, "Error while retrieving storage scope identifier");
             return TypedResults.Problem("An error occurred while retrieving the scope ID", statusCode: 500);
         }
     }

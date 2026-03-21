@@ -3,18 +3,22 @@ using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc />
 public class RecipesRepository(
     IDbContextFactory<AppDbContext> factory,
-    IStringNormalizer stringNormalizer)
+    IStringNormalizer stringNormalizer,
+    ILogger<RecipesRepository> logger)
     : IRecipesRepository
 {
     public async Task<IEnumerable<Recipe>> GetAsync(string? searchFilter,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving recipes");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         var baseQuery = dbContext.Set<Recipe>()
@@ -39,6 +43,8 @@ public class RecipesRepository(
         CancellationToken cancellationToken,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving recipe");
+
         if (appDbContext is null)
         {
             await using AppDbContext newDbContext = await factory.CreateDbContextAsync(cancellationToken);
@@ -61,6 +67,8 @@ public class RecipesRepository(
     public async Task<Guid> CreateOrUpdateAsync(Recipe entity,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating or updating recipe");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         bool exists = await dbContext.Recipes
@@ -112,6 +120,8 @@ public class RecipesRepository(
     public async Task DeleteAsync(Guid entityId,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Deleting recipe");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         await dbContext.Set<Recipe>()
@@ -123,6 +133,8 @@ public class RecipesRepository(
     public async Task<Recipe2RecipeIngredient> CreateOrUpdateAsync(Recipe2RecipeIngredient entity,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating or updating recipe ingredient relation");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         Recipe2RecipeIngredient? existing = await GetAsync(entity.RecipeId,
@@ -155,6 +167,8 @@ public class RecipesRepository(
         CancellationToken cancellationToken,
         AppDbContext? appDbContext = null)
     {
+        logger.LogDebug("Retrieving recipe ingredient relation");
+
         if (appDbContext is null)
         {
             await using AppDbContext newDbContext = await factory.CreateDbContextAsync(cancellationToken);
@@ -175,6 +189,8 @@ public class RecipesRepository(
     public async Task<RecipeStep> CreateRecipeStepAsync(RecipeStep entity,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating recipe step");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         dbContext.RecipeSteps.Add(entity);
@@ -188,6 +204,8 @@ public class RecipesRepository(
         string name,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating recipe name");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         await dbContext.Recipes
@@ -202,6 +220,8 @@ public class RecipesRepository(
     public async Task<Guid[]> GetImagesByRecipeIdAsync(Guid id,
         CancellationToken cancellationToken)
     {
+        logger.LogDebug("Retrieving recipe image identifiers");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         Guid[]? entities = await dbContext.Recipes

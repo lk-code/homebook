@@ -39,9 +39,7 @@ public class SavingGoalHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while getting saving goals for user {UserId}",
-                user.GetUserId());
+            logger.LogError(err, "Error while retrieving saving goals");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -116,9 +114,7 @@ public class SavingGoalHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while updating saving goal name for {SavingGoalId}",
-                savingGoalId);
+            logger.LogError(err, "Error while updating saving goal name");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -154,9 +150,7 @@ public class SavingGoalHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while updating saving goal appearance for {SavingGoalId}",
-                savingGoalId);
+            logger.LogError(err, "Error while updating saving goal appearance");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -195,9 +189,7 @@ public class SavingGoalHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while updating saving goal amounts for {SavingGoalId}",
-                savingGoalId);
+            logger.LogError(err, "Error while updating saving goal amounts");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -232,9 +224,7 @@ public class SavingGoalHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while updating saving goal infos for {SavingGoalId}",
-                savingGoalId);
+            logger.LogError(err, "Error while updating saving goal information");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -266,9 +256,7 @@ public class SavingGoalHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while deleting saving goal for {Id}",
-                id);
+            logger.LogError(err, "Error while deleting saving goal");
             return TypedResults.InternalServerError(err.Message);
         }
     }

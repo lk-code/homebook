@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using HomeBook.Backend.Abstractions.Models;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace HomeBook.Backend.Handler;
 
-public static class AccountHandler
+public class AccountHandler
 {
-    public static async Task<Results<Ok<LoginResponse>, BadRequest<ValidationProblemDetails>, UnauthorizedHttpResult>>
-        HandleLogin([FromBody] LoginRequest request,
-            [FromServices] IAccountProvider accountProvider,
-            [FromServices] ILogger<object> logger,
-            CancellationToken cancellationToken)
+    public static async Task<IResult> HandleLogin([FromBody] LoginRequest request,
+        [FromServices] IAccountProvider accountProvider,
+        CancellationToken cancellationToken,
+        [FromServices] ILogger<AccountHandler> logger)
     {
         try
         {
@@ -64,10 +65,11 @@ public static class AccountHandler
 
     public static async Task<Results<Ok<string>, BadRequest<string>>> HandleLogout(
         [FromServices] IAccountProvider accountProvider,
-        [FromServices] ILogger<object> logger,
         [FromServices] IHttpContextAccessor httpContextAccessor,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        [FromServices] ILogger<AccountHandler>? logger = null)
     {
+        logger ??= NullLogger<AccountHandler>.Instance;
         try
         {
             HttpContext? httpContext = httpContextAccessor.HttpContext;
@@ -87,17 +89,17 @@ public static class AccountHandler
 
             string token = authHeader["Bearer ".Length..].Trim();
 
-            logger.LogInformation("Logout attempt for token");
+            logger.LogInformation("Processing logout request");
 
             bool success = await accountProvider.LogoutAsync(token, cancellationToken);
 
             if (!success)
             {
-                logger.LogWarning("Logout failed - invalid or expired token");
+                logger.LogWarning("Logout request rejected");
                 return TypedResults.BadRequest("Logout failed");
             }
 
-            logger.LogInformation("Logout successful");
+            logger.LogInformation("Logout request completed successfully");
             return TypedResults.Ok("Logout successful");
         }
         catch (Exception ex)

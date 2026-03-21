@@ -1,12 +1,14 @@
 using HomeBook.Backend.Mappings;
 using HomeBook.Backend.Responses;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
-public static class PlatformHandler
+public class PlatformHandler
 {
-    public static IResult HandleGetLocales([FromServices] IConfiguration configuration,
+    public static IResult HandleGetLocales([FromServices] ILogger<PlatformHandler> logger,
+        [FromServices] IConfiguration configuration,
         CancellationToken cancellationToken)
     {
         try
@@ -27,8 +29,9 @@ public static class PlatformHandler
 
             return TypedResults.Ok(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while loading available locales");
             return TypedResults.Problem("An error occurred while loading available locales", statusCode: 500);
         }
     }
