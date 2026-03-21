@@ -1,6 +1,7 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,7 +13,9 @@ namespace HomeBook.Backend.Core.Account;
 /// <summary>
 /// JWT service implementation for token operations
 /// </summary>
-public class JwtService(IConfiguration configuration) : IJwtService
+public class JwtService(
+    IConfiguration configuration,
+    ILogger<JwtService> logger) : IJwtService
 {
     private readonly string _secretKey = configuration["Jwt:SecretKey"]
                                          ?? throw new InvalidOperationException("JWT SecretKey is required");
@@ -32,6 +35,8 @@ public class JwtService(IConfiguration configuration) : IJwtService
     /// <inheritdoc />
     public JwtTokenResult GenerateToken(Guid userId, string username, bool isAdmin)
     {
+        logger.LogInformation("Generating JWT token");
+
         SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_secretKey));
         SigningCredentials credentials = new(key, SecurityAlgorithms.HmacSha256);
         DateTime expiresAt = DateTime.UtcNow.AddMinutes(_expirationMinutes);
@@ -98,8 +103,9 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "JWT token validation failed");
             return false;
         }
     }
@@ -134,8 +140,9 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
             return null;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Failed to extract user ID from JWT token");
             return null;
         }
     }
@@ -170,8 +177,9 @@ public class JwtService(IConfiguration configuration) : IJwtService
 
             return false;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Failed to extract admin flag from JWT token");
             return false;
         }
     }

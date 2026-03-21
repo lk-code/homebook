@@ -18,6 +18,8 @@ public class UserPreferenceProvider(
     public async Task<string?> GetUserPreferredLocaleAsync(Guid userId,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving locale preference");
+
         UserPreference? localeUserPreference = await userPreferenceRepository
             .GetPreferenceForUserByKeyAsync(userId,
                 PREFERENCE_KEY_LOCALE,

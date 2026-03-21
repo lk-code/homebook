@@ -22,19 +22,18 @@ public class DatabaseManager(ILogger<DatabaseManager> logger) : IDatabaseManager
     {
         try
         {
-            // string connectionString = "Data Source=:memory:";
             string connectionString = $"Data Source={databaseFilePath};Timeout=5;";
 
-            logger.LogInformation("Checking SQLite database availability with connection string: {ConnectionString}", connectionString);
+            logger.LogInformation("Checking SQLite database availability");
 
             await using SqliteConnection connection = new(connectionString);
             await connection.OpenAsync(cancellationToken);
 
             return true;
         }
-        catch(Exception err)
+        catch (Exception err)
         {
-            logger.LogError(err, "Error while checking postgresql database availability");
+            logger.LogError(err, "Error while checking SQLite database availability");
 
             return false;
         }

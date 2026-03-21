@@ -1,10 +1,11 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.EnvironmentHandler;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Services;
 
-public class NativeFileService : IApplicationPathProvider, IFileSystemService
+public class NativeFileService(ILogger<NativeFileService> logger) : IApplicationPathProvider, IFileSystemService
 {
     public string ConfigurationPath { get; } = PathHandler.ConfigurationPath;
     public string RuntimeConfigurationFilePath { get; } = PathHandler.RuntimeConfigurationFilePath;
@@ -16,37 +17,59 @@ public class NativeFileService : IApplicationPathProvider, IFileSystemService
     public string StorageDirectory { get; } = PathHandler.StorageDirectory;
 
     /// <inheritdoc />
-    public bool FileExists(string path) => File.Exists(path);
+    public bool FileExists(string path)
+    {
+        return File.Exists(path);
+    }
 
     /// <inheritdoc />
-    public async Task<string> FileReadAllTextAsync(string path, CancellationToken cancellationToken) =>
-        await File.ReadAllTextAsync(path, cancellationToken);
+    public async Task<string> FileReadAllTextAsync(string path, CancellationToken cancellationToken)
+    {
+        return await File.ReadAllTextAsync(path, cancellationToken);
+    }
 
     /// <inheritdoc />
-    public async Task<byte[]> FileReadAllBytesAsync(string path, CancellationToken cancellationToken) =>
-        await File.ReadAllBytesAsync(path, cancellationToken);
+    public async Task<byte[]> FileReadAllBytesAsync(string path, CancellationToken cancellationToken)
+    {
+        return await File.ReadAllBytesAsync(path, cancellationToken);
+    }
 
     /// <inheritdoc />
-    public async Task FileWriteAllTextAsync(string path, string content, CancellationToken cancellationToken) =>
+    public async Task FileWriteAllTextAsync(string path, string content, CancellationToken cancellationToken)
+    {
         await File.WriteAllTextAsync(path, content, cancellationToken);
+    }
 
     /// <inheritdoc />
-    public async Task FileWriteAllBytesAsync(string path, byte[] content, CancellationToken cancellationToken) =>
+    public async Task FileWriteAllBytesAsync(string path, byte[] content, CancellationToken cancellationToken)
+    {
         await File.WriteAllBytesAsync(path, content, cancellationToken);
+    }
 
     /// <inheritdoc />
-    public bool DirectoryExists(string path) => Directory.Exists(path);
+    public bool DirectoryExists(string path)
+    {
+        return Directory.Exists(path);
+    }
 
     /// <inheritdoc />
-    public DirectoryInfo CreateDirectory(string path) => Directory.CreateDirectory(path);
+    public DirectoryInfo CreateDirectory(string path)
+    {
+        return Directory.CreateDirectory(path);
+    }
 
     /// <inheritdoc />
-    public void DeleteFile(string path) => File.Delete(path);
+    public void DeleteFile(string path)
+    {
+        File.Delete(path);
+    }
 
     /// <inheritdoc />
     public Task<List<FileInformation>> GetFilesInDirectoryAsync(string storagePath,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving files in directory");
+
         List<FileInformation> files = Directory
             .EnumerateFiles(storagePath, "*", SearchOption.AllDirectories)
             .Select(path =>

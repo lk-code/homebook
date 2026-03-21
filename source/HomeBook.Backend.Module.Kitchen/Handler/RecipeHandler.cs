@@ -47,7 +47,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while getting recipes");
+            logger.LogError(err, "Error while retrieving recipes");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -82,7 +82,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while getting recipes");
+            logger.LogError(err, "Error while retrieving recipe");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -109,13 +109,13 @@ public class RecipeHandler
             RecipeImagesResponse response = new(imageMediaIds);
             return TypedResults.Ok(response);
         }
-        catch (InvalidCastException err)
+        catch (InvalidCastException)
         {
             return TypedResults.NotFound();
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while getting recipes");
+            logger.LogError(err, "Error while retrieving recipe images");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -181,7 +181,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while creating recipe");
+            logger.LogError(err, "Error while updating recipe");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -238,7 +238,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while creating recipe");
+            logger.LogError(err, "Error while updating recipe name");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -269,9 +269,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while deleting recipe for {Id}",
-                id);
+            logger.LogError(err, "Error while deleting recipe");
             return TypedResults.InternalServerError(err.Message);
         }
     }

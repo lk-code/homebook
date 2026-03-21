@@ -23,7 +23,7 @@ public class InfoHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "An error occurred while retrieving instance information.");
+            logger.LogError(err, "An error occurred while retrieving instance information");
 
             return TypedResults.Problem("An error occurred while retrieving instance information.", statusCode: 500);
         }
@@ -41,7 +41,7 @@ public class InfoHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "An error occurred while retrieving instance information.");
+            logger.LogError(err, "An error occurred while retrieving instance name");
 
             return TypedResults.Problem("An error occurred while retrieving instance name.", statusCode: 500);
         }
@@ -60,7 +60,7 @@ public class InfoHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "An error occurred while retrieving instance information.");
+            logger.LogError(err, "An error occurred while retrieving default locale");
 
             return TypedResults.Problem("An error occurred while retrieving instance name.", statusCode: 500);
         }

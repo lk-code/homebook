@@ -26,8 +26,7 @@ public class RecipesProvider(
     public async Task<RecipeResultDto[]> GetRecipesAsync(string searchFilter,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Retrieving meals with search filter: {SearchFilter}",
-            searchFilter);
+        logger.LogInformation("Retrieving recipes");
 
         IEnumerable<Recipe> recipeEntities = await recipesRepository.GetAsync(searchFilter,
             cancellationToken);
@@ -40,14 +39,19 @@ public class RecipesProvider(
 
     /// <inheritdoc/>
     public async Task<RecipeResultDto?> GetRecipeByIdAsync(Guid id,
-        CancellationToken cancellationToken) =>
-        (await recipesRepository.GetByIdAsync(id,
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Retrieving recipe");
+        return (await recipesRepository.GetByIdAsync(id,
             cancellationToken))?.ToDto();
+    }
 
     /// <inheritdoc/>
     public async Task<Guid> CreateOrUpdateAsync(RecipeRequestDto requestDto,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating or updating recipe");
+
         // TODO: validate dto
 
         // get mediaIds which should be deleted because its not needed
@@ -112,6 +116,8 @@ public class RecipesProvider(
     public async Task<Guid> CreateIngredientAsync(string name,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating ingredient");
+
         RecipeIngredient entity = new()
         {
             Name = name
@@ -124,15 +130,19 @@ public class RecipesProvider(
     }
 
     /// <inheritdoc/>
-    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken) =>
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Deleting recipe");
         await recipesRepository.DeleteAsync(id,
             cancellationToken);
+    }
 
     /// <inheritdoc/>
     public async Task UpdateNameAsync(Guid id,
         string name,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating recipe name");
         await recipesRepository.UpdateRecipeNameAsync(id,
             name,
             cancellationToken);
@@ -144,11 +154,13 @@ public class RecipesProvider(
     {
         try
         {
+            logger.LogInformation("Retrieving recipe image identifiers");
             return await recipesRepository.GetImagesByRecipeIdAsync(id,
                 cancellationToken);
         }
         catch (EntityNotFoundException err)
         {
+            logger.LogError(err, "Recipe was not found while retrieving image identifiers");
             throw new RecipeNotFoundException("Recipe not found", err);
         }
     }

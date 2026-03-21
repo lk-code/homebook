@@ -3,6 +3,7 @@ using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.Finances;
 using HomeBook.Backend.Module.Finances.Services;
 using HomeBook.UnitTests.TestCore.Helper;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 
 namespace HomeBook.UnitTests.Backend.Core.Finances;
@@ -19,7 +20,8 @@ public class FinanceCalculationsServiceTests
     {
         _cancellationToken = CancellationToken.None;
         _dateTimeProvider = Substitute.For<IDateTimeProvider>();
-        _instance = new FinanceCalculationsService(_dateTimeProvider);
+        _instance = new FinanceCalculationsService(_dateTimeProvider,
+            NullLogger<FinanceCalculationsService>.Instance);
     }
 
     [Test]

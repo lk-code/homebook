@@ -16,8 +16,7 @@ public class SavingGoalsProvider(
     public async Task<SavingGoalDto[]> GetAllSavingGoalsAsync(Guid userId,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Retrieving all saving goals for user. UserId: {UserId}",
-            userId);
+        logger.LogInformation("Retrieving saving goals");
 
         IEnumerable<SavingGoal> savingGoalEntities = await savingGoalsRepository.GetAllSavingGoalsAsync(userId,
             cancellationToken);
@@ -31,10 +30,13 @@ public class SavingGoalsProvider(
     /// <inheritdoc />
     public async Task<SavingGoalDto?> GetSavingGoalByIdAsync(Guid userId,
         Guid savingGoalId,
-        CancellationToken cancellationToken) =>
-        (await savingGoalsRepository.GetByIdAsync(userId,
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Retrieving saving goal");
+        return (await savingGoalsRepository.GetByIdAsync(userId,
             savingGoalId,
             cancellationToken))?.ToDto();
+    }
 
     /// <inheritdoc />
     public async Task<Guid> CreateAsync(Guid userId,
@@ -49,6 +51,8 @@ public class SavingGoalsProvider(
         DateTime? targetDate,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Creating saving goal");
+
         SavingGoal entity = new()
         {
             UserId = userId,
@@ -78,6 +82,8 @@ public class SavingGoalsProvider(
         string name,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating saving goal name");
+
         SavingGoal entity = await savingGoalsRepository.GetByIdAsync(userId,
                                 savingGoalId,
                                 cancellationToken)
@@ -98,6 +104,8 @@ public class SavingGoalsProvider(
         string icon,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating saving goal appearance");
+
         SavingGoal entity = await savingGoalsRepository.GetByIdAsync(userId,
                                 savingGoalId,
                                 cancellationToken)
@@ -122,6 +130,8 @@ public class SavingGoalsProvider(
         decimal? interestRate,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating saving goal amounts");
+
         SavingGoal entity = await savingGoalsRepository.GetByIdAsync(userId,
                                 savingGoalId,
                                 cancellationToken)
@@ -150,6 +160,8 @@ public class SavingGoalsProvider(
         DateTime? targetDate,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating saving goal info");
+
         SavingGoal entity = await savingGoalsRepository.GetByIdAsync(userId,
                                 savingGoalId,
                                 cancellationToken)
@@ -167,8 +179,11 @@ public class SavingGoalsProvider(
     /// <inheritdoc />
     public async Task DeleteAsync(Guid userId,
         Guid savingGoalId,
-        CancellationToken cancellationToken) =>
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Deleting saving goal");
         await savingGoalsRepository.DeleteAsync(userId,
             savingGoalId,
             cancellationToken);
+    }
 }

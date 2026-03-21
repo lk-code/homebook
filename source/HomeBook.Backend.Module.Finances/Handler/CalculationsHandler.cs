@@ -52,7 +52,7 @@ public class CalculationsHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while calculating savings");
+            logger.LogError(err, "Error while handling savings calculation");
             return TypedResults.InternalServerError(err.Message);
         }
     }

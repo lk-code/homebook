@@ -5,6 +5,7 @@ using HomeBook.Backend.Factories;
 using HomeBook.UnitTests.TestCore.Backend.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 
 namespace HomeBook.UnitTests.Backend.Factories;
@@ -19,12 +20,14 @@ public class DatabaseMigratorFactoryTests
     public void SetUp()
     {
         _serviceProvider = new ServiceCollection()
+            .AddLogging()
             .AddSingleton(Substitute.For<IDatabaseMigratorFactory>())
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("UNITDB")
             .AddSingleton(Substitute.For<IConfiguration>())
             .BuildServiceProvider();
 
-        _instance = new DatabaseMigratorFactory(_serviceProvider);
+        _instance = new DatabaseMigratorFactory(_serviceProvider,
+            NullLogger<DatabaseMigratorFactory>.Instance);
     }
 
     [TearDown]

@@ -5,6 +5,7 @@ using HomeBook.Backend.Abstractions.Models.UserManagement;
 using HomeBook.Backend.Core.DataProvider.Mappings;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Core.DataProvider;
 
@@ -12,13 +13,16 @@ namespace HomeBook.Backend.Core.DataProvider;
 public class UserProvider(
     IUserRepository userRepository,
     IHashProviderFactory hashProviderFactory,
-    IValidator<User> userValidator) : IUserProvider
+    IValidator<User> userValidator,
+    ILogger<UserProvider> logger) : IUserProvider
 {
     /// <inheritdoc />
     public async Task<Guid> CreateUserAsync(string username,
         string password,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Creating user");
+
         bool userExists = await userRepository.ContainsUserAsync(username, cancellationToken);
         if (userExists)
             throw new UserAlreadyExistsException($"User with username '{username}' already exists.");
@@ -46,6 +50,8 @@ public class UserProvider(
     /// <inheritdoc />
     public async Task<IEnumerable<UserInfo>> GetAllAsync(CancellationToken cancellationToken)
     {
+        logger.LogInformation("Retrieving all users");
+
         IEnumerable<User> userEntities = await userRepository.GetAllAsync(cancellationToken);
         IEnumerable<UserInfo> userInfos = userEntities.Select(x => x.ToUserInfo());
         return userInfos;
@@ -55,6 +61,8 @@ public class UserProvider(
     public async Task UpdateUserAsync(UserInfo userInfo,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating user");
+
         User user = await userRepository.GetUserByIdAsync(userInfo.Id, cancellationToken)
                     ?? throw new KeyNotFoundException($"User with id '{userInfo.Id}' not found.");
         user = user.Update(userInfo);
@@ -69,6 +77,8 @@ public class UserProvider(
         bool isAdmin,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Updating user admin flag");
+
         User? user = userRepository.GetUserByIdAsync(userId, cancellationToken)
             .GetAwaiter()
             .GetResult();

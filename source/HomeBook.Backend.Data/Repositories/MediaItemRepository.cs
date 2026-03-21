@@ -2,11 +2,14 @@ using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Data.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Repositories;
 
 /// <inheritdoc/>
-public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
+public class MediaItemRepository(
+    IDbContextFactory<AppDbContext> factory,
+    ILogger<MediaItemRepository> logger)
     : IMediaItemRepository
 {
     /// <inheritdoc/>
@@ -14,6 +17,8 @@ public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
         string filename,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Adding media item");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         MediaItem? existing = await GetMediaItemByFilenameAsync(scopeId,
@@ -42,6 +47,8 @@ public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
     public async Task<MediaItem?> GetMediaItemByIdAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Retrieving media item");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         MediaItem? entity = await dbContext.MediaItems.Where(m => m.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
@@ -54,6 +61,8 @@ public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
         string filename,
         CancellationToken cancellationToken = default)
     {
+        logger.LogDebug("Retrieving media item by filename");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         MediaItem? entity = await dbContext.MediaItems.Where(m => m.StorageScopeId == scopeId
@@ -67,6 +76,8 @@ public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
     public async Task DeleteMediaItemAsync(Guid id,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Deleting media item");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
 
         await dbContext.MediaItems.Where(m => m.Id == id)
@@ -77,6 +88,8 @@ public class MediaItemRepository(IDbContextFactory<AppDbContext> factory)
     public async Task<string?> GetFilenameByIdAsync(Guid id,
         CancellationToken cancellationToken)
     {
+        logger.LogDebug("Retrieving media filename");
+
         await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
         string? entity = await dbContext.MediaItems
             .Where(m => m.Id == id)

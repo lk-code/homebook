@@ -38,9 +38,7 @@ public class SearchHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while handling search request for query '{Query}'",
-                query);
+            logger.LogError(err, "Error while handling search request");
             return TypedResults.InternalServerError(err.Message);
         }
     }

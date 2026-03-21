@@ -1,13 +1,15 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.DTOs.Responses.Media;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
-public static class MediaHandler
+public class MediaHandler
 {
     // GET - Read file content
     public static async Task<IResult> HandleGetUrlForMediaId(Guid mediaId,
+        [FromServices] ILogger<MediaHandler> logger,
         [FromServices] IMediaProvider mediaProvider,
         CancellationToken cancellationToken)
     {
@@ -19,14 +21,14 @@ public static class MediaHandler
             Uri? mediaUri = await mediaProvider.GetUrlForMediaItemAsync(mediaId,
                 cancellationToken);
 
-            if(mediaUri is null)
+            if (mediaUri is null)
                 return TypedResults.NotFound();
 
             return TypedResults.Ok(new MediaUrlResponse(mediaUri));
         }
         catch (Exception err)
         {
-            // TODO: log and return error
+            logger.LogError(err, "Error while retrieving media URL");
             return TypedResults.Problem();
         }
     }

@@ -15,23 +15,20 @@ public class SearchProvider(
         Guid userId,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Executing search");
+
         IEnumerable<Task<SearchAggregationResult>> moduleSearchTasks = modules
             .Select(async module =>
             {
                 try
                 {
-                    logger.LogDebug("Requesting module {Module} for search query '{Query}'",
-                        module.Name,
-                        query);
+                    logger.LogDebug("Requesting search results from module");
 
                     SearchResult result = await module.SearchAsync(query,
                         userId,
                         cancellationToken);
 
-                    logger.LogDebug("Module {Module} returned search result with {Count} items for query '{Query}'",
-                        module.Name,
-                        result.Items.Count(),
-                        query);
+                    logger.LogDebug("Module returned search results");
 
                     SearchAggregationResult moduleSearchResult = new(module.Key,
                         result.TotalCount,
@@ -40,7 +37,7 @@ public class SearchProvider(
                 }
                 catch (OperationCanceledException)
                 {
-                    // Task was cancelled, return null
+                    logger.LogDebug("Search request was cancelled");
                     return null;
                 }
                 catch (Exception err)

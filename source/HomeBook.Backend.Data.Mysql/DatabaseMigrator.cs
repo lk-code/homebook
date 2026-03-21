@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data.Mysql;
 
@@ -11,11 +12,14 @@ namespace HomeBook.Backend.Data.Mysql;
 public class DatabaseMigrator(
     IServiceProvider serviceProvider,
     IConfiguration configuration,
-    IEnumerable<SaveChangesInterceptor> saveChangesInterceptors) : IDatabaseMigrator
+    IEnumerable<SaveChangesInterceptor> saveChangesInterceptors,
+    ILogger<DatabaseMigrator> logger) : IDatabaseMigrator
 {
     /// <inheritdoc />
     public async Task MigrateAsync(CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Running MySQL database migrations");
+
         await using AppDbContext context = (AppDbContext)GetDbContext();
         await context.Database.MigrateAsync(cancellationToken);
     }
@@ -23,6 +27,8 @@ public class DatabaseMigrator(
     /// <inheritdoc />
     public DbContext GetDbContext()
     {
+        logger.LogDebug("Creating MySQL database context for migration");
+
         DbContextOptionsBuilder<AppDbContext> optionsBuilder = new();
         ServiceCollectionExtensions.CreateDbContextOptionsBuilder(configuration, serviceProvider, optionsBuilder);
 
@@ -33,6 +39,7 @@ public class DatabaseMigrator(
 
     public void ConfigureForServiceCollection(ServiceCollection services, IConfiguration configuration)
     {
+        logger.LogInformation("Configuring MySQL services for migration");
         services.AddBackendDataMysql(configuration);
     }
 }

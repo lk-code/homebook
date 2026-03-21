@@ -1,10 +1,11 @@
 using HomeBook.Backend.Abstractions.Contracts;
+using Microsoft.Extensions.Logging;
 using Npgsql;
 
 namespace HomeBook.Backend.Data.PostgreSql;
 
 /// <inheritdoc />
-public class PostgreSqlProbe : IDatabaseProbe
+public class PostgreSqlProbe(ILogger<PostgreSqlProbe> logger) : IDatabaseProbe
 {
     /// <inheritdoc />
     public string ProviderName { get; } = "POSTGRESQL";
@@ -19,6 +20,8 @@ public class PostgreSqlProbe : IDatabaseProbe
     {
         try
         {
+            logger.LogInformation("Checking PostgreSQL connectivity");
+
             string connectionString = $"Host={host};Port={port};Database={databaseName};Username={username};Password={password};Timeout=5;";
 
             await using NpgsqlConnection connection = new(connectionString);
@@ -32,8 +35,9 @@ public class PostgreSqlProbe : IDatabaseProbe
 
             return isConnected;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "PostgreSQL connectivity check failed");
             return false;
         }
     }
