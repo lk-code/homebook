@@ -1,10 +1,11 @@
+@using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.UI.Resources
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<LocalizationStrings> Loc
-@inject IConfiguration Configuration
+@inject IDeveloperService DeveloperService
 
 <MudPaper Class="frosted-b4">
 
