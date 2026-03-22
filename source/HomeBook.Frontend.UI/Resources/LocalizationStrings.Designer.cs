@@ -1508,5 +1508,23 @@ namespace HomeBook.Frontend.UI.Resources {
                 return ResourceManager.GetString("Settings_Storage_UsageType_Logs_Title", resourceCulture);
             }
         }
+        
+        public static string Settings_Developer_ConfigurationArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Developer_ConfigurationArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Developer_ConfigurationItemsFrontend_Title {
+            get {
+                return ResourceManager.GetString("Settings_Developer_ConfigurationItemsFrontend_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Developer_ConfigurationItemsBackend_Title {
+            get {
+                return ResourceManager.GetString("Settings_Developer_ConfigurationItemsBackend_Title", resourceCulture);
+            }
+        }
     }
 }

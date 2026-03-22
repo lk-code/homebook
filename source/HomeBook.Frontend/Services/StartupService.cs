@@ -13,6 +13,7 @@ public class StartupService(
     IJsLocalStorageProvider jsLocalStorageProvider,
     ILocalizationService localizationService,
     ISetupService setupService,
+    IDeveloperService developerService,
     ILogger<StartupService> logger) : IStartupService
 {
     public event Action<AppStatus>? ApplicationInitialized;
@@ -42,12 +43,18 @@ public class StartupService(
         {
             // load instance data into cache
             await LoadInstanceDataAsync(cancellationToken);
+            await InitializeDeveloperServiceAsync(cancellationToken);
             await InitializeLocalizing(cancellationToken);
             await LoadingModuleAssemblies(cancellationToken);
         }
 
         // Notify authentication state changed
         ApplicationInitialized?.Invoke(Status);
+    }
+
+    private async Task InitializeDeveloperServiceAsync(CancellationToken cancellationToken)
+    {
+        await developerService.InitializeAsync(cancellationToken);
     }
 
     /// <inheritdoc />

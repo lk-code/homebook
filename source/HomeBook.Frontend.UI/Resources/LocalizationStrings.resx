@@ -755,4 +755,13 @@
     <data name="Settings_Storage_UsageType_Logs_Title" xml:space="preserve">
         <value>Logs</value>
     </data>
+    <data name="Settings_Developer_ConfigurationArea_Title" xml:space="preserve">
+        <value>App Configuration</value>
+    </data>
+    <data name="Settings_Developer_ConfigurationItemsFrontend_Title" xml:space="preserve">
+        <value>Frontend</value>
+    </data>
+    <data name="Settings_Developer_ConfigurationItemsBackend_Title" xml:space="preserve">
+        <value>Backend</value>
+    </data>
 </root>

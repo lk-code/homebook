@@ -1,6 +1,6 @@
+using HomeBook.Backend.DTOs.Responses.Info;
 using HomeBook.Backend.Handler;
 using HomeBook.Backend.Responses;
-using HomeBook.Backend.Middleware;
 
 namespace HomeBook.Backend.Endpoints;
 
@@ -27,6 +27,14 @@ public static class InfoEndpoints
             .WithDescription("Returns the instance name as a string (public endpoint)")
             .AllowAnonymous()
             .Produces<string>()
+            .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        group.MapGet("/devmode", InfoHandler.HandleGetDevModeSettings)
+            .WithName("GetDevModeSettings")
+            .WithTags("Info")
+            .WithDescription("Returns the development mode settings")
+            .AllowAnonymous()
+            .Produces<DevModeResponse>()
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
         group.MapGet("/default-locale", InfoHandler.HandleGetInstanceDefaultLocale)

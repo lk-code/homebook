@@ -4,5 +4,5 @@ namespace HomeBook.Frontend.Pages.Settings;
 
 public partial class SettingsNavMenu : ComponentBase
 {
-    private bool _showDeveloperArea => Configuration.GetValue<bool>("Developer:SettingsArea");
+    private bool _showDeveloperArea => DeveloperService.IsDevelopmentModeActive();
 }
