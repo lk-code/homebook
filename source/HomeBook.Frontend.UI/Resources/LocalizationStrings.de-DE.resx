@@ -46,12 +46,12 @@
   <data name="Settings_NavMenu_Users_Text" xml:space="preserve">
         <value>Benutzer</value>
   </data>
-    <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
+  <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
         <value>HomeBook Einstellungen</value>
-    </data>
-    <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
+  </data>
+  <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
         <value>HomeBook Module</value>
-    </data>
+  </data>
   <data name="Settings_NavMenu_DeveloperComponents_Text" xml:space="preserve">
         <value>Dev UI</value>
   </data>
@@ -319,7 +319,265 @@
   <data name="Setup_AdminUser_Form_Password_Label" xml:space="preserve">
     <value>Passwort</value>
   </data>
-    <data name="Settings_NavMenu_HomebookStorage_Text" xml:space="preserve">
+  <data name="Settings_NavMenu_HomebookStorage_Text" xml:space="preserve">
         <value>HomeBook Speicher</value>
-    </data>
+  </data>
+  <data name="Setup_AdminUser_Form_Password_HelperText" xml:space="preserve">
+    <value>Geben Sie ein sicheres Passwort für das Konto ein</value>
+  </data>
+  <data name="Setup_AdminUser_Save_Button_Text" xml:space="preserve">
+    <value>Benutzer speichern</value>
+  </data>
+  <data name="Setup_Configuration_Title" xml:space="preserve">
+    <value>HomeBook Konfiguration</value>
+  </data>
+  <data name="Setup_Configuration_ConfigurationFound_Title" xml:space="preserve">
+    <value>HomeBook wurde vorkonfiguriert.</value>
+  </data>
+  <data name="Setup_Configuration_ConfigurationSaved_Title" xml:space="preserve">
+    <value>Die HomeBook-Konfiguration wurde erfolgreich gespeichert.</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceName_Label" xml:space="preserve">
+    <value>HomeBook Instanz Name</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceName_HelperText" xml:space="preserve">
+    <value>Geben Sie Ihrer HomeBook-Instanz einen eigenen Namen</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceDefaultLocale_Label" xml:space="preserve">
+    <value>HomeBook Standard Sprache</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceDefaultLocale_HelperText" xml:space="preserve">
+    <value>Wählen Sie die Standardsprache für die Darstellung von Homebook aus</value>
+  </data>
+  <data name="Setup_Configuration_Save_Button_Text" xml:space="preserve">
+    <value>Konfiguration speichern</value>
+  </data>
+  <data name="Setup_Process_Title" xml:space="preserve">
+    <value>HomeBook Setup</value>
+  </data>
+  <data name="Setup_ProcessFinished_Title" xml:space="preserve">
+    <value>HomeBook Setup ist abgeschlossen</value>
+  </data>
+  <data name="Setup_Process_SetupIsPrepared_Message" xml:space="preserve">
+    <value>Die Vorbereitungen für das Setup sind abgeschlossen, das Setup startet jetzt.</value>
+  </data>
+  <data name="Setup_Process_Retry_Button_Text" xml:space="preserve">
+    <value>Setup wiederholen</value>
+  </data>
+  <data name="Setup_Process_Finished_Success_Message" xml:space="preserve">
+    <value>Die Installation war erfolgreich.</value>
+  </data>
+  <data name="Setup_Process_Finished_StartHomeBook_Message" xml:space="preserve">
+    <value>HomeBook öffnen</value>
+  </data>
+  <data name="Setup_Process_Finished_RemoveEnvironmentVariables_Message" xml:space="preserve">
+    <value>Bitte entfernen Sie die Setup-Umgebungsvariablen aus Ihrer Docker-Konfiguration.</value>
+  </data>
+  <data name="Setup_Process_ProcessingError_MessageTemplate" xml:space="preserve">
+    <value>Bei der Installation ist ein Fehler aufgetreten: {0}</value>
+  </data>
+  <data name="Setup_Process_ProcessingServerRestartError_Message" xml:space="preserve">
+    <value>Der Server wurde nach der Installation nicht korrekt neu gestartet. Bitte überprüfen Sie die Serverprotokolle.</value>
+  </data>
+  <data name="Setup_Process_ProcessingValidationError_Message" xml:space="preserve">
+    <value>Bei der Überprüfung der Konfiguration während der Installation ist ein Fehler aufgetreten. Bitte überprüfen Sie die Serverprotokolle.</value>
+  </data>
+  <data name="Setup_Process_ProcessingLicenseError_Message" xml:space="preserve">
+    <value>Die Projektlizenzen wurden nicht akzeptiert.</value>
+  </data>
+  <data name="Setup_Process_ProcessingUnknownError_Message" xml:space="preserve">
+    <value>Während des Installationsvorgangs ist ein unbekannter Fehler aufgetreten. Bitte überprüfen Sie die Serverprotokolle.</value>
+  </data>
+  <data name="Setup_Process_ProcessingUnknownError_MessageTemplate" xml:space="preserve">
+    <value>Während der Installation ist ein unbekannter Fehler aufgetreten: {0}</value>
+  </data>
+  <data name="Update_ProcessFinished_Title" xml:space="preserve">
+    <value>Das Update für HomeBook ist abgeschlossen</value>
+  </data>
+  <data name="Update_Process_Title" xml:space="preserve">
+    <value>HomeBook Update</value>
+  </data>
+  <data name="Update_Process_UpdateIsPrepared_Message" xml:space="preserve">
+    <value>Das Update ist vorbereitet und wird jetzt gestartet.</value>
+  </data>
+  <data name="Update_Process_Finished_Success_Message" xml:space="preserve">
+    <value>Die Aktualisierung war erfolgreich.</value>
+  </data>
+  <data name="Update_Process_Finished_StartHomeBook_Message" xml:space="preserve">
+    <value>HomeBook öffnen</value>
+  </data>
+  <data name="Update_Process_Retry_Button_Text" xml:space="preserve">
+    <value>Update erneut versuchen</value>
+  </data>
+  <data name="Update_Process_ProcessingError_MessageTemplate" xml:space="preserve">
+    <value>Beim Update ist ein Fehler aufgetreten: {0}</value>
+  </data>
+  <data name="Update_Process_ProcessingServerRestartError_Message" xml:space="preserve">
+    <value>Der Server wurde nach dem Update nicht ordnungsgemäß neu gestartet. Bitte überprüfen Sie die Serverprotokolle.</value>
+  </data>
+  <data name="Update_Process_ProcessingUnknownError_Message" xml:space="preserve">
+    <value>Während des Update-Vorgangs ist ein unbekannter Fehler aufgetreten. Bitte überprüfen Sie die Serverprotokolle.</value>
+  </data>
+  <data name="Update_Process_ProcessingSetupMissingError_Message" xml:space="preserve">
+    <value>Führen Sie zunächst das HomeBook-Setup aus.</value>
+  </data>
+  <data name="Update_Process_ProcessingUnknownError_MessageTemplate" xml:space="preserve">
+    <value>Während des Update-Vorgangs ist ein unbekannter Fehler aufgetreten: {0}</value>
+  </data>
+  <data name="Settings_Instance_PageCaption" xml:space="preserve">
+    <value>Verwalten Sie die globalen Einstellungen und Funktionen Ihrer HomeBook-Instanz.</value>
+  </data>
+  <data name="Settings_Instance_InstanceName_Title" xml:space="preserve">
+    <value>HomeBook Instanz Name</value>
+  </data>
+  <data name="Settings_Instance_InstanceName_Caption" xml:space="preserve">
+    <value>Geben Sie Ihrer HomeBook-Instanz einen eigenen Namen</value>
+  </data>
+  <data name="Settings_Instance_InstanceDefaultLocale_Title" xml:space="preserve">
+    <value>HomeBook Standard Sprache</value>
+  </data>
+  <data name="Settings_Instance_InstanceDefaultLocale_Caption" xml:space="preserve">
+    <value>Wählen Sie die Standardsprache für die Darstellung von HomeBook aus</value>
+  </data>
+  <data name="Settings_Instance_SaveChanges_Button" xml:space="preserve">
+    <value>Änderungen speichern</value>
+  </data>
+  <data name="Settings_Instance_LoadPreferences_Error_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Laden der HomeBook-Einstellungen: {0}</value>
+  </data>
+  <data name="Settings_Instance_PreferencesUpdated_Success_Message" xml:space="preserve">
+    <value>HomeBook-Konfiguration erfolgreich aktualisiert!</value>
+  </data>
+  <data name="Settings_Instance_PreferencesUpdated_Error_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Aktualisieren der HomeBook-Konfiguration: {0}</value>
+  </data>
+  <data name="Settings_User_Overview_PageTitle" xml:space="preserve">
+    <value>Benutzer Verwaltung</value>
+  </data>
+  <data name="Settings_User_Overview_AddUserButton_Text" xml:space="preserve">
+    <value>Neuer Benutzer</value>
+  </data>
+  <data name="Settings_User_Overview_Loading_Message" xml:space="preserve">
+    <value>Lade Benutzer...</value>
+  </data>
+  <data name="Settings_User_Overview_CurrentCount_MessageTemplate" xml:space="preserve">
+    <value>Es werden {0} von {1} angezeigt</value>
+  </data>
+  <data name="Settings_User_Overview_ItemsPerPageSelect_Label" xml:space="preserve">
+    <value>Benutzer pro Seite</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Username_TableHeader" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Status_TableHeader" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Role_TableHeader" xml:space="preserve">
+    <value>Rolle</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Created_TableHeader" xml:space="preserve">
+    <value>Erstellt</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Actions_TableHeader" xml:space="preserve">
+    <value>Aktionen</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Actions_EditUser_ToolTipText" xml:space="preserve">
+    <value>Benutzer editieren</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_NoResult_Message" xml:space="preserve">
+    <value>Keine Benutzer gefunden.</value>
+  </data>
+  <data name="Settings_User_Overview_ToggleStatusTooltip_Enable_Text" xml:space="preserve">
+    <value>Benutzer aktivieren</value>
+  </data>
+  <data name="Settings_User_Overview_ToggleStatusTooltip_Disable_Text" xml:space="preserve">
+    <value>Benutzer deaktivieren</value>
+  </data>
+  <data name="Settings_User_Overview_UserStatus_Disabled_Text" xml:space="preserve">
+    <value>Deaktiviert</value>
+  </data>
+  <data name="Settings_User_Overview_UserStatus_Active_Text" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="Settings_User_Overview_UserRole_Admin_Text" xml:space="preserve">
+    <value>Admin</value>
+  </data>
+  <data name="Settings_User_Overview_UserRole_User_Text" xml:space="preserve">
+    <value>Benutzer</value>
+  </data>
+  <data name="Settings_User_Overview_LoadCurrentUserError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Abrufen des aktuellen Benutzers: {0}</value>
+  </data>
+  <data name="Settings_User_Overview_LoadAllUsersError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Laden aller Benutzer: {0}</value>
+  </data>
+  <data name="Settings_User_Overview_OwnUserError_Message" xml:space="preserve">
+    <value>Sie können den Status Ihres eigenen Kontos nicht ändern.</value>
+  </data>
+  <data name="Settings_User_Overview_UserEnabled_MessageTemplate" xml:space="preserve">
+    <value>Der Benutzer '{0}' wurde freigeschaltet.</value>
+  </data>
+  <data name="Settings_User_Overview_UserDisabled_MessageTemplate" xml:space="preserve">
+    <value>Der Benutzer '{0}' wurde deaktiviert.</value>
+  </data>
+  <data name="Settings_User_Overview_UserUpdatingError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Aktualisieren des Benutzers: {0}</value>
+  </data>
+  <data name="Settings_User_Add_PageTitle" xml:space="preserve">
+    <value>Neuen Benutzer anlegen</value>
+  </data>
+  <data name="Settings_User_Edit_PageTitle" xml:space="preserve">
+    <value>Benutzer bearbeiten</value>
+  </data>
+  <data name="Settings_User_Add_Creating_Message" xml:space="preserve">
+    <value>Erstelle...</value>
+  </data>
+  <data name="Settings_User_Add_CreateButton_Text" xml:space="preserve">
+    <value>Benutzer erstellen</value>
+  </data>
+  <data name="Settings_User_Add_CancelButton_Text" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Settings_User_Add_AdministratorFlag_Label" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Settings_User_Add_AdministratorFlag_Caption" xml:space="preserve">
+    <value>Administratoren haben uneingeschränkten Zugriff auf alle Funktionen</value>
+  </data>
+  <data name="Settings_User_Add_Form_Username_Label" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="Settings_User_Add_Form_Username_Caption" xml:space="preserve">
+    <value>Gib einen eindeutigen Benutzernamen ein</value>
+  </data>
+  <data name="Settings_User_Add_Form_Password_Label" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
+  <data name="Settings_User_Add_Form_Password_Caption" xml:space="preserve">
+    <value>Geben Sie ein sicheres Passwort ein</value>
+  </data>
+  <data name="Settings_User_Add_Form_ConfirmPassword_Label" xml:space="preserve">
+    <value>Passwort bestätigen</value>
+  </data>
+  <data name="Settings_User_Add_Form_ConfirmPassword_Caption" xml:space="preserve">
+    <value>Passwort bestätigen</value>
+  </data>
+  <data name="Settings_PageTitle" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Settings_User_Edit_LoadingUser_Message" xml:space="preserve">
+    <value>Lade Benutzer...</value>
+  </data>
+  <data name="Settings_User_Edit_UserNotFound_Message" xml:space="preserve">
+    <value>Benutzer nicht gefunden!</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Username_Label" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Username_Caption" xml:space="preserve">
+    <value>Geben Sie einen eindeutigen Benutzernamen ein</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Password_Label" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
 </root>
