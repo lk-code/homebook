@@ -287,7 +287,7 @@ public partial class Edit : ComponentBase
         if (_recipe is null)
             return;
 
-        Uri absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItemId,
+        Uri? absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItemId,
             cancellationToken);
         _recipe.ImageMediaItems.Add(new MediaItemViewModel(mediaItemId,
             absoluteUri,
@@ -298,7 +298,7 @@ public partial class Edit : ComponentBase
     private async Task<MediaItemViewModel> BuildMediaItemViewModelAsync(RecipeMediaItemDto mediaItem,
         CancellationToken cancellationToken)
     {
-        Uri absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItem.MediaItemId,
+        Uri? absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItem.MediaItemId,
             cancellationToken);
 
         return new MediaItemViewModel(mediaItem.MediaItemId,

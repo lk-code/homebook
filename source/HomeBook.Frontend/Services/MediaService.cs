@@ -5,12 +5,14 @@ using HomeBook.Frontend.Modules.Abstractions;
 
 namespace HomeBook.Frontend.Services;
 
+/// <inheritdoc/>
 public class MediaService(
-    IConfiguration configuration,
     IAuthenticationService authenticationService,
-    BackendClient backendClient) : IMediaService
+    BackendClient backendClient,
+    IAppUriProvider appUriProvider) : IMediaService
 {
-    public async Task<Uri> GetUrlForMediaItemAsync(Guid mediaItemId,
+    /// <inheritdoc/>
+    public async Task<Uri?> GetUrlForMediaItemAsync(Guid mediaItemId,
         CancellationToken cancellationToken)
     {
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
@@ -23,14 +25,11 @@ public class MediaService(
                 },
                 cancellationToken);
 
-        string mediaHost = configuration["Backend:Host"];
-        if (string.IsNullOrEmpty(mediaHost))
-            mediaHost = configuration["Frontend:Host"];
+        if (response is null
+            || string.IsNullOrEmpty(response.MediaUri))
+            return null;
 
-        string mediaLink = response?.MediaUri;
-        string absoluteMediaLink = $"{mediaHost}{mediaLink}";
-
-        Uri.TryCreate(absoluteMediaLink, UriKind.Absolute, out Uri? mediaUri);
+        Uri mediaUri = appUriProvider.GetAbsoluteUri(response.MediaUri);
 
         return mediaUri;
     }

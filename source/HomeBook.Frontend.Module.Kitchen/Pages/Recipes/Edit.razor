@@ -209,10 +209,13 @@
                                     </MudDragHandle>
                                 </div>
 
-                                <MudImage Src="@context.AbsoluteUri.ToString()"
-                                          Alt="@_recipe.Name"
-                                          Class="rounded-lg"
-                                          Style="object-fit: cover; width: 100%; height: 220px;"/>
+                                @if (context.AbsoluteUri is not null)
+                                {
+                                    <MudImage Src="@context.AbsoluteUri.ToString()"
+                                              Alt="@_recipe.Name"
+                                              Class="rounded-lg"
+                                              Style="object-fit: cover; width: 100%; height: 220px;"/>
+                                }
 
                                 <div class="d-flex justify-end mt-3">
                                     <MudButton Variant="Variant.Filled"

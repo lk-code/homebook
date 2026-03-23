@@ -1,8 +1,6 @@
-using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Provider;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using NSubstitute;
 
 namespace HomeBook.UnitTests.Backend.Provider;
 

@@ -26,6 +26,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMediaService, MediaService>();
         services.AddSingleton<ISystemStorageProvider, SystemStorageProvider>();
         services.AddSingleton<IDeveloperService, DeveloperService>();
+        services.AddSingleton<IAppUriProvider, AppUriProvider>();
 
         services.AddSingleton<IWidgetFactory, WidgetFactory>();
 
