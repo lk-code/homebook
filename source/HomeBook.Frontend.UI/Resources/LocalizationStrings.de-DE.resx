@@ -580,4 +580,175 @@
   <data name="Settings_User_Edit_Form_Password_Label" xml:space="preserve">
     <value>Passwort</value>
   </data>
+  <data name="Settings_User_Edit_Form_Password_Caption" xml:space="preserve">
+    <value>Geben Sie ein sicheres Passwort ein</value>
+  </data>
+  <data name="Settings_User_Edit_Form_ConfirmPassword_Label" xml:space="preserve">
+    <value>Passwort bestätigen</value>
+  </data>
+  <data name="Settings_User_Edit_Form_ConfirmPassword_Caption" xml:space="preserve">
+    <value>Passwort bestätigen</value>
+  </data>
+  <data name="Settings_User_Edit_AdministratorFlag_Label" xml:space="preserve">
+    <value>Administrator</value>
+  </data>
+  <data name="Settings_User_Edit_AdministratorFlag_Caption" xml:space="preserve">
+    <value>Administratoren haben uneingeschränkten Zugriff auf alle Funktionen</value>
+  </data>
+  <data name="Settings_User_Edit_CantChangeOwnAdministratorFlag_Caption" xml:space="preserve">
+    <value>Sie können Ihren eigenen Administratorstatus nicht ändern</value>
+  </data>
+  <data name="Settings_User_Edit_CancelButton_Text" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Settings_User_Edit_Saving_Message" xml:space="preserve">
+    <value>Speichere...</value>
+  </data>
+  <data name="Settings_User_Edit_SaveButton_Text" xml:space="preserve">
+    <value>Benutzer speichern</value>
+  </data>
+  <data name="Settings_User_Edit_ActionsHeader_Text" xml:space="preserve">
+    <value>Aktionen</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_EnableDisable_Title" xml:space="preserve">
+    <value>Benutzer aktivieren/deaktivieren</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_Title" xml:space="preserve">
+    <value>Benutzer löschen</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_EnableDisable_Caption" xml:space="preserve">
+    <value>Aktiviert oder deaktiviert den Benutzerzugriff.</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_Caption" xml:space="preserve">
+    <value>Der Benutzer wird dauerhaft aus HomeBook entfernt.</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_DeleteButton_Text" xml:space="preserve">
+    <value>Benutzer löschen</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_CantDeleteOwnUser_Message" xml:space="preserve">
+    <value>Du kannst dein eigenes Konto nicht löschen</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_CantDisableOwnUser_Message" xml:space="preserve">
+    <value>Du kannst dein eigenes Konto nicht deaktivieren</value>
+  </data>
+  <data name="Settings_User_Edit_LoadingUserError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Laden des aktuellen Benutzers: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_GetUserIdError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Abrufen der Daten des aktuellen Benutzers: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_PasswordsDoNotMatchError_Message" xml:space="preserve">
+    <value>Die Passwörter stimmen nicht überein</value>
+  </data>
+  <data name="Settings_User_Edit_PasswordTooShortError_MessageTemplate" xml:space="preserve">
+    <value>Das Passwort muss mindestens {0} Zeichen lang sein</value>
+  </data>
+  <data name="Settings_User_Edit_UsernameRequiredError_Message" xml:space="preserve">
+    <value>Benutzername ist erforderlich</value>
+  </data>
+  <data name="Settings_User_Edit_UsernameLengthError_MessageTemplate" xml:space="preserve">
+    <value>Der Benutzername muss zwischen {0} und {1} Zeichen lang sein</value>
+  </data>
+  <data name="Settings_User_Edit_UpdateSuccess_Message" xml:space="preserve">
+    <value>Benutzer erfolgreich aktualisiert</value>
+  </data>
+  <data name="Settings_User_Edit_NoChanges_Message" xml:space="preserve">
+    <value>Keine Änderungen zum Speichern</value>
+  </data>
+  <data name="Settings_User_Edit_UpdatingError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Aktualisieren des Benutzers: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_UserEnabledSuccess_Message" xml:space="preserve">
+    <value>Der Benutzer wurde freigeschaltet</value>
+  </data>
+  <data name="Settings_User_Edit_UserDisabledSuccess_Message" xml:space="preserve">
+    <value>Der Benutzer wurde deaktiviert</value>
+  </data>
+  <data name="Settings_User_Edit_User_StatusUpdatingError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Aktualisieren des Benutzerstatus: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_User_DeletingError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Löschen des Benutzers: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_UserDeleteSuccess_Message" xml:space="preserve">
+    <value>Der Benutzer wurde gelöscht</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_Title" xml:space="preserve">
+    <value>Benutzer löschen</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_MessageTemplate" xml:space="preserve">
+    <value>Möchten Sie den Benutzer '{0}' wirklich löschen? Dieser Vorgang kann nicht rückgängig gemacht werden.</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_YesText" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_CancelText" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="Settings_User_Add_PasswordsDoNotMatchError_Message" xml:space="preserve">
+    <value>Die Passwörter stimmen nicht überein</value>
+  </data>
+  <data name="Settings_User_Add_PasswordRequiredError_MessageTemplate" xml:space="preserve">
+    <value>Passwort ist erforderlich</value>
+  </data>
+  <data name="Settings_User_Add_UsernameRequiredError_Message" xml:space="preserve">
+    <value>Benutzername ist erforderlich</value>
+  </data>
+  <data name="Settings_User_Add_UsernameLengthError_MessageTemplate" xml:space="preserve">
+    <value>Der Benutzername muss zwischen {0} und {1} Zeichen lang sein</value>
+  </data>
+  <data name="Settings_User_Add_PasswordTooShortError_MessageTemplate" xml:space="preserve">
+    <value>Das Passwort muss mindestens {0} Zeichen lang sein</value>
+  </data>
+  <data name="Settings_User_Add_UserCouldNotCreatedError_MessageTemplate" xml:space="preserve">
+    <value>Der Benutzer '{0}' konnte nicht angelegt werden</value>
+  </data>
+  <data name="Settings_User_Add_UserCreatedSuccess_MessageTemplate" xml:space="preserve">
+    <value>Der Benutzer '{0}' wurde erfolgreich angelegt</value>
+  </data>
+  <data name="Settings_User_Add_CreationUnknownError_MessageTemplate" xml:space="preserve">
+    <value>Fehler beim Anlegen des Benutzers: {0}</value>
+  </data>
+  <data name="Account_Login_SigningInButton_Text" xml:space="preserve">
+    <value>Anmelden...</value>
+  </data>
+  <data name="Account_Login_SignInButton_Text" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="Settings_About_ExternalLink_ProjectWebsite_Href" xml:space="preserve">
+    <value>https://homebook-app.github.io/</value>
+  </data>
+  <data name="Settings_Storage_StorageInformationsArea_Title" xml:space="preserve">
+    <value>Speicher Informationen</value>
+  </data>
+  <data name="Settings_Storage_UsedSpace_Title" xml:space="preserve">
+    <value>Verwendeter Speicher</value>
+  </data>
+  <data name="Settings_Storage_UsedSpace_Text" xml:space="preserve">
+    <value>{0} von {1} verfügbar</value>
+  </data>
+  <data name="Settings_Storage_UsageChart_Usage_Title" xml:space="preserve">
+    <value>Belegung</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
+    <value>Medienspeicher</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
+    <value>Cache</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Temp_Title" xml:space="preserve">
+    <value>Temp</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Logs_Title" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="Settings_Developer_ConfigurationArea_Title" xml:space="preserve">
+    <value>App Konfiguration</value>
+  </data>
+  <data name="Settings_Developer_ConfigurationItemsFrontend_Title" xml:space="preserve">
+    <value>Frontend</value>
+  </data>
+  <data name="Settings_Developer_ConfigurationItemsBackend_Title" xml:space="preserve">
+    <value>Backend</value>
+  </data>
 </root>
