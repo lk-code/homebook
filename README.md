@@ -119,6 +119,14 @@ if all environment variables are set, correctly, the setup will be running autom
 | `HOMEBOOK_CONFIGURATION_NAME`            | the name of the homebook instance (e.g., `My HomeBook`)                   |
 | `HOMEBOOK_CONFIGURATION_DEFAULT_LOCALE`  | the default ui locale (see languages)                                     |
 
+#### Additional Environment Variables
+
+if all environment variables are set, correctly, the setup will be running automatically.
+
+| Variable     | Description                                             |
+|--------------|---------------------------------------------------------|
+| `HB_DevMode` | with value 'true' the devmode for homebook is activated |
+
 ### Allowed Password Characters
 
 ```
