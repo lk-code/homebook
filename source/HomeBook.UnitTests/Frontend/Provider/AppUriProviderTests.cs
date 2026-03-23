@@ -14,10 +14,10 @@ public class AppUriProviderTests
             .AddInMemoryCollection(new Dictionary<string, string?>
             {
                 {
-                    "Backend:Host", "https://www.your-homebook.com/"
+                    "Backend:Host", "/app"
                 },
                 {
-                    "Frontend:Host", "/api"
+                    "Frontend:Host", "https://www.your-homebook.com/"
                 }
             })
             .Build();
@@ -30,6 +30,33 @@ public class AppUriProviderTests
 
         // Assert
         absoluteUri.ShouldNotBeNull();
-        absoluteUri.ToString().ShouldBe("https://www.your-homebook.com/images/test.jpg");
+        absoluteUri.ToString().ShouldBe("https://www.your-homebook.com/app/images/test.jpg");
+    }
+
+    [Test]
+    public void GetAbsoluteUri_WithDifferentServerConfig_Return()
+    {
+        // Arrange
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                {
+                    "Backend:Host", "https://backend.your-homebook.com/"
+                },
+                {
+                    "Frontend:Host", "https://www.your-homebook.com/"
+                }
+            })
+            .Build();
+        var instance = new AppUriProvider(
+            configuration);
+        var relativeUri = "/images/test.jpg";
+
+        // Act
+        var absoluteUri = instance.GetAbsoluteUri(relativeUri);
+
+        // Assert
+        absoluteUri.ShouldNotBeNull();
+        absoluteUri.ToString().ShouldBe("https://backend.your-homebook.com/images/test.jpg");
     }
 }
