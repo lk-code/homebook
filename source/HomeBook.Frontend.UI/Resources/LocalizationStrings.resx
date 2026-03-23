@@ -95,9 +95,6 @@
     <data name="UiLicenseDialog_Title" xml:space="preserve">
         <value>HomeBook Project Licenses</value>
     </data>
-    <data name="Settings_About_VersionToolTip_Text_Template" xml:space="preserve">
-        <value>Server: {0}, UI: {1}</value>
-    </data>
     <data name="Settings_About_Version_Text_Template" xml:space="preserve">
         <value>HomeBook Version: {0}</value>
     </data>
@@ -294,7 +291,7 @@
         <value>Username</value>
     </data>
     <data name="Setup_AdminUser_Form_Username_HelperText" xml:space="preserve">
-        <value>Enter a username for your homebook administrator account</value>
+        <value>Enter a username for your HomeBook administrator account</value>
     </data>
     <data name="Setup_AdminUser_Form_Password_Label" xml:space="preserve">
         <value>Password</value>
@@ -309,10 +306,10 @@
         <value>HomeBook Configuration</value>
     </data>
     <data name="Setup_Configuration_ConfigurationFound_Title" xml:space="preserve">
-        <value>Homebook has been preconfigured.</value>
+        <value>HomeBook has been preconfigured.</value>
     </data>
     <data name="Setup_Configuration_ConfigurationSaved_Title" xml:space="preserve">
-        <value>Homebook configuration saved successfully.</value>
+        <value>HomeBook configuration saved successfully.</value>
     </data>
     <data name="Setup_Configuration_Form_InstanceName_Label" xml:space="preserve">
         <value>HomeBook Instance Name</value>
@@ -324,7 +321,7 @@
         <value>HomeBook Default Language</value>
     </data>
     <data name="Setup_Configuration_Form_InstanceDefaultLocale_HelperText" xml:space="preserve">
-        <value>Select the default language for displaying Homebook</value>
+        <value>Select the default language for displaying HomeBook</value>
     </data>
     <data name="Setup_Configuration_Save_Button_Text" xml:space="preserve">
         <value>Save Configuration</value>
@@ -345,7 +342,7 @@
         <value>The setup was successful.</value>
     </data>
     <data name="Setup_Process_Finished_StartHomeBook_Message" xml:space="preserve">
-        <value>Start HomeBook</value>
+        <value>Open HomeBook</value>
     </data>
     <data name="Setup_Process_Finished_RemoveEnvironmentVariables_Message" xml:space="preserve">
         <value>Please remove the Setup Environment Variables from your docker configuration.</value>
@@ -381,7 +378,7 @@
         <value>The update was successful.</value>
     </data>
     <data name="Update_Process_Finished_StartHomeBook_Message" xml:space="preserve">
-        <value>Start HomeBook</value>
+        <value>Open HomeBook</value>
     </data>
     <data name="Update_Process_Retry_Button_Text" xml:space="preserve">
         <value>Retry Update</value>
@@ -402,7 +399,7 @@
         <value>An unknown error occurred during the update process: {0}</value>
     </data>
     <data name="Settings_Instance_PageTitle" xml:space="preserve">
-        <value>Homebook Configuration</value>
+        <value>HomeBook Configuration</value>
     </data>
     <data name="Settings_Instance_PageCaption" xml:space="preserve">
         <value>Manage global settings and features for your HomeBook instance.</value>
