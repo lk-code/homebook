@@ -189,12 +189,6 @@ namespace HomeBook.Frontend.UI.Resources {
             }
         }
         
-        public static string Settings_About_VersionToolTip_Text_Template {
-            get {
-                return ResourceManager.GetString("Settings_About_VersionToolTip_Text_Template", resourceCulture);
-            }
-        }
-        
         public static string Settings_About_Version_Text_Template {
             get {
                 return ResourceManager.GetString("Settings_About_Version_Text_Template", resourceCulture);
