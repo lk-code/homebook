@@ -10,6 +10,4 @@ public record SearchModuleResponse(
 public record SearchItemResponse(
     string Title,
     string? Description,
-    string Url,
-    string Icon,
-    string Color);
+    string Identifier);

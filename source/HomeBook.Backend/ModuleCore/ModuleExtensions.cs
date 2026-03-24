@@ -1,17 +1,14 @@
 using HomeBook.Backend.Abstractions.Contracts;
-using HomeBook.Backend.Core.Search;
-using HomeBook.Backend.Data.Contracts;
-using HomeBook.Backend.Factories;
 using HomeBook.Backend.Modules.Abstractions;
 using HomeBook.Backend.Options;
-using Npgsql;
 
 namespace HomeBook.Backend.ModuleCore;
 
 public static class ModuleExtensions
 {
     private static ModuleBuilder? _moduleBuilder = null;
-    private static SearchRegistrationFactory? _searchRegistrationFactory = null;
+
+    public static ModuleBuilder? GetHomeBookModuleBuilder(this WebApplicationBuilder builder) => _moduleBuilder;
 
     /// <summary>
     /// use in Blazor Server
@@ -41,7 +38,6 @@ public static class ModuleExtensions
         IConfiguration c,
         Action<ModuleBuilder> builderAction)
     {
-        _searchRegistrationFactory = new();
         _moduleBuilder = new ModuleBuilder(hb, sc, c);
         builderAction(_moduleBuilder);
     }
@@ -53,17 +49,6 @@ public static class ModuleExtensions
     public static async Task RunModulesPostBuild(this WebApplication host)
     {
         CancellationToken cancellationToken = CancellationToken.None;
-
-        ISearchRegistrationInitiator searchRegistrationInitiator = host.Services
-            .GetRequiredService<ISearchRegistrationInitiator>();
-        searchRegistrationInitiator.AddServiceProvider(host.Services);
-
-        // register the search provider with modules
-        // sc.AddSingleton<ISearchRegistrationFactory>(x =>
-        // {
-        //     _searchRegistrationFactory.AddServiceProvider(x);
-        //     return _searchRegistrationFactory!;
-        // });
 
         await host.RunModulesPostBuild(host.Services,
             host.Configuration);
@@ -83,11 +68,6 @@ public static class ModuleExtensions
     {
         if (_moduleBuilder is null)
             return;
-
-        // register search enabled modules in search registration factory
-        ISearchRegistrationInitiator searchRegistrationInitiator = sp
-            .GetRequiredService<ISearchRegistrationInitiator>();
-        _moduleBuilder.RegisterModulesInSearchFactory(searchRegistrationInitiator);
 
         IEnumerable<IModule> modules = sp.GetServices<IModule>();
 

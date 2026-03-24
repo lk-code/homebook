@@ -1,4 +1,7 @@
 using System.Reflection;
+using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Core.Search;
+using HomeBook.Backend.Core.Search.Models;
 using HomeBook.Backend.Modules.Abstractions;
 using HomeBook.Backend.Options;
 
@@ -9,9 +12,8 @@ public class ModuleBuilder(
     IServiceCollection serviceCollection,
     IConfiguration configuration)
 {
-    private readonly List<string> _searchEnabledModules = [];
-
-    public IReadOnlyList<string> SearchEnabledModules => _searchEnabledModules.AsReadOnly();
+    private readonly List<SearchHandlerRegistration> _searchHandlerRegistrations = [];
+    public List<SearchHandlerRegistration> GetSearchHandlerRegistrations() => _searchHandlerRegistrations;
 
     /// <summary>
     /// adds a module to the service collection if the module is enabled.
@@ -37,6 +39,36 @@ public class ModuleBuilder(
         serviceCollection.AddKeyedSingleton<IModule, T>(moduleId);
 
         // implements the Module the IBackendModuleServiceRegistrar interface?
+        RegisterModuleServices<T>();
+
+        // implements the Module the IBackendModuleSearchRegistrar interface?
+        RegisterModuleSearchHandler<T>(moduleId);
+    }
+
+    private void RegisterModuleSearchHandler<T>(string moduleId) where T : class, IModule
+    {
+        if (typeof(IBackendModuleSearchRegistrar).IsAssignableFrom(typeof(T)))
+        {
+            ISearchBuilder searchBuilder = new SearchBuilder();
+
+            MethodInfo? method = typeof(T).GetMethod(
+                nameof(IBackendModuleSearchRegistrar.RegisterSearch),
+                BindingFlags.Public | BindingFlags.Static
+            );
+            method?.Invoke(null, [searchBuilder, configuration]);
+
+            ISearchBuilderDataAccessor accessor = (ISearchBuilderDataAccessor)searchBuilder;
+            IEnumerable<Type> searchHandlerTypes = accessor.GetRegisteredSearchHandlers();
+            foreach (Type searchHandlerType in searchHandlerTypes)
+            {
+                serviceCollection.AddScoped(typeof(ISearchHandler), searchHandlerType);
+                _searchHandlerRegistrations.Add(new SearchHandlerRegistration(moduleId, searchHandlerType));
+            }
+        }
+    }
+
+    private void RegisterModuleServices<T>() where T : class, IModule
+    {
         if (typeof(IBackendModuleServiceRegistrar).IsAssignableFrom(typeof(T)))
         {
             MethodInfo? method = typeof(T).GetMethod(
@@ -45,8 +77,5 @@ public class ModuleBuilder(
             );
             method?.Invoke(null, [serviceCollection, configuration]);
         }
-
-        if (typeof(IBackendModuleSearchRegistrar).IsAssignableFrom(typeof(T)))
-            _searchEnabledModules.Add(moduleId);
     }
 }

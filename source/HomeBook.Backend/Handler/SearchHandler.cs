@@ -15,19 +15,17 @@ public class SearchHandler
     /// <param name="user"></param>
     /// <param name="query"></param>
     /// <param name="logger"></param>
-    /// <param name="searchRegistrationFactory"></param>
+    /// <param name="searchProvider"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static async Task<IResult> HandleSearch(ClaimsPrincipal user,
         [FromQuery(Name = "s")] string query,
         [FromServices] ILogger<SearchHandler> logger,
-        [FromServices] ISearchRegistrationFactory searchRegistrationFactory,
+        [FromServices] ISearchProvider searchProvider,
         CancellationToken cancellationToken)
     {
         try
         {
-            ISearchProvider searchProvider = searchRegistrationFactory
-                .CreateSearchProvider();
             IEnumerable<ISearchAggregationResult> searchAggregationResults = await searchProvider
                 .SearchAsync(query,
                     user.GetUserId(),

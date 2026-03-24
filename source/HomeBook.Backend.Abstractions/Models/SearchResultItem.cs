@@ -1,6 +1,6 @@
 using HomeBook.Backend.Abstractions.Contracts;
 
-namespace HomeBook.Backend.Modules.Abstractions;
+namespace HomeBook.Backend.Abstractions.Models;
 
 public record SearchResult(
     int TotalCount,
@@ -9,6 +9,4 @@ public record SearchResult(
 public record SearchResultItem(
     string Title,
     string? Description,
-    string Url,
-    string Icon,
-    string Color) : ISearchResultItem;
+    string Identifier) : ISearchResultItem;

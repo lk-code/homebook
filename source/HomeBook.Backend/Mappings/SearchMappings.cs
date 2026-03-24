@@ -22,7 +22,5 @@ public static class SearchMappings
         new(
             item.Title,
             item.Description,
-            item.Url,
-            item.Icon,
-            item.Color);
+            item.Identifier);
 }
