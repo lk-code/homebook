@@ -1,0 +1,92 @@
+@using HomeBook.Frontend.Abstractions.Models
+@using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Modules.Abstractions
+@using Microsoft.AspNetCore.Components
+
+@inject IEnumerable<ISearchHandlerResultTemplate> SearchHandlerResultTemplates
+@inject IEnumerable<SearchHandlerResultTemplateRegistration> SearchHandlerResultTemplateRegistrations
+
+<div class="@RootCssClass">
+    @if (ShowFlyout)
+    {
+        <button type="button"
+                class="ui-search-component__overlay"
+                aria-label="Close search"
+                @onclick="CloseFlyout"/>
+    }
+
+    <MudTextField T="string"
+                  Value="@SearchText"
+                  ValueChanged="OnSearchTextChangedAsync"
+                  Margin="Margin.Dense"
+                  Placeholder="@Placeholder"
+                  Clearable="true"
+                  Immediate="true"
+                  FullWidth="true"
+                  Variant="Variant.Outlined"
+                  Adornment="Adornment.Start"
+                  AdornmentIcon="@HomeBookIcons.Icons8.Windows11.Outline.Search"
+                  Class="ui-search-component__input"/>
+
+    @if (ShowFlyout)
+    {
+        <MudPaper Class="ui-search-component__flyout"
+                  Elevation="10">
+            @if (IsSearching)
+            {
+                <div class="ui-search-component__state">
+                    <MudProgressCircular Indeterminate="true"
+                                         Size="Size.Small"/>
+                </div>
+            }
+            else
+            {
+                @foreach (SearchModuleGroup module in SearchResults)
+                {
+                    <section class="ui-search-component__module" @key="module.ModuleKey">
+                        <div class="ui-search-component__module-header">
+                            <MudText Typo="Typo.overline"
+                                     Class="ui-search-component__module-title">
+                                @FormatModuleName(module.ModuleKey)
+                            </MudText>
+
+                            <MudText Typo="Typo.caption"
+                                     Class="ui-search-component__module-count">
+                                @module.TotalCount
+                            </MudText>
+                        </div>
+
+                        @if (module.TemplateType is not null)
+                        {
+                            <DynamicComponent Type="module.TemplateType"
+                                              Parameters="BuildSearchHandlerResultTemplateParameters(module.Items)"/>
+                        }
+                        else
+                        {
+                            <div class="ui-search-component__items">
+                                @foreach (SearchHandlerResultTemplateItem item in module.Items)
+                                {
+                                    <div class="ui-search-component__item"
+                                         @key="item.Identifier ?? item.Title">
+                                        <MudText Typo="Typo.body2"
+                                                 Class="ui-search-component__item-title">
+                                            @item.Title
+                                        </MudText>
+
+                                        @if (!string.IsNullOrWhiteSpace(item.Description))
+                                        {
+                                            <MudText Typo="Typo.caption"
+                                                     Class="ui-search-component__item-description">
+                                                @item.Description
+                                            </MudText>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </section>
+                }
+            }
+        </MudPaper>
+    }
+</div>

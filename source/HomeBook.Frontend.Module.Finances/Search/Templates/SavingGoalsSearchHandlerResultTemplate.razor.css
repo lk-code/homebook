@@ -1,0 +1,31 @@
+.ui-search-saving-goals-handler-template {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0 1rem 1rem;
+}
+
+.ui-search-saving-goals-handler-template__row-button {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    text-transform: none;
+}
+
+.ui-search-saving-goals-handler-template__row {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    text-align: left;
+}
+
+.ui-search-saving-goals-handler-template__title {
+    display: block;
+    font-weight: 600;
+}
+
+.ui-search-saving-goals-handler-template__description {
+    display: block;
+    margin-top: 0.2rem;
+    color: color-mix(in srgb, var(--mud-palette-text-primary) 72%, transparent);
+}

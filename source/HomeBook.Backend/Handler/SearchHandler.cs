@@ -26,10 +26,12 @@ public class SearchHandler
     {
         try
         {
-            IEnumerable<ISearchAggregationResult> searchAggregationResults = await searchProvider
+            List<ISearchAggregationResult> searchAggregationResults = (await searchProvider
                 .SearchAsync(query,
                     user.GetUserId(),
-                    cancellationToken);
+                    cancellationToken))
+                .Where(x => x.TotalCount > 0)
+                .ToList();
 
             SearchResponse response = searchAggregationResults.ToResponse();
             return TypedResults.Ok(response);

@@ -10,6 +10,6 @@ public class SavingGoalSearchHandler : ISearchHandler
         CancellationToken cancellationToken = default)
     {
         return new SearchResult(0,
-            []);
+        []);
     }
 }

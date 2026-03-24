@@ -45,6 +45,5 @@ public class Module : IModule,
         IConfiguration configuration)
     {
         searchBuilder.RegisterHandler<SearchHandler.SavingGoalSearchHandler>();
-        searchBuilder.RegisterHandler<SearchHandler.TestSearchHandler>();
     }
 }

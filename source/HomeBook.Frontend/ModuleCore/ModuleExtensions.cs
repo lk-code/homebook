@@ -1,4 +1,5 @@
 using HomeBook.Frontend.Abstractions.Contracts;
+using HomeBook.Frontend.Abstractions.Models;
 using HomeBook.Frontend.Modules.Abstractions;
 using HomeBook.Frontend.Options;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -7,14 +8,8 @@ namespace HomeBook.Frontend.ModuleCore;
 
 public static class ModuleExtensions
 {
-    private static ModuleBuilder? _moduleBuilder = null;
+    private static ModuleBuilder? _moduleBuilder;
 
-    /// <summary>
-    /// use in Blazor Server
-    /// </summary>
-    /// <param name="builder"></param>
-    /// <param name="homeBookOptions"></param>
-    /// <param name="builderAction"></param>
     public static void AddModules(this WebAssemblyHostBuilder builder,
         HomeBookOptions homeBookOptions,
         Action<ModuleBuilder> builderAction)
@@ -25,13 +20,6 @@ public static class ModuleExtensions
             builderAction);
     }
 
-    /// <summary>
-    ///
-    /// </summary>
-    /// <param name="sc"></param>
-    /// <param name="hb"></param>
-    /// <param name="c"></param>
-    /// <param name="builderAction"></param>
     public static void AddModules(this IServiceCollection sc,
         HomeBookOptions hb,
         IConfiguration c,
@@ -40,17 +28,13 @@ public static class ModuleExtensions
         _moduleBuilder = new ModuleBuilder(hb, sc, c);
         builderAction(_moduleBuilder);
 
-        // _moduleBuilder
-        //     .AddSystemModule<HomeModule>()
-        //     .AddSystemModule<HelpModule>();
-
-        // _modules = sp.GetServices<IModule>();
+        _moduleBuilder.GenerateSearchHandlerResultTemplateRegistration();
+        foreach (SearchHandlerResultTemplateRegistration registration in _moduleBuilder.GetSearchHandlerRegistrations())
+        {
+            sc.AddSingleton(registration);
+        }
     }
 
-    /// <summary>
-    /// use in Blazor Server
-    /// </summary>
-    /// <param name="host"></param>
     public static async Task RunModulesPostBuild(this WebAssemblyHost host)
     {
         CancellationToken cancellationToken = CancellationToken.None;
@@ -61,39 +45,29 @@ public static class ModuleExtensions
         await startupService.StartAsync(cancellationToken);
     }
 
-    /// <summary>
-    /// general post build logic
-    /// </summary>
-    /// <param name="sp"></param>
-    /// <param name="c"></param>
     public static async Task RunSupportModulesPostBuild(this IServiceProvider sp,
         IConfiguration c)
     {
         IEnumerable<IModule> modules = sp.GetServices<IModule>();
         IWidgetFactory widgetFactory = sp.GetRequiredService<IWidgetFactory>();
 
-        // initialize all modules
         foreach (IModule module in modules)
         {
             if (_moduleBuilder is null)
                 return;
 
-            // register widgets
             string moduleId = module.GetType().FullName
                               ?? throw new InvalidOperationException("Module type must have a full name.");
-            // IReadOnlyList<Type> widgets = widgetFactory.GetWidgetTypesForModule(moduleId);
 
             IWidgetBuilder widgetBuilder = _moduleBuilder.GetWidgetBuilder(moduleId);
             widgetFactory.AddWidgetBuilder(moduleId, widgetBuilder);
 
-            // call the initialization logic
             try
             {
                 await module.InitializeAsync();
             }
             catch (NotImplementedException)
             {
-                // do nothing
             }
         }
     }
