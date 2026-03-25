@@ -4,7 +4,5 @@ public interface ISearchResultItem
 {
     string Title { get; }
     string? Description { get; }
-    string Url { get; }
-    string Icon { get; }
-    string Color { get; }
+    string Identifier { get; }
 }

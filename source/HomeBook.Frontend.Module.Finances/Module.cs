@@ -17,7 +17,8 @@ public class Module(IStringLocalizer<Strings> Loc)
     : IModule,
         IModuleWidgetRegistration,
         IModuleDependencyRegistration,
-        IModuleStartMenuRegistration
+        IModuleStartMenuRegistration,
+        IModuleSearchRegistration
 {
     /// <inheritdoc />
     public string Name => Loc[nameof(Strings.ModuleName)];
@@ -71,5 +72,10 @@ public class Module(IStringLocalizer<Strings> Loc)
             "/Finances",
             HomeBookIcons.Icons8.Windows11.Filled.Graph,
             "var(--hb-color-denim)");
+    }
+
+    public static void RegisterSearch(ISearchHandlerResultTemplateBuilder builder, IConfiguration configuration)
+    {
+        builder.AddSearchHandlerResultTemplate<Search.Templates.SavingGoalsSearchHandlerResultTemplate>("HomeBook.Backend.Module.Finances.Module.SavingGoalSearchHandler");
     }
 }

@@ -74,7 +74,6 @@ public class FinanceSavingGoalHandlerE2ETests
             ["Database:UseInMemory"] = "true",
             ["Database:Provider"] = "SQLITE"
         });
-        SearchRegistrationFactory srf = new();
         IServiceProvider serviceProvider = new ServiceCollection()
             .AddLogging()
             .AddSingleton<IConfiguration>(configuration)
@@ -82,7 +81,7 @@ public class FinanceSavingGoalHandlerE2ETests
             .AddBackendDataSqlite(configuration)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
             .AddDependenciesForRuntime(configuration, InstanceStatus.SETUP)
-            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .AddBackendModulesForTestEnvironment(configuration)
             .BuildServiceProvider();
 
         // apply migrations

@@ -1,5 +1,4 @@
 using FluentValidation;
-using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Core.Finances.Validators;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Module.Finances.Contracts;
@@ -42,37 +41,9 @@ public class Module : IModule,
         services.AddSingleton<IValidator<SavingGoal>, SavingGoalValidator>();
     }
 
-    public async Task<SearchResult> SearchAsync(string query,
-        Guid userId,
-        CancellationToken cancellationToken = default)
+    public static void RegisterSearch(ISearchBuilder searchBuilder,
+        IConfiguration configuration)
     {
-        await Task.Delay(5000, cancellationToken); // Simulate some search delay
-
-        var items = new List<ISearchResultItem>
-        {
-            new SearchResultItem(
-                Title: "Budget Overview",
-                Description: "View your monthly budget summary",
-                Url: "/finances/budget-overview",
-                Icon: "budget_icon",
-                Color: "green"
-            ),
-            new SearchResultItem(
-                Title: "Expense Tracker",
-                Description: "Track your daily expenses",
-                Url: "/finances/expense-tracker",
-                Icon: "expense_icon",
-                Color: "red"
-            ),
-            new SearchResultItem(
-                Title: "Saving Goals",
-                Description: "Manage your saving goals",
-                Url: "/finances/saving-goals",
-                Icon: "saving_icon",
-                Color: "blue"
-            )
-        };
-        return new SearchResult(items.Count,
-            items);
+        searchBuilder.RegisterHandler<SearchHandler.SavingGoalSearchHandler>();
     }
 }

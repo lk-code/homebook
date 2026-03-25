@@ -10,8 +10,7 @@ namespace HomeBook.UnitTests.TestCore.Backend;
 public static class TestModulesExtensions
 {
     public static IServiceCollection AddBackendModulesForTestEnvironment(this IServiceCollection sc,
-        IConfiguration c,
-        SearchRegistrationFactory srf)
+        IConfiguration c)
     {
         HomeBookOptions hb = new();
         ModuleBuilder moduleBuilder = new(hb, sc, c);
@@ -19,8 +18,6 @@ public static class TestModulesExtensions
         moduleBuilder
             .AddModule<HomeBook.Backend.Module.Finances.Module>()
             .AddModule<HomeBook.Backend.Module.Kitchen.Module>();
-
-        moduleBuilder.RegisterModulesInSearchFactory(srf);
 
         return sc;
     }

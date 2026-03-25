@@ -1,0 +1,42 @@
+@using HomeBook.Frontend.Module.Kitchen.Contracts
+@using HomeBook.Frontend.Module.Kitchen.ViewModels
+@using HomeBook.Frontend.Modules.Abstractions
+
+@inject IRecipeService RecipeService
+@inject IMediaService MediaService
+
+<div class="ui-search-recipes-handler-template">
+
+    @foreach (RecipeSearchResultViewModel searchResult in _searchResults)
+    {
+        <MudLink Class="ui-search-recipes-handler-template__tile-button rounded recipe-search-result"
+                 Underline="Underline.None"
+                 Href="@string.Format("/Kitchen/Recipes/{0}/View", searchResult.Id)">
+
+            <MudCard Elevation="0"
+                     Class="frosted-b1">
+
+                @if (searchResult.HeroImageUri is not null)
+                {
+                    <MudCardMedia Image="@searchResult.HeroImageUri.ToString()"
+                                  Class="recipe-image"
+                                  Height="200"/>
+                }
+                else
+                {
+                    <div class="recipe-image-placeholder-container">
+                        <MudCardMedia Image="_content/HomeBook.Frontend.Module.Kitchen/images/undraw_cooking_j2pu.svg"
+                                      Class="recipe-image-placeholder"/>
+                    </div>
+                }
+
+                <MudCardContent Class="border-0">
+                    <MudText>@searchResult.Name</MudText>
+                </MudCardContent>
+
+            </MudCard>
+
+        </MudLink>
+    }
+
+</div>

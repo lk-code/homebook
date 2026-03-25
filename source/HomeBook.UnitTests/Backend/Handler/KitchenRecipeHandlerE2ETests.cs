@@ -68,14 +68,13 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         string testUserName = "testuser";
         string testUserPassword = "s3cr3tP@ssw0rd!";
 
-        SearchRegistrationFactory srf = new();
         IConfigurationRoot configuration = CreateTestConfiguration();
         IServiceCollection serviceCollection = CreateTestServiceProvider(configuration);
         IServiceProvider serviceProvider = serviceCollection
             .AddBackendDataSqlite(configuration)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
             .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
-            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .AddBackendModulesForTestEnvironment(configuration)
             .BuildServiceProvider();
 
         // apply migrations
@@ -243,7 +242,6 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         string testUserPassword = "s3cr3tP@ssw0rd!";
 
         // create configuration and service provider
-        SearchRegistrationFactory srf = new();
         IConfigurationRoot configuration = CreateTestConfiguration();
         IServiceCollection serviceCollection = CreateTestServiceProvider(configuration);
 
@@ -251,7 +249,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             .AddBackendDataSqlite(configuration)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
             .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
-            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .AddBackendModulesForTestEnvironment(configuration)
             .BuildServiceProvider();
 
         // apply migrations
@@ -453,7 +451,6 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         string testUserPassword = "s3cr3tP@ssw0rd!";
 
         // create configuration and service provider
-        SearchRegistrationFactory srf = new();
         IConfigurationRoot configuration = CreateTestConfiguration();
         IServiceCollection serviceCollection = CreateTestServiceProvider(configuration);
 
@@ -461,7 +458,7 @@ public class KitchenRecipeHandlerE2ETests : TestBase
             .AddBackendDataSqlite(configuration)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
             .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
-            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .AddBackendModulesForTestEnvironment(configuration)
             .BuildServiceProvider();
 
         // apply migrations
@@ -632,14 +629,13 @@ public class KitchenRecipeHandlerE2ETests : TestBase
         string testUserName = "testuser";
         string testUserPassword = "s3cr3tP@ssw0rd!";
 
-        SearchRegistrationFactory srf = new();
         IConfigurationRoot configuration = CreateTestConfiguration();
         IServiceCollection serviceCollection = CreateTestServiceProvider(configuration);
         IServiceProvider serviceProvider = serviceCollection
             .AddBackendDataSqlite(configuration)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
             .AddDependenciesForRuntime(configuration, InstanceStatus.RUNNING)
-            .AddBackendModulesForTestEnvironment(configuration, srf)
+            .AddBackendModulesForTestEnvironment(configuration)
             .BuildServiceProvider();
 
         var databaseMigrator = serviceProvider.GetKeyedService<IDatabaseMigrator>("SQLITE")!;

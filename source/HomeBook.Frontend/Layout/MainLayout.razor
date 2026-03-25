@@ -56,16 +56,8 @@
 
         <MudSpacer/>
 
-        <MudTextField T="string"
-                      Margin="Margin.Dense"
-                      Placeholder="@Loc[nameof(LocalizationStrings.MainLayout_SearchTextField_Placeholder)]"
-                      Clearable="true"
-                      Immediate="true"
-                      Variant="Variant.Outlined"
-                      Adornment="Adornment.Start"
-                      AdornmentIcon="@HomeBookIcons.Icons8.Windows11.Outline.Search">
-
-        </MudTextField>
+        <UiSearchComponent Placeholder="@Loc[nameof(LocalizationStrings.MainLayout_SearchTextField_Placeholder)]"
+                           DebounceDelayMs="1000"/>
 
         <MudSpacer/>
 
