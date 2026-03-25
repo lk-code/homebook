@@ -761,4 +761,7 @@
     <data name="Settings_Developer_ConfigurationItemsBackend_Title" xml:space="preserve">
         <value>Backend</value>
     </data>
+    <data name="Settings_NavMenu_Appearance_Text" xml:space="preserve">
+        <value>Appearance</value>
+    </data>
 </root>

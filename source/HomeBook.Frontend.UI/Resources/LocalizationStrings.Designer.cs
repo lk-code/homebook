@@ -1520,5 +1520,11 @@ namespace HomeBook.Frontend.UI.Resources {
                 return ResourceManager.GetString("Settings_Developer_ConfigurationItemsBackend_Title", resourceCulture);
             }
         }
+        
+        public static string Settings_NavMenu_Appearance_Text {
+            get {
+                return ResourceManager.GetString("Settings_NavMenu_Appearance_Text", resourceCulture);
+            }
+        }
     }
 }
