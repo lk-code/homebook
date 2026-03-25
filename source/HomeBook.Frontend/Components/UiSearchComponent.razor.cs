@@ -5,11 +5,23 @@ using HomeBook.Frontend.Abstractions.Models;
 using HomeBook.Frontend.Modules.Abstractions;
 using Humanizer;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace HomeBook.Frontend.Components;
 
 public partial class UiSearchComponent : ComponentBase, IDisposable
 {
+    private static readonly DialogOptions SearchDialogOptions = new()
+    {
+        Position = DialogPosition.TopCenter,
+        MaxWidth = MaxWidth.Medium,
+        FullWidth = true,
+        BackdropClick = true,
+        CloseOnEscapeKey = true,
+        NoHeader = true,
+        CloseButton = false
+    };
+
     private long _searchSequence;
     private bool _disposed;
     private HashSet<Type> _availableSearchHandlerResultTemplateTypes = [];
@@ -88,6 +100,14 @@ public partial class UiSearchComponent : ComponentBase, IDisposable
     private void CloseFlyout()
     {
         ResetSearchState();
+    }
+
+    private Task OnDialogVisibleChanged(bool visible)
+    {
+        if (!visible)
+            CloseFlyout();
+
+        return Task.CompletedTask;
     }
 
     private async Task SearchAsync(long currentSequence)

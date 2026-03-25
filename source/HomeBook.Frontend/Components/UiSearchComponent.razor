@@ -7,14 +7,6 @@
 @inject IEnumerable<SearchHandlerResultTemplateRegistration> SearchHandlerResultTemplateRegistrations
 
 <div class="@RootCssClass">
-    @if (ShowFlyout)
-    {
-        <button type="button"
-                class="ui-search-component__overlay"
-                aria-label="Close search"
-                @onclick="CloseFlyout"/>
-    }
-
     <MudTextField T="string"
                   Value="@SearchText"
                   ValueChanged="OnSearchTextChangedAsync"
@@ -28,10 +20,14 @@
                   AdornmentIcon="@HomeBookIcons.Icons8.Windows11.Outline.Search"
                   Class="ui-search-component__input"/>
 
-    @if (ShowFlyout)
-    {
-        <MudPaper Class="ui-search-component__flyout"
-                  Elevation="10">
+    <MudDialog Visible="@ShowFlyout"
+               VisibleChanged="OnDialogVisibleChanged"
+               Options="@SearchDialogOptions"
+               Gutters="false"
+               Class="frosted-b3"
+               ContentClass="ui-search-component__dialog-content">
+        <DialogContent>
+            <div class="ui-search-component__dialog-body">
             @if (IsSearching)
             {
                 <div class="ui-search-component__state">
@@ -87,6 +83,7 @@
                     </section>
                 }
             }
-        </MudPaper>
-    }
+            </div>
+        </DialogContent>
+    </MudDialog>
 </div>

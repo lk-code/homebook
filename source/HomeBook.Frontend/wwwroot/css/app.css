@@ -2060,21 +2060,7 @@
 }
 
 .ui-search-component.is-open {
-  z-index: 1201;
-}
-
-.ui-search-component__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  display: block;
-  width: 100vw;
-  height: 100vh;
-  padding: 0;
-  margin: 0;
-  border: 0;
-  background: transparent;
-  appearance: none;
+  z-index: 1601;
 }
 
 .ui-search-component__input {
@@ -2083,17 +2069,17 @@
   width: 100%;
 }
 
-.ui-search-component__flyout {
-  position: absolute;
-  left: 0;
-  top: 100px;
-  z-index: 1;
-  width: 100%;
-  max-height: min(32rem, 70vh);
+.ui-search-component__dialog-content {
+  padding: 0;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.ui-search-component__dialog-body {
   overflow-y: auto;
   border-radius: 16px;
   color: var(--mud-palette-text-primary);
-  animation: ui-search-component-flyout-in 180ms ease-out;
+  background: transparent;
 }
 
 .ui-search-component__state {
@@ -2104,7 +2090,7 @@
 }
 
 .ui-search-component__module {
-  padding: 0.75rem 0;
+  padding: 0.75rem 0 0;
 }
 
 .ui-search-component__module + .ui-search-component__module {
@@ -2172,16 +2158,29 @@
     max-width: min(18rem, 100vw - 7rem);
   }
 }
-@keyframes ui-search-component-flyout-in {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+@media (max-width: 599.98px) {
+  .ui-search-component__dialog-body {
+    width: calc(100vw - 1rem);
+    max-height: min(28rem, 75vh);
   }
 }
+.recipe-image-placeholder-container {
+  height: 200px;
+  padding-top: 20px;
+}
+.recipe-image-placeholder-container .recipe-image-placeholder {
+  height: 180px !important;
+  background-size: contain;
+}
+
+.recipe-search-result {
+  box-shadow: var(--mud-elevation-5);
+  transition: all 1s ease;
+}
+.recipe-search-result:hover, .recipe-search-result:active {
+  box-shadow: var(--mud-elevation-8);
+}
+
 .hb-setup-container {
   height: 100vh;
   padding-top: 120px;
