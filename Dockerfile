@@ -12,8 +12,6 @@ RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version $
 ENV DOTNET_ROOT=/usr/share/dotnet-custom
 ENV PATH="$DOTNET_ROOT:$PATH"
 
-RUN echo "SDK LIST:" && dotnet --list-sdks
-
 RUN apt-get update && \
     apt-get install -y curl ca-certificates gnupg && \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash - && \
@@ -47,9 +45,16 @@ RUN apt-get update && \
 RUN addgroup --gid $APP_UID appgroup \
     && adduser --uid $APP_UID --gid $APP_UID --disabled-password --gecos "" appuser
 
-RUN mkdir -p /var/lib/homebook \
-    && chown -R $APP_UID /var/lib/homebook \
-    && chmod -R 770 /var/lib/homebook
+# create working directory for homebook
+RUN mkdir -p /var/lib/homebook
+# copy setup files
+COPY ./files/wallpaper/Mountains.Dark@1x.webp /var/lib/homebook/setup/wallpaper/Mountains.Dark@1x.webp
+COPY ./files/wallpaper/Mountains.Dark@1x.webp /var/lib/homebook/setup/wallpaper/Mountains.Dark@1x.webp
+COPY ./files/wallpaper/Mountains.Light@1x.webp /var/lib/homebook/setup/wallpaper/Mountains.Light@1x.webp
+COPY ./files/wallpaper/Mountains.Light@3x.webp /var/lib/homebook/setup/wallpaper/Mountains.Light@3x.webp
+# set permissions for homebook directory
+RUN chown -R $APP_UID /var/lib/homebook
+RUN chmod -R 770 /var/lib/homebook
 
 RUN rm -rf /usr/share/nginx/html/*
 RUN rm /etc/nginx/sites-enabled/default
