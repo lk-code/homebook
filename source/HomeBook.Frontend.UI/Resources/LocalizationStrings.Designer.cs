@@ -1526,5 +1526,11 @@ namespace HomeBook.Frontend.UI.Resources {
                 return ResourceManager.GetString("Settings_NavMenu_Appearance_Text", resourceCulture);
             }
         }
+        
+        public static string Settings_Appearance_WallpaperArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Appearance_WallpaperArea_Title", resourceCulture);
+            }
+        }
     }
 }

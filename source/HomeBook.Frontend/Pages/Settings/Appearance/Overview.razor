@@ -1,0 +1,187 @@
+@page "/Settings/Appearance"
+
+@using HomeBook.Frontend.Contracts
+@using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Modules.Abstractions
+@using HomeBook.Frontend.UI.Resources
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<LocalizationStrings> Loc
+@inject IInternalFileStorageRegistration FileStorageRegistration
+@inject IMediaService MediaService
+@inject IFileStorageService FileStorageService
+
+<MudContainer>
+
+    <MudGrid>
+
+        <MudItem xs="12" sm="12" md="4" lg="3" xl="3" xxl="3">
+
+            <SettingsNavMenu/>
+
+        </MudItem>
+
+        <MudItem xs="12" sm="12" md="8" lg="9" xl="9" xxl="9">
+
+            <!-- Application Information -->
+            <MudPaper Class="pa-6 frosted-b8"
+                      Elevation="2">
+
+                <MudStack Class="mb-3">
+
+                    <MudStack Row="true"
+                              Class="align-center"
+                              Spacing="2">
+
+                        <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.PaintPaletteWithBrush"
+                                 Size="Size.Large"
+                                 Class="mr-2"/>
+
+                        <MudText Typo="Typo.h5"
+                                 Color="Color.Primary">
+                            +Darstellung
+                            @Loc[nameof(LocalizationStrings.Settings_Appearance_WallpaperArea_Title)]
+                        </MudText>
+
+                    </MudStack>
+
+                    <MudText Typo="Typo.caption"
+                             Color="Color.Primary">
+                        +Das ist eine Beschreibung
+                        @Loc[nameof(LocalizationStrings.Settings_Appearance_WallpaperArea_Title)]
+                    </MudText>
+
+                </MudStack>
+
+                <MudDivider Class="mb-4"/>
+
+                <MudStack Row="true"
+                          Class="align-center mb-1"
+                          Spacing="2">
+                    <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.Panorama"
+                             Size="Size.Large"
+                             Class="mr-2"/>
+                    <MudText Typo="Typo.h6"
+                             Color="Color.Primary">
+                        +Dynamic Wallpaper
+                    </MudText>
+                </MudStack>
+
+                <MudGrid Spacing="3"
+                         Class="mb-5"
+                         Justify="Justify.FlexStart">
+
+                    @foreach (string thumbUrl in _dynamicWallpaperThumbImageUrls)
+                    {
+                        <MudItem>
+                            <MudButton Variant="Variant.Text"
+                                       Class="pa-0">
+                                <MudImage Width="208" Height="140"
+                                          ObjectFit="ObjectFit.Cover"
+                                          Src="@thumbUrl"/>
+                            </MudButton>
+                        </MudItem>
+                    }
+
+                </MudGrid>
+
+                <MudStack Row="true"
+                          Class="align-center mb-1"
+                          Spacing="2">
+                    <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.Picture"
+                             Size="Size.Large"
+                             Class="mr-2"/>
+                    <MudText Typo="Typo.h6"
+                             Color="Color.Primary">
+                        +Wallpaper
+                    </MudText>
+                </MudStack>
+
+                <MudGrid Spacing="3"
+                         Class="mb-5"
+                         Justify="Justify.FlexStart">
+
+                    @foreach (string thumbUrl in _staticWallpaperThumbImageUrls)
+                    {
+                        <MudItem>
+                            <MudButton Variant="Variant.Text"
+                                       Class="pa-0">
+                                <MudImage Width="208" Height="140"
+                                          ObjectFit="ObjectFit.Cover"
+                                          Src="@thumbUrl"/>
+                            </MudButton>
+                        </MudItem>
+                    }
+
+                </MudGrid>
+
+                <MudStack Row="true"
+                          Class="align-center mb-1"
+                          Spacing="2">
+                    <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.PhotoGallery"
+                             Size="Size.Large" y
+                             Class="mr-2"/>
+                    <MudText Typo="Typo.h6"
+                             Color="Color.Primary">
+                        +Eigene
+                    </MudText>
+                </MudStack>
+
+                <MudGrid Spacing="3"
+                         Justify="Justify.FlexStart">
+
+                    @foreach (string thumbUrl in _lastOwnWallpaperThumbImageUrls)
+                    {
+                        <MudItem>
+                            <MudButton Variant="Variant.Text"
+                                       Class="pa-0">
+                                <MudImage Width="208" Height="140"
+                                          ObjectFit="ObjectFit.Cover"
+                                          Src="@thumbUrl"/>
+                            </MudButton>
+                        </MudItem>
+                    }
+
+                    <MudItem>
+
+                        <MudFileUpload T="IBrowserFile"
+                                       Accept="@FileStorageRegistration.FileExtForImages"
+                                       AppendMultipleFiles="false"
+                                       MaxFileSize="@(50 * 1024 * 1024)"
+                                       OnFilesChanged="UploadWallpaperImagesAsync"
+                                       DragAndDrop="true"
+                                       MaximumFileCount="1">
+
+                            <CustomContent>
+
+                                <MudButton Variant="Variant.Outlined"
+                                           OnClick="@context.OpenFilePickerAsync"
+                                           Color="Color.Primary"
+                                           Class="pa-0">
+
+                                    <div class="button-icon-container d-flex align-center flex-wrap justify-center"
+                                         style="width: 208px; height: 140px;">
+                                        <MudIcon Icon="@HomeBookIcons.Icons8.Windows11.Filled.Plus"
+                                                 Size="Size.Large"
+                                                 Class=""/>
+                                    </div>
+
+                                </MudButton>
+
+                            </CustomContent>
+
+                            <SelectedTemplate/>
+
+                        </MudFileUpload>
+
+                    </MudItem>
+
+                </MudGrid>
+
+            </MudPaper>
+
+        </MudItem>
+
+    </MudGrid>
+
+</MudContainer>

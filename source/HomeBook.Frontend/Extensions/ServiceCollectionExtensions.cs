@@ -1,4 +1,5 @@
 using HomeBook.Frontend.Abstractions.Contracts;
+using HomeBook.Frontend.Contracts;
 using HomeBook.Frontend.ModuleCore;
 using HomeBook.Frontend.Modules.Abstractions;
 using HomeBook.Frontend.Provider;
@@ -23,6 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IStartupService, StartupService>();
         services.AddSingleton<IFileStorageService, FileStorageService>();
         services.AddSingleton<IFileStorageRegistration, FileStorageRegistration>();
+        services.AddSingleton<IInternalFileStorageRegistration, FileStorageRegistration>();
         services.AddSingleton<IMediaService, MediaService>();
         services.AddSingleton<ISystemStorageProvider, SystemStorageProvider>();
         services.AddSingleton<IDeveloperService, DeveloperService>();

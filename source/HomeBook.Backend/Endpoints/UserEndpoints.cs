@@ -38,6 +38,32 @@ public static class UserEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
+        group.MapGet("/preferences/wallpaper", UserHandler.HandleGetUserPreferenceForWallpaper)
+            .WithName("GetUserPreferenceForWallpaper")
+            .WithTags("User")
+            .WithDescription(new Description(
+                "returns the user preference for wallpaper",
+                "HTTP 200: User preference was found",
+                "HTTP 401: User is not authorized",
+                "HTTP 404: User preference was not found",
+                "HTTP 500: Unknown error while getting preference"))
+            .RequireAuthorization()
+            .Produces<GetUserPreferenceWallpaperResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        group.MapPost("/preferences/wallpaper", UserHandler.HandleUpdateUserPreferenceForWallpaper)
+            .WithName("UpdateUserPreferenceForWallpaper")
+            .WithTags("User")
+            .WithDescription(new Description("updates the user preference for wallpaper",
+                "HTTP 200: User preference was updated",
+                "HTTP 401: User is not authorized",
+                "HTTP 500: Unknown error while updating preference"))
+            .RequireAuthorization()
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces<string>(StatusCodes.Status500InternalServerError);
+
         return routeBuilder;
     }
 }

@@ -82,6 +82,9 @@ if (instanceStatus == InstanceStatus.RUNNING)
         {
             // app modules
             moduleBuilder
+                // core modules
+                .AddModule<HomeBook.Backend.CoreModules.WallpaperModule>()
+                // additional modules
                 .AddModule<HomeBook.Backend.Module.Finances.Module>()
                 .AddModule<HomeBook.Backend.Module.Kitchen.Module>();
         });
