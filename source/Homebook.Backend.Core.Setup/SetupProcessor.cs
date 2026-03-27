@@ -75,7 +75,7 @@ public class SetupProcessor(
         ServiceProvider serviceProvider = services.BuildServiceProvider();
 
         IUserProvider userProvider = serviceProvider.GetRequiredService<IUserProvider>();
-        await userProvider.CreateUserAsync(adminUsername,
+        Guid adminUserId = await userProvider.CreateUserAsync(adminUsername,
             adminPassword,
             cancellationToken);
 
@@ -96,7 +96,15 @@ public class SetupProcessor(
 
         await instanceConfigurationProvider.SetHomeBookInstanceDefaultLocaleAsync(defaultLocale, cancellationToken);
 
-        // 5. execute available updates
+        // 5. set wallpaper for admin user
+        // TODO: set the wallpaper for admin user
+        IUserPreferenceProvider userPreferenceProvider = serviceProvider.GetRequiredService<IUserPreferenceProvider>();
+        string defaultWallpaperConfiguration = "stawp-Mountains.Light";
+        await userPreferenceProvider.SetUserWallpaperAsync(adminUserId,
+            defaultWallpaperConfiguration,
+            cancellationToken);
+
+        // 6. execute available updates
         IUpdateProcessor updateProcessor = serviceProvider.GetRequiredService<IUpdateProcessor>();
         await updateProcessor.ProcessAsync(cancellationToken);
     }
