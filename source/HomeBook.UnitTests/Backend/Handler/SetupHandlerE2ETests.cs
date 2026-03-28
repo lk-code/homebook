@@ -92,6 +92,7 @@ public class SetupHandlerE2ETests
 
         IConfigurationRoot configuration = builder.Build();
         IServiceProvider serviceProvider = new ServiceCollection()
+            .AddLogging()
             .AddSingleton<IConfiguration>(configuration)
             .AddSingleton(configuration)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
@@ -118,7 +119,8 @@ public class SetupHandlerE2ETests
             _loggerFactory.CreateLogger<SetupConfigurationProvider>(),
             new EnvironmentValidator());
         var hostApplicationLifetime = new TestHostApplicationLifetime();
-        var databaseMigratorFactory = new DatabaseMigratorFactory(serviceProvider);
+        var databaseMigratorFactory = new DatabaseMigratorFactory(serviceProvider,
+            _loggerFactory.CreateLogger<DatabaseMigratorFactory>());
         var hashProviderFactory = new HashProviderFactory();
         var setupProcessorFactory = new SetupProcessorFactory(
             databaseMigratorFactory,
@@ -140,7 +142,10 @@ public class SetupHandlerE2ETests
                     try
                     {
                         var jsonContentBytes = args.Content;
-                        var jsonContent =  Encoding.UTF8.GetString(jsonContentBytes);
+                        if (jsonContentBytes is null)
+                            break;
+
+                        var jsonContent = Encoding.UTF8.GetString(jsonContentBytes);
                         if (!string.IsNullOrEmpty(jsonContent))
                         {
                             // Parse JSON to dictionary

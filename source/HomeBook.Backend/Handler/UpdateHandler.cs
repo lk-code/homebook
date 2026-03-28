@@ -1,10 +1,12 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using Homebook.Backend.Core.Setup.Exceptions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
-public static class UpdateHandler
+public class UpdateHandler
 {
     /// <summary>
     /// starts the homebook update process.
@@ -15,12 +17,13 @@ public static class UpdateHandler
     /// <param name="updateProcessor"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static async Task<IResult> HandleStartUpdate([FromServices] ILogger<SetupHandler> logger,
-        [FromServices] ISetupInstanceManager setupInstanceManager,
+    public static async Task<IResult> HandleStartUpdate([FromServices] ISetupInstanceManager setupInstanceManager,
         [FromServices] IHostApplicationLifetime hostApplicationLifetime,
         [FromServices] IUpdateProcessor updateProcessor,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken,
+        [FromServices] ILogger<UpdateHandler>? logger = null)
     {
+        logger ??= NullLogger<UpdateHandler>.Instance;
         try
         {
             bool setupFinished = setupInstanceManager.IsHomebookInstanceCreated();

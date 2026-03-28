@@ -15,32 +15,30 @@ public class SearchHandler
     /// <param name="user"></param>
     /// <param name="query"></param>
     /// <param name="logger"></param>
-    /// <param name="searchRegistrationFactory"></param>
+    /// <param name="searchProvider"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static async Task<IResult> HandleSearch(ClaimsPrincipal user,
         [FromQuery(Name = "s")] string query,
         [FromServices] ILogger<SearchHandler> logger,
-        [FromServices] ISearchRegistrationFactory searchRegistrationFactory,
+        [FromServices] ISearchProvider searchProvider,
         CancellationToken cancellationToken)
     {
         try
         {
-            ISearchProvider searchProvider = searchRegistrationFactory
-                .CreateSearchProvider();
-            IEnumerable<ISearchAggregationResult> searchAggregationResults = await searchProvider
+            List<ISearchAggregationResult> searchAggregationResults = (await searchProvider
                 .SearchAsync(query,
                     user.GetUserId(),
-                    cancellationToken);
+                    cancellationToken))
+                .Where(x => x.TotalCount > 0)
+                .ToList();
 
             SearchResponse response = searchAggregationResults.ToResponse();
             return TypedResults.Ok(response);
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while handling search request for query '{Query}'",
-                query);
+            logger.LogError(err, "Error while handling search request");
             return TypedResults.InternalServerError(err.Message);
         }
     }

@@ -83,4 +83,7 @@ public interface IRecipesRepository
     Task UpdateRecipeNameAsync(Guid id,
         string name,
         CancellationToken cancellationToken);
+
+    Task<Guid[]> GetImagesByRecipeIdAsync(Guid id,
+        CancellationToken cancellationToken);
 }

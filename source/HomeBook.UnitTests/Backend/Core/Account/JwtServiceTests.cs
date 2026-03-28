@@ -1,5 +1,6 @@
 using HomeBook.Backend.Core.Account;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute.ExceptionExtensions;
 
 namespace HomeBook.UnitTests.Backend.Core.Account;
@@ -30,7 +31,8 @@ public class JwtServiceTests
                 }
             })
             .Build();
-        _instance = new JwtService(_configuration);
+        _instance = new JwtService(_configuration,
+            NullLogger<JwtService>.Instance);
     }
 
     [TestCase(true)]

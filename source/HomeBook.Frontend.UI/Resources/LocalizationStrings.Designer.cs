@@ -189,12 +189,6 @@ namespace HomeBook.Frontend.UI.Resources {
             }
         }
         
-        public static string Settings_About_VersionToolTip_Text_Template {
-            get {
-                return ResourceManager.GetString("Settings_About_VersionToolTip_Text_Template", resourceCulture);
-            }
-        }
-        
         public static string Settings_About_Version_Text_Template {
             get {
                 return ResourceManager.GetString("Settings_About_Version_Text_Template", resourceCulture);
@@ -1452,6 +1446,78 @@ namespace HomeBook.Frontend.UI.Resources {
         public static string Settings_About_ExternalLink_ProjectWebsite_Href {
             get {
                 return ResourceManager.GetString("Settings_About_ExternalLink_ProjectWebsite_Href", resourceCulture);
+            }
+        }
+        
+        public static string Settings_NavMenu_HomebookStorage_Text {
+            get {
+                return ResourceManager.GetString("Settings_NavMenu_HomebookStorage_Text", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_StorageInformationsArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_StorageInformationsArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsedSpace_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsedSpace_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsedSpace_Text {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsedSpace_Text", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageChart_Usage_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageChart_Usage_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Media_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Media_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Cache_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Cache_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Temp_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Temp_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Storage_UsageType_Logs_Title {
+            get {
+                return ResourceManager.GetString("Settings_Storage_UsageType_Logs_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Developer_ConfigurationArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Developer_ConfigurationArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Developer_ConfigurationItemsFrontend_Title {
+            get {
+                return ResourceManager.GetString("Settings_Developer_ConfigurationItemsFrontend_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Developer_ConfigurationItemsBackend_Title {
+            get {
+                return ResourceManager.GetString("Settings_Developer_ConfigurationItemsBackend_Title", resourceCulture);
             }
         }
     }

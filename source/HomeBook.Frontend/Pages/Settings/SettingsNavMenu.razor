@@ -1,10 +1,11 @@
+@using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.UI.Resources
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<LocalizationStrings> Loc
-@inject IConfiguration Configuration
+@inject IDeveloperService DeveloperService
 
 <MudPaper Class="frosted-b4">
 
@@ -63,6 +64,12 @@
                         Href="/Settings/Database"
                         Icon="@HomeBookIcons.Icons8.LiquidGlassColor.Database">
                 +Database
+            </MudNavLink>
+
+            <MudNavLink Match="NavLinkMatch.Prefix"
+                        Href="/Settings/Storage"
+                        Icon="@HomeBookIcons.Icons8.LiquidGlassColor.Chart10Percent">
+                @Loc[nameof(LocalizationStrings.Settings_NavMenu_HomebookStorage_Text)]
             </MudNavLink>
 
             <MudNavLink Match="NavLinkMatch.Prefix"

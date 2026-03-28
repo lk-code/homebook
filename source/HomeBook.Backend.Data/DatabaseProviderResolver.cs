@@ -1,11 +1,14 @@
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Setup;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Data;
 
 /// <inheritdoc />
-public class DatabaseProviderResolver(IEnumerable<IDatabaseProbe> databaseProbes) : IDatabaseProviderResolver
+public class DatabaseProviderResolver(
+    IEnumerable<IDatabaseProbe> databaseProbes,
+    ILogger<DatabaseProviderResolver> logger) : IDatabaseProviderResolver
 {
     /// <inheritdoc />
     public async Task<string?> ResolveAsync(string host,
@@ -15,6 +18,8 @@ public class DatabaseProviderResolver(IEnumerable<IDatabaseProbe> databaseProbes
         string password,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Resolving database provider");
+
         using CancellationTokenSource cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         // Run all database probes in parallel
@@ -22,17 +27,19 @@ public class DatabaseProviderResolver(IEnumerable<IDatabaseProbe> databaseProbes
         {
             try
             {
+                logger.LogDebug("Running database probe");
+
                 bool canConnect = await probe.CanConnectAsync(host, port, databaseName, username, password, cts.Token);
                 return canConnect ? probe.ProviderName : (string?)null;
             }
             catch (OperationCanceledException)
             {
-                // Task was cancelled, return null
+                logger.LogDebug("Database probe was cancelled");
                 return null;
             }
-            catch
+            catch (Exception ex)
             {
-                // If a probe fails, it's not a valid provider for this connection
+                logger.LogError(ex, "Database probe failed");
                 return null;
             }
         });
@@ -47,7 +54,7 @@ public class DatabaseProviderResolver(IEnumerable<IDatabaseProbe> databaseProbes
 
             if (!string.IsNullOrEmpty(result))
             {
-                // Cancel all remaining tasks since we found a valid provider
+                logger.LogInformation("Resolved database provider");
                 await cts.CancelAsync();
                 return result;
             }
@@ -56,7 +63,7 @@ public class DatabaseProviderResolver(IEnumerable<IDatabaseProbe> databaseProbes
             taskArray = taskArray.Where(t => t != completedTask).ToArray();
         }
 
-        // No successful provider found
+        logger.LogWarning("No database provider could be resolved");
         return null;
     }
 }

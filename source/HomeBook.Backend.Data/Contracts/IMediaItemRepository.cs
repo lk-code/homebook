@@ -46,4 +46,6 @@ public interface IMediaItemRepository
     /// <returns></returns>
     Task DeleteMediaItemAsync(Guid id,
         CancellationToken cancellationToken = default);
+
+    Task<string?> GetFilenameByIdAsync(Guid mediaItemId, CancellationToken cancellationToken);
 }

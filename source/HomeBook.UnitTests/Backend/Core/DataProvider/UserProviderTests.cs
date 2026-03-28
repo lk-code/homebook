@@ -33,10 +33,10 @@ public class UserProviderTests
         _logger = factory.CreateLogger<UserProvider>();
         _userRepository = Substitute.For<IUserRepository>();
         _instance = new UserProvider(
-            // _logger,
             _userRepository,
             new HashProviderFactory(),
-            new UserValidator());
+            new UserValidator(),
+            _logger);
     }
 
     [Test]

@@ -11,9 +11,7 @@ public static class ServiceCollectionExtensions
         IConfiguration configuration,
         InstanceStatus instanceStatus)
     {
-        services.AddSingleton<SearchRegistrationFactory>();
-        services.AddSingleton<ISearchRegistrationFactory, SearchRegistrationFactory>(x => x.GetRequiredService<SearchRegistrationFactory>());
-        services.AddSingleton<ISearchRegistrationInitiator, SearchRegistrationFactory>(x => x.GetRequiredService<SearchRegistrationFactory>());
+        services.AddScoped<ISearchProvider, SearchProvider>();
 
         return services;
     }

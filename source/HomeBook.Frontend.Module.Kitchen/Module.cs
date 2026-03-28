@@ -16,7 +16,8 @@ public class Module(IStringLocalizer<Strings> Loc)
     : IModule,
         IModuleWidgetRegistration,
         IModuleDependencyRegistration,
-        IModuleStartMenuRegistration
+        IModuleStartMenuRegistration,
+        IModuleSearchRegistration
 {
     /// <inheritdoc />
     public string Name => Loc[nameof(Strings.ModuleName)];
@@ -51,6 +52,13 @@ public class Module(IStringLocalizer<Strings> Loc)
         IConfiguration configuration)
     {
         // builder.AddWidget<Widgets.CurrentBudgetWidget>();
+    }
+
+    /// <inheritdoc />
+    public static void RegisterSearch(ISearchHandlerResultTemplateBuilder builder,
+        IConfiguration configuration)
+    {
+        builder.AddSearchHandlerResultTemplate<Search.Templates.RecipesSearchHandlerResultTemplate>("HomeBook.Backend.Module.Kitchen.Module.RecipeSearchHandler");
     }
 
     /// <inheritdoc />

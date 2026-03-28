@@ -1,4 +1,12 @@
 @page "/Settings/Developer"
+@using HomeBook.Frontend.Abstractions.Contracts
+@using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.UI.Resources
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<LocalizationStrings> Loc
+@inject IConfiguration Configuration
+@inject IDeveloperService DeveloperService
 
 <MudContainer>
 
@@ -12,8 +20,52 @@
 
         <MudItem xs="12" sm="12" md="8" lg="9" xl="9" xxl="9">
 
-            <MudPaper Class="d-flex align-center justify-center mud-width-full py-8">
-                developer
+            <!-- Application Information -->
+            <MudPaper Class="pa-6 frosted-b8"
+                      Elevation="2">
+
+                <MudStack Row="true"
+                          Class="align-center mb-1"
+                          Spacing="2">
+                    <MudIcon Icon="@HomeBookIcons.Icons8.GlassMorphism.Programming"
+                             Size="Size.Large"
+                             Class="mr-2"/>
+                    <MudText Typo="Typo.h5"
+                             Color="Color.Primary">
+                        @Loc[nameof(LocalizationStrings.Settings_Developer_ConfigurationArea_Title)]
+                    </MudText>
+                </MudStack>
+
+                <MudDivider Class="mb-4"/>
+
+                <MudText Typo="Typo.h6"
+                         Color="Color.Primary">
+                    @Loc[nameof(LocalizationStrings.Settings_Developer_ConfigurationItemsFrontend_Title)]
+                </MudText>
+
+                <MudList T="string"
+                         Dense="true">
+                    @foreach (KeyValuePair<string, string?> configItem in _configurationFrontendValues)
+                    {
+                        <MudListItem Text="@($"{configItem.Key} - {configItem.Value}")"/>
+                    }
+                </MudList>
+
+                <MudText Typo="Typo.h6"
+                         Color="Color.Primary">
+
+                    @Loc[nameof(LocalizationStrings.Settings_Developer_ConfigurationItemsBackend_Title)]
+                </MudText>
+
+                <MudList T="string"
+                         Dense="true">
+
+                    @foreach (KeyValuePair<string, string?> configItem in _configurationBackendValues)
+                    {
+                        <MudListItem Text="@($"{configItem.Key} - {configItem.Value}")"/>
+                    }
+                </MudList>
+
             </MudPaper>
 
         </MudItem>

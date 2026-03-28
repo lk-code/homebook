@@ -18,7 +18,7 @@ namespace HomeBook.UnitTests.Backend.Handler;
 public class AccountHandlerTests
 {
     private IAccountProvider _accountProvider = null!;
-    private ILogger<object> _logger = null!;
+    private ILogger<AccountHandler> _logger = null!;
     private IHttpContextAccessor _httpContextAccessor = null!;
     private HttpContext _httpContext = null!;
 
@@ -26,7 +26,7 @@ public class AccountHandlerTests
     public void SetUp()
     {
         _accountProvider = Substitute.For<IAccountProvider>();
-        _logger = Substitute.For<ILogger<object>>();
+        _logger = Substitute.For<ILogger<AccountHandler>>();
         _httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         _httpContext = Substitute.For<HttpContext>();
 
@@ -60,14 +60,14 @@ public class AccountHandlerTests
         var result = await AccountHandler.HandleLogin(
             request,
             _accountProvider,
-            _logger,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<Ok<LoginResponse>>();
+        result.ShouldBeOfType<Ok<LoginResponse>>();
 
-        var okResult = result.Result as Ok<LoginResponse>;
+        var okResult = result as Ok<LoginResponse>;
         okResult!.Value.ShouldNotBeNull();
         okResult.Value!.Token.ShouldBe("jwt-token");
         okResult.Value.RefreshToken.ShouldBe("refresh-token");
@@ -94,12 +94,12 @@ public class AccountHandlerTests
         var result = await AccountHandler.HandleLogin(
             request,
             _accountProvider,
-            _logger,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<UnauthorizedHttpResult>();
+        result.ShouldBeOfType<UnauthorizedHttpResult>();
 
         await _accountProvider.Received(1).LoginAsync(request.Username, request.Password, Arg.Any<CancellationToken>());
     }
@@ -123,14 +123,14 @@ public class AccountHandlerTests
         var result = await AccountHandler.HandleLogin(
             request,
             _accountProvider,
-            _logger,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<BadRequest<ValidationProblemDetails>>();
+        result.ShouldBeOfType<BadRequest<ValidationProblemDetails>>();
 
-        var badRequestResult = result.Result as BadRequest<ValidationProblemDetails>;
+        var badRequestResult = result as BadRequest<ValidationProblemDetails>;
         badRequestResult!.Value.ShouldNotBeNull();
         badRequestResult.Value!.Title.ShouldBe("Validation Error");
         badRequestResult.Value.Detail.ShouldBe("Validation error");
@@ -158,12 +158,12 @@ public class AccountHandlerTests
         var result = await AccountHandler.HandleLogin(
             request,
             _accountProvider,
-            _logger,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
-        result.Result.ShouldBeOfType<UnauthorizedHttpResult>();
+        result.ShouldBeOfType<UnauthorizedHttpResult>();
 
         await _accountProvider.Received(1).LoginAsync(request.Username, request.Password, Arg.Any<CancellationToken>());
     }
@@ -188,9 +188,9 @@ public class AccountHandlerTests
         // Act
         var result = await AccountHandler.HandleLogout(
             _accountProvider,
-            _logger,
             _httpContextAccessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
@@ -222,9 +222,9 @@ public class AccountHandlerTests
         // Act
         var result = await AccountHandler.HandleLogout(
             _accountProvider,
-            _logger,
             _httpContextAccessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
@@ -245,9 +245,9 @@ public class AccountHandlerTests
         // Act
         var result = await AccountHandler.HandleLogout(
             _accountProvider,
-            _logger,
             _httpContextAccessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
@@ -272,9 +272,9 @@ public class AccountHandlerTests
         // Act
         var result = await AccountHandler.HandleLogout(
             _accountProvider,
-            _logger,
             _httpContextAccessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
@@ -303,9 +303,9 @@ public class AccountHandlerTests
         // Act
         var result = await AccountHandler.HandleLogout(
             _accountProvider,
-            _logger,
             _httpContextAccessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();
@@ -338,9 +338,9 @@ public class AccountHandlerTests
         // Act
         var result = await AccountHandler.HandleLogout(
             _accountProvider,
-            _logger,
             _httpContextAccessor,
-            CancellationToken.None);
+            CancellationToken.None,
+            _logger);
 
         // Assert
         result.ShouldNotBeNull();

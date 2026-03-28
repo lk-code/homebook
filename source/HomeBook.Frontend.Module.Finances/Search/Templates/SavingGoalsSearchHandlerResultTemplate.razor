@@ -1,0 +1,25 @@
+<div class="ui-search-saving-goals-handler-template">
+    @foreach (var item in Items)
+    {
+        <MudButton Variant="Variant.Text"
+                   Class="ui-search-saving-goals-handler-template__row-button"
+                   Disabled="@(!CanNavigate(item))"
+                   OnClick="@(() => NavigateToSavingGoal(item))">
+            <MudPaper Class="ui-search-saving-goals-handler-template__row frosted-b3"
+                      Elevation="0">
+                <MudText Typo="Typo.body2"
+                         Class="ui-search-saving-goals-handler-template__title">
+                    @item.Title
+                </MudText>
+
+                @if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    <MudText Typo="Typo.caption"
+                             Class="ui-search-saving-goals-handler-template__description">
+                        @item.Description
+                    </MudText>
+                }
+            </MudPaper>
+        </MudButton>
+    }
+</div>

@@ -1,6 +1,6 @@
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.Core.Search.Models;
-using HomeBook.Backend.Modules.Abstractions;
 using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Core.Search;
@@ -8,47 +8,45 @@ namespace HomeBook.Backend.Core.Search;
 /// <inheritdoc/>
 public class SearchProvider(
     ILogger<SearchProvider> logger,
-    IEnumerable<IBackendModuleSearchRegistrar> modules) : ISearchProvider
+    IEnumerable<ISearchHandler> searchHandlers,
+    IEnumerable<SearchHandlerRegistration> searchHandlerRegistrations) : ISearchProvider
 {
     /// <inheritdoc/>
     public async Task<IReadOnlyList<ISearchAggregationResult>> SearchAsync(string query,
         Guid userId,
         CancellationToken cancellationToken = default)
     {
-        IEnumerable<Task<SearchAggregationResult>> moduleSearchTasks = modules
-            .Select(async module =>
+        logger.LogInformation("Executing search");
+
+        IEnumerable<Task<SearchAggregationResult>> moduleSearchTasks = searchHandlers
+            .Select(async searchHandler =>
             {
                 try
                 {
-                    logger.LogDebug("Requesting module {Module} for search query '{Query}'",
-                        module.Name,
-                        query);
+                    var type = searchHandler.GetType();
+                    string moduleKey = searchHandlerRegistrations.First(x => x.SearchHandlerType == type).ModuleId;
+                    string searchModuleKey = $"{moduleKey}.{type.Name}";
 
-                    SearchResult result = await module.SearchAsync(query,
-                        userId,
-                        cancellationToken);
+                    logger.LogInformation("Handling search request for search handler '{0}'", searchModuleKey);
 
-                    logger.LogDebug("Module {Module} returned search result with {Count} items for query '{Query}'",
-                        module.Name,
-                        result.Items.Count(),
-                        query);
+                    SearchResult searchResult = await searchHandler
+                        .SearchAsync(query, userId, cancellationToken);
 
-                    SearchAggregationResult moduleSearchResult = new(module.Key,
-                        result.TotalCount,
-                        result.Items);
-                    return moduleSearchResult;
+                    return new SearchAggregationResult(searchModuleKey,
+                        searchResult.TotalCount,
+                        searchResult.Items);
                 }
                 catch (OperationCanceledException)
                 {
-                    // Task was cancelled, return null
+                    logger.LogInformation("Search request was cancelled");
                     return null;
                 }
                 catch (Exception err)
                 {
-                    logger.LogError(err,
-                        "Error while requesting module {Module} for search query '{Query}'",
-                        module.Name,
-                        query);
+                    // logger.LogError(err,
+                    //     "Error while requesting module {Module} for search query '{Query}'",
+                    //     module.Name,
+                    //     query);
 
                     return null;
                 }

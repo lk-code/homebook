@@ -1,6 +1,7 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Core.Storage;
 
@@ -9,27 +10,38 @@ public class StorageFileSystemProvider(
     IStorageScopeRegistrationRepository repository,
     IMediaItemRepository mediaItemRepository,
     IApplicationPathProvider applicationPathProvider,
-    IFileSystemService fileSystemService) : IStorageProvider
+    IFileSystemService fileSystemService,
+    ILogger<StorageFileSystemProvider> logger) : IStorageProvider
 {
     /// <inheritdoc/>
     public async Task<bool> IsScopeRegisteredAsync(string fullScopeName,
-        CancellationToken cancellationToken) =>
-        (await repository.GetByFullScopeNameAsync(fullScopeName,
-            cancellationToken) is not null);
+        CancellationToken cancellationToken)
+    {
+        logger.LogDebug("Checking whether a storage scope is registered");
+        return await repository.GetByFullScopeNameAsync(fullScopeName,
+            cancellationToken) is not null;
+    }
 
     /// <inheritdoc/>
     public async Task<bool> IsScopeRegisteredAsync(Guid scopeId,
-        CancellationToken cancellationToken) =>
-        (await repository.GetByIdAsync(scopeId,
-            cancellationToken) is not null);
+        CancellationToken cancellationToken)
+    {
+        logger.LogDebug("Checking whether a storage scope is registered");
+        return await repository.GetByIdAsync(scopeId,
+            cancellationToken) is not null;
+    }
 
     /// <inheritdoc/>
     public async Task<Guid> RegisterStorageScopeAsync(string fullScopeName,
         string moduleKey,
-        CancellationToken cancellationToken) =>
-        await repository.AddScopeAsync(fullScopeName,
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Registering storage scope");
+
+        return await repository.AddScopeAsync(fullScopeName,
             moduleKey,
             cancellationToken);
+    }
 
     /// <inheritdoc/>
     public async Task CreateStorageForScopeAsync(Guid scopeId,
@@ -39,6 +51,7 @@ public class StorageFileSystemProvider(
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
         string storagePath = Path.Combine(applicationPathProvider.StorageDirectory, scopeId.ToString());
+        logger.LogInformation("Ensuring storage directory exists for scope");
 
         bool storageDirectoryAlreadyExists = fileSystemService.DirectoryExists(storagePath);
         if (!storageDirectoryAlreadyExists)
@@ -49,9 +62,12 @@ public class StorageFileSystemProvider(
 
     /// <inheritdoc/>
     public async Task<Guid?> GetScopeIdByFullName(string fullScopeName,
-        CancellationToken cancellationToken) =>
-        (await repository.GetByFullScopeNameAsync(fullScopeName,
+        CancellationToken cancellationToken)
+    {
+        logger.LogDebug("Retrieving storage scope identifier");
+        return (await repository.GetByFullScopeNameAsync(fullScopeName,
             cancellationToken))?.Id;
+    }
 
     private string GetFullStorageFilePath(Guid scopeId, string filename)
     {
@@ -67,6 +83,8 @@ public class StorageFileSystemProvider(
     {
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        logger.LogInformation("Deleting file from storage scope");
 
         string fullFilePath = GetFullStorageFilePath(scopeId, filename);
 
@@ -88,6 +106,8 @@ public class StorageFileSystemProvider(
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
+        logger.LogDebug("Reading file bytes from storage scope");
+
         string fullFilePath = GetFullStorageFilePath(scopeId, filename);
 
         byte[] content = await fileSystemService.FileReadAllBytesAsync(fullFilePath, cancellationToken);
@@ -102,6 +122,8 @@ public class StorageFileSystemProvider(
     {
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
+
+        logger.LogDebug("Reading file text from storage scope");
 
         string fullFilePath = GetFullStorageFilePath(scopeId, filename);
 
@@ -119,8 +141,10 @@ public class StorageFileSystemProvider(
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
+        logger.LogInformation("Writing binary file to storage scope");
+
         string fileExt = Path.GetExtension(originalFilename);
-        string internalFileName = $"{Guid.NewGuid()}.{fileExt}";
+        string internalFileName = $"{Guid.NewGuid()}{fileExt}";
         string fullFilePath = GetFullStorageFilePath(scopeId, internalFileName);
 
         await fileSystemService.FileWriteAllBytesAsync(fullFilePath, content, cancellationToken);
@@ -147,8 +171,10 @@ public class StorageFileSystemProvider(
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
+        logger.LogInformation("Writing text file to storage scope");
+
         string fileExt = Path.GetExtension(originalFilename);
-        string internalFileName = $"{Guid.NewGuid()}.{fileExt}";
+        string internalFileName = $"{Guid.NewGuid()}{fileExt}";
         string fullFilePath = GetFullStorageFilePath(scopeId, internalFileName);
 
         await fileSystemService.FileWriteAllTextAsync(fullFilePath, content, cancellationToken);

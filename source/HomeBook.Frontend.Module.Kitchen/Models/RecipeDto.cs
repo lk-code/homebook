@@ -8,4 +8,5 @@ public record RecipeDto(
     int? Servings,
     int? CaloriesKcal,
     int? DurationInMinutes,
-    string Ingredients);
+    string Ingredients,
+    Guid? HeroMediaId);

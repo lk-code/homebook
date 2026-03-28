@@ -10,6 +10,7 @@ using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 using Serilog;
 using System.Text.Json.Serialization;
+using HomeBook.Backend.Core.Search.Models;
 
 #if DEBUG
 string developmentEnvFile = Path.Combine("env", "Development.env");
@@ -74,6 +75,7 @@ if (builder.Environment.IsDevelopment())
     });
 
 if (instanceStatus == InstanceStatus.RUNNING)
+{
     builder.AddModules(
         builder.HomeBook(),
         (moduleBuilder) =>
@@ -83,6 +85,13 @@ if (instanceStatus == InstanceStatus.RUNNING)
                 .AddModule<HomeBook.Backend.Module.Finances.Module>()
                 .AddModule<HomeBook.Backend.Module.Kitchen.Module>();
         });
+
+    ModuleBuilder moduleBuilder = builder.GetHomeBookModuleBuilder()!;
+    foreach (SearchHandlerRegistration searchHandlerRegistration in moduleBuilder.GetSearchHandlerRegistrations())
+    {
+        builder.Services.AddSingleton<SearchHandlerRegistration>(searchHandlerRegistration);
+    }
+}
 
 WebApplication app = builder.Build();
 
@@ -112,7 +121,8 @@ app.UseDefaultFiles();
 // map endpoints that are always available
 app.MapVersionEndpoints()
     .MapSystemEndpoints()
-    .MapPlatformEndpoints();
+    .MapPlatformEndpoints()
+    .MapDevelopmentEndpoints();
 
 switch (instanceStatus)
 {

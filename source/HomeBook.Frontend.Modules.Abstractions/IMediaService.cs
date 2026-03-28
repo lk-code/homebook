@@ -11,5 +11,6 @@ public interface IMediaService
     /// <param name="mediaItemId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Uri> GetUrlForMediaItemAsync(Guid mediaItemId, CancellationToken cancellationToken);
+    Task<Uri?> GetUrlForMediaItemAsync(Guid mediaItemId,
+        CancellationToken cancellationToken);
 }

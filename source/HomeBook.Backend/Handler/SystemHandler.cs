@@ -3,15 +3,60 @@ using HomeBook.Backend.Requests;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models;
+using HomeBook.Backend.Mappings;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
-public static class SystemHandler
+public class SystemHandler
 {
-    public static IResult HandleGetSystemInfo([FromServices] IConfiguration configuration,
+    public static async Task<IResult> HandleGetSystemStorageInfo(
+        [FromServices] ISystemStorageService systemStorageService,
+        [FromServices] ILogger<SystemHandler> logger,
         CancellationToken cancellationToken)
     {
+        try
+        {
+            StorageUsage cacheUsedSpace = await systemStorageService
+                .GetCacheStorageUsageAsync(cancellationToken);
+            StorageUsage logsUsedSpace = await systemStorageService
+                .GetLogsStorageUsageAsync(cancellationToken);
+            StorageUsage tempUsedSpace = await systemStorageService
+                .GetTempDataStorageUsageAsync(cancellationToken);
+
+            List<MediaStorageSizeType> storageByType = await systemStorageService
+                .GetMediaStorageUsageAsync(cancellationToken);
+            MediaStorageSizeTypeResponse[]? mediaStorageSizes = (storageByType ?? [])
+                .Select(x =>
+                    new MediaStorageSizeTypeResponse(
+                        x.ScopeKey,
+                        x.ModuleKey,
+                        x.ModuleName,
+                        x.StorageSizeBytes))
+                .ToArray();
+
+            GetSystemStorageInfoResponse response = new(cacheUsedSpace.ToResponse(),
+                logsUsedSpace.ToResponse(),
+                tempUsedSpace.ToResponse(),
+                mediaStorageSizes);
+            return TypedResults.Ok(response);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "Error while retrieving system storage information");
+            return TypedResults.Problem("An error occurred while retrieving system storage informations.",
+                statusCode: 500);
+        }
+    }
+
+    public static IResult HandleGetSystemInfo([FromServices] IConfiguration configuration,
+        CancellationToken cancellationToken,
+        [FromServices] ILogger<SystemHandler>? logger = null)
+    {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             string dotnetVersion = Environment.Version.ToString();
@@ -25,8 +70,9 @@ public static class SystemHandler
                 deploymentType);
             return TypedResults.Ok(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while retrieving system information");
             return TypedResults.Problem("An error occurred while retrieving system information.", statusCode: 500);
         }
     }
@@ -35,8 +81,10 @@ public static class SystemHandler
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10,
         [FromQuery] string? username = null,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Validate pagination parameters
@@ -74,16 +122,19 @@ public static class SystemHandler
             UsersResponse response = new(userResponses, totalCount, page, pageSize, totalPages);
             return TypedResults.Ok(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while retrieving users");
             return TypedResults.Problem("An error occurred while retrieving users.", statusCode: 500);
         }
     }
 
     public static async Task<IResult> HandleGetUserById(Guid userId,
         [FromServices] IUserRepository userRepository,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Check if user exists
@@ -103,8 +154,9 @@ public static class SystemHandler
 
             return TypedResults.Ok(userResponse);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while retrieving user");
             return TypedResults.Problem("An error occurred while retrieving the user.", statusCode: 500);
         }
     }
@@ -112,8 +164,10 @@ public static class SystemHandler
     public static async Task<IResult> HandleCreateUser([FromServices] IUserRepository userRepository,
         [FromServices] IHashProviderFactory hashProviderFactory,
         [FromBody] CreateUserRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Validate input
@@ -165,8 +219,9 @@ public static class SystemHandler
             CreateUserResponse response = new(createdUser.Id);
             return TypedResults.Ok(response);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while creating user");
             return TypedResults.Problem("An error occurred while creating the user.", statusCode: 500);
         }
     }
@@ -175,8 +230,10 @@ public static class SystemHandler
         Guid userId,
         [FromServices] IJwtService jwtService,
         HttpContext httpContext,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Get current user ID from JWT token
@@ -217,8 +274,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("User deleted successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while deleting user");
             return TypedResults.Problem("An error occurred while deleting the user.", statusCode: 500);
         }
     }
@@ -227,8 +285,10 @@ public static class SystemHandler
         [FromServices] IHashProviderFactory hashProviderFactory,
         Guid userId,
         [FromBody] UpdatePasswordRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Validate input
@@ -261,8 +321,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("Password updated successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while updating password");
             return TypedResults.Problem("An error occurred while updating the password.", statusCode: 500);
         }
     }
@@ -272,8 +333,10 @@ public static class SystemHandler
         Guid userId,
         [FromBody] UpdateUserAdminRequest request,
         HttpContext httpContext,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Get current user ID from JWT token
@@ -311,8 +374,9 @@ public static class SystemHandler
 
             return TypedResults.Ok($"User admin status updated successfully to {request.IsAdmin}");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while updating user admin status");
             return TypedResults.Problem("An error occurred while updating admin status.", statusCode: 500);
         }
     }
@@ -321,8 +385,10 @@ public static class SystemHandler
         [FromServices] IJwtService jwtService,
         [FromRoute] Guid userId,
         HttpContext httpContext,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Get current user ID from JWT token
@@ -366,8 +432,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("User enabled successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while enabling user");
             return TypedResults.Problem("An error occurred while enabling the user.", statusCode: 500);
         }
     }
@@ -376,8 +443,10 @@ public static class SystemHandler
         [FromServices] IJwtService jwtService,
         [FromRoute] Guid userId,
         HttpContext httpContext,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Get current user ID from JWT token
@@ -411,8 +480,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("User disabled successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while disabling user");
             return TypedResults.Problem("An error occurred while disabling the user.", statusCode: 500);
         }
     }
@@ -420,8 +490,10 @@ public static class SystemHandler
     public static async Task<IResult> HandleUpdateUsername([FromServices] IUserRepository userRepository,
         Guid userId,
         [FromBody] UpdateUsernameRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Validate input
@@ -447,8 +519,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("Username updated successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while updating username");
             return TypedResults.Problem("An error occurred while updating the username", statusCode: 500);
         }
     }
@@ -456,8 +529,10 @@ public static class SystemHandler
     public static async Task<IResult> HandleUpdateInstanceName(
         [FromServices] IInstanceConfigurationProvider instanceConfigurationProvider,
         [FromBody] UpdateInstanceNameRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Validate input
@@ -470,8 +545,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("Instance name updated successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while updating instance name");
             return TypedResults.Problem("An error occurred while updating the instance name", statusCode: 500);
         }
     }
@@ -479,8 +555,10 @@ public static class SystemHandler
     public static async Task<IResult> HandleUpdateInstanceDefaultLocale(
         [FromServices] IInstanceConfigurationProvider instanceConfigurationProvider,
         [FromBody] UpdateInstanceDefaultLocaleRequest request,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default,
+        [FromServices] ILogger<SystemHandler>? logger = null)
     {
+        logger ??= NullLogger<SystemHandler>.Instance;
         try
         {
             // Validate input
@@ -493,8 +571,9 @@ public static class SystemHandler
 
             return TypedResults.Ok("Default locale updated successfully");
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            logger.LogError(ex, "Error while updating default locale");
             return TypedResults.Problem("An error occurred while updating the default locale", statusCode: 500);
         }
     }

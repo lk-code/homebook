@@ -1,12 +1,15 @@
 using System.Text;
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.Services;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace HomeBook.UnitTests.TestCore.Backend.Services;
 
 public class TestFileService : IApplicationPathProvider, IFileSystemService
 {
-    private static readonly IApplicationPathProvider NativeFileService = new NativeFileService();
+    private static readonly IApplicationPathProvider NativeFileService =
+        new NativeFileService(NullLogger<NativeFileService>.Instance);
 
     // Virtual file system storage
     private readonly Dictionary<string, byte[]> _fileContents = new();
@@ -100,6 +103,14 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
         _fileContents.Remove(NormalizePath(path));
     }
 
+    public async Task<List<FileInformation>> GetFilesInDirectoryAsync(string storagePath,
+        CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+
+        return [];
+    }
+
     // Additional methods for managing the virtual file system
 
     /// <summary>
@@ -170,7 +181,7 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
 
 public class FileSystemEventArgs(
     string filePath,
-    byte[] content,
+    byte[]? content,
     FileSystemEventType eventType) : EventArgs
 {
     public FileSystemEventArgs(string filePath,
@@ -180,7 +191,7 @@ public class FileSystemEventArgs(
     }
 
     public string FilePath { get; } = filePath;
-    public byte[] Content { get; } = content;
+    public byte[]? Content { get; } = content;
     public FileSystemEventType EventType { get; } = eventType;
 }
 

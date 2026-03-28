@@ -14,14 +14,6 @@ namespace HomeBook.Client.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
-        /// <summary>The color property</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Color { get; set; }
-#nullable restore
-#else
-        public string Color { get; set; }
-#endif
         /// <summary>The description property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -30,13 +22,13 @@ namespace HomeBook.Client.Models
 #else
         public string Description { get; set; }
 #endif
-        /// <summary>The icon property</summary>
+        /// <summary>The identifier property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? Icon { get; set; }
+        public string? Identifier { get; set; }
 #nullable restore
 #else
-        public string Icon { get; set; }
+        public string Identifier { get; set; }
 #endif
         /// <summary>The title property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -45,14 +37,6 @@ namespace HomeBook.Client.Models
 #nullable restore
 #else
         public string Title { get; set; }
-#endif
-        /// <summary>The url property</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Url { get; set; }
-#nullable restore
-#else
-        public string Url { get; set; }
 #endif
         /// <summary>
         /// Instantiates a new <see cref="global::HomeBook.Client.Models.SearchItemResponse"/> and sets the default values.
@@ -79,11 +63,9 @@ namespace HomeBook.Client.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "color", n => { Color = n.GetStringValue(); } },
                 { "description", n => { Description = n.GetStringValue(); } },
-                { "icon", n => { Icon = n.GetStringValue(); } },
+                { "identifier", n => { Identifier = n.GetStringValue(); } },
                 { "title", n => { Title = n.GetStringValue(); } },
-                { "url", n => { Url = n.GetStringValue(); } },
             };
         }
         /// <summary>
@@ -93,11 +75,9 @@ namespace HomeBook.Client.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteStringValue("color", Color);
             writer.WriteStringValue("description", Description);
-            writer.WriteStringValue("icon", Icon);
+            writer.WriteStringValue("identifier", Identifier);
             writer.WriteStringValue("title", Title);
-            writer.WriteStringValue("url", Url);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

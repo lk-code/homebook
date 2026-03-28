@@ -2,13 +2,15 @@ using FluentValidation;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Core.DataProvider;
 
 /// <inheritdoc />
 public class InstanceConfigurationProvider(
     IConfigurationRepository configurationRepository,
-    IValidator<Configuration> configurationValidator) : IInstanceConfigurationProvider
+    IValidator<Configuration> configurationValidator,
+    ILogger<InstanceConfigurationProvider> logger) : IInstanceConfigurationProvider
 {
     private static readonly string HOMEBOOK_CONFIGURATION_NAME = "HOMEBOOK_CONFIGURATION_NAME";
     private static readonly string HOMEBOOK_CONFIGURATION_DEFAULT_LOCALE = "HOMEBOOK_CONFIGURATION_DEFAULT_LOCALE";
@@ -17,6 +19,8 @@ public class InstanceConfigurationProvider(
     public async Task SetHomeBookInstanceNameAsync(string instanceName,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Updating HomeBook instance name");
+
         Configuration config = new()
         {
             Key = HOMEBOOK_CONFIGURATION_NAME,
@@ -31,6 +35,8 @@ public class InstanceConfigurationProvider(
     /// <inheritdoc />
     public async Task<string> GetHomeBookInstanceNameAsync(CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Retrieving HomeBook instance name");
+
         Configuration? instanceName = await configurationRepository
             .GetConfigurationByKeyAsync(HOMEBOOK_CONFIGURATION_NAME,
                 cancellationToken);
@@ -40,6 +46,8 @@ public class InstanceConfigurationProvider(
     public async Task SetHomeBookInstanceDefaultLocaleAsync(string defaultLocale,
         CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Updating HomeBook default locale");
+
         Configuration config = new()
         {
             Key = HOMEBOOK_CONFIGURATION_DEFAULT_LOCALE,
@@ -53,6 +61,8 @@ public class InstanceConfigurationProvider(
 
     public async Task<string?> GetHomeBookInstanceDefaultLocaleAsync(CancellationToken cancellationToken = default)
     {
+        logger.LogInformation("Retrieving HomeBook default locale");
+
         Configuration? defaultLanguage = await configurationRepository
             .GetConfigurationByKeyAsync(HOMEBOOK_CONFIGURATION_DEFAULT_LOCALE,
                 cancellationToken);

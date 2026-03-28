@@ -1,5 +1,8 @@
+using HomeBook.Frontend.Abstractions.Models;
+using HomeBook.Frontend.Core.Icons;
 using HomeBook.Frontend.Module.Kitchen.Enums;
 using HomeBook.Frontend.Module.Kitchen.Models;
+using HomeBook.Frontend.Module.Kitchen.Resources;
 using HomeBook.Frontend.Module.Kitchen.ViewModels;
 using Microsoft.AspNetCore.Components;
 
@@ -15,6 +18,17 @@ public partial class PlanOverview : ComponentBase
         (short)System.Globalization.CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(DateTime.Today,
             System.Globalization.CalendarWeekRule.FirstFourDayWeek,
             DayOfWeek.Monday);
+
+    protected override async Task OnInitializedAsync()
+    {
+        MenuService.UpdateMenuItems([
+            new MenuItem(Loc[nameof(Strings.StartMenuItem_Recipes_Title)],
+                "/Kitchen/Recipes",
+                HomeBookIcons.Icons8.Windows11.Outline.CookBook)
+        ]);
+
+        await base.OnInitializedAsync();
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

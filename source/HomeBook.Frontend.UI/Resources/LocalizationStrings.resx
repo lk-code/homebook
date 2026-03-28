@@ -95,9 +95,6 @@
     <data name="UiLicenseDialog_Title" xml:space="preserve">
         <value>HomeBook Project Licenses</value>
     </data>
-    <data name="Settings_About_VersionToolTip_Text_Template" xml:space="preserve">
-        <value>Server: {0}, UI: {1}</value>
-    </data>
     <data name="Settings_About_Version_Text_Template" xml:space="preserve">
         <value>HomeBook Version: {0}</value>
     </data>
@@ -141,10 +138,10 @@
         <value>Users</value>
     </data>
     <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
-        <value>Homebook Configuration</value>
+        <value>HomeBook Configuration</value>
     </data>
     <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
-        <value>Homebook Modules</value>
+        <value>HomeBook Modules</value>
     </data>
     <data name="Settings_NavMenu_DeveloperComponents_Text" xml:space="preserve">
         <value>Dev UI</value>
@@ -294,7 +291,7 @@
         <value>Username</value>
     </data>
     <data name="Setup_AdminUser_Form_Username_HelperText" xml:space="preserve">
-        <value>Enter a username for your homebook administrator account</value>
+        <value>Enter a username for your HomeBook administrator account</value>
     </data>
     <data name="Setup_AdminUser_Form_Password_Label" xml:space="preserve">
         <value>Password</value>
@@ -309,10 +306,10 @@
         <value>HomeBook Configuration</value>
     </data>
     <data name="Setup_Configuration_ConfigurationFound_Title" xml:space="preserve">
-        <value>Homebook has been preconfigured.</value>
+        <value>HomeBook has been preconfigured.</value>
     </data>
     <data name="Setup_Configuration_ConfigurationSaved_Title" xml:space="preserve">
-        <value>Homebook configuration saved successfully.</value>
+        <value>HomeBook configuration saved successfully.</value>
     </data>
     <data name="Setup_Configuration_Form_InstanceName_Label" xml:space="preserve">
         <value>HomeBook Instance Name</value>
@@ -324,7 +321,7 @@
         <value>HomeBook Default Language</value>
     </data>
     <data name="Setup_Configuration_Form_InstanceDefaultLocale_HelperText" xml:space="preserve">
-        <value>Select the default language for displaying Homebook</value>
+        <value>Select the default language for displaying HomeBook</value>
     </data>
     <data name="Setup_Configuration_Save_Button_Text" xml:space="preserve">
         <value>Save Configuration</value>
@@ -345,7 +342,7 @@
         <value>The setup was successful.</value>
     </data>
     <data name="Setup_Process_Finished_StartHomeBook_Message" xml:space="preserve">
-        <value>Start HomeBook</value>
+        <value>Open HomeBook</value>
     </data>
     <data name="Setup_Process_Finished_RemoveEnvironmentVariables_Message" xml:space="preserve">
         <value>Please remove the Setup Environment Variables from your docker configuration.</value>
@@ -381,7 +378,7 @@
         <value>The update was successful.</value>
     </data>
     <data name="Update_Process_Finished_StartHomeBook_Message" xml:space="preserve">
-        <value>Start HomeBook</value>
+        <value>Open HomeBook</value>
     </data>
     <data name="Update_Process_Retry_Button_Text" xml:space="preserve">
         <value>Retry Update</value>
@@ -402,7 +399,7 @@
         <value>An unknown error occurred during the update process: {0}</value>
     </data>
     <data name="Settings_Instance_PageTitle" xml:space="preserve">
-        <value>Homebook Configuration</value>
+        <value>HomeBook Configuration</value>
     </data>
     <data name="Settings_Instance_PageCaption" xml:space="preserve">
         <value>Manage global settings and features for your HomeBook instance.</value>
@@ -727,5 +724,41 @@
     </data>
     <data name="Settings_About_ExternalLink_ProjectWebsite_Href" xml:space="preserve">
         <value>https://homebook-app.github.io/</value>
+    </data>
+    <data name="Settings_NavMenu_HomebookStorage_Text" xml:space="preserve">
+        <value>HomeBook Storage</value>
+    </data>
+    <data name="Settings_Storage_StorageInformationsArea_Title" xml:space="preserve">
+        <value>Storage Informations</value>
+    </data>
+    <data name="Settings_Storage_UsedSpace_Title" xml:space="preserve">
+        <value>Used Space</value>
+    </data>
+    <data name="Settings_Storage_UsedSpace_Text" xml:space="preserve">
+        <value>{0} of {1} available</value>
+    </data>
+    <data name="Settings_Storage_UsageChart_Usage_Title" xml:space="preserve">
+        <value>Usage</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
+        <value>Media Storage</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
+        <value>Cache</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Temp_Title" xml:space="preserve">
+        <value>Temp</value>
+    </data>
+    <data name="Settings_Storage_UsageType_Logs_Title" xml:space="preserve">
+        <value>Logs</value>
+    </data>
+    <data name="Settings_Developer_ConfigurationArea_Title" xml:space="preserve">
+        <value>App Configuration</value>
+    </data>
+    <data name="Settings_Developer_ConfigurationItemsFrontend_Title" xml:space="preserve">
+        <value>Frontend</value>
+    </data>
+    <data name="Settings_Developer_ConfigurationItemsBackend_Title" xml:space="preserve">
+        <value>Backend</value>
     </data>
 </root>

@@ -1,4 +1,3 @@
-using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Module.Kitchen.Contracts;
 using HomeBook.Backend.Module.Kitchen.Endpoints;
 using HomeBook.Backend.Module.Kitchen.Provider;
@@ -37,29 +36,15 @@ public class Module : IModule,
         services.AddScoped<IRecipesProvider, RecipesProvider>();
     }
 
-    public async Task<SearchResult> SearchAsync(string query,
-        Guid userId,
-        CancellationToken cancellationToken = default)
-    {
-        await Task.Delay(3500, cancellationToken); // Simulate some search delay
-
-        var items = new List<ISearchResultItem>
-        {
-            new SearchResultItem(
-                Title: "Expense Tracker",
-                Description: "Track your daily expenses",
-                Url: "/finances/expense-tracker",
-                Icon: "expense_icon",
-                Color: "red"
-            )
-        };
-        return new SearchResult(items.Count,
-            items);
-    }
-
     public void RegisterStorage(IStorageBuilder storageBuilder,
         IConfiguration configuration)
     {
         storageBuilder.RegisterStorage("RecipeImages");
+    }
+
+    public static void RegisterSearch(ISearchBuilder searchBuilder,
+        IConfiguration configuration)
+    {
+        searchBuilder.RegisterHandler<SearchHandler.RecipeSearchHandler>();
     }
 }

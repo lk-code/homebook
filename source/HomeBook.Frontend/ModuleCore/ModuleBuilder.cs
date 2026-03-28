@@ -1,4 +1,6 @@
 using System.Reflection;
+using HomeBook.Frontend.Abstractions.Contracts;
+using HomeBook.Frontend.Abstractions.Models;
 using HomeBook.Frontend.Modules.Abstractions;
 using HomeBook.Frontend.Options;
 
@@ -10,6 +12,11 @@ public class ModuleBuilder(
     IConfiguration configuration)
 {
     private Dictionary<string, IWidgetBuilder> _registeredWidgets = new();
+    private Dictionary<string, Type> _registeredSearchHandlerResultTemplates = new();
+    private readonly List<SearchHandlerResultTemplateRegistration> _searchHandlerRegistrations = [];
+
+    public Dictionary<string, Type> GetSearchHandlerResultTemplates() => _registeredSearchHandlerResultTemplates;
+    public List<SearchHandlerResultTemplateRegistration> GetSearchHandlerRegistrations() => _searchHandlerRegistrations;
 
     /// <summary>
     /// adds a module to the service collection if the module is enabled.
@@ -42,9 +49,34 @@ public class ModuleBuilder(
         // create the startmenu items
         CreateStartMenuItems<T>(homeBookOptions.StartMenuBuilder, moduleId);
 
+        // register the module search
+        RegisterModuleSearch<T>(moduleId);
+
         _registeredWidgets.Add(moduleId, widgetBuilder);
 
         return this;
+    }
+
+    private void RegisterModuleSearch<T>(string moduleId) where T : class, IModule
+    {
+        ISearchHandlerResultTemplateBuilder searchHandlerResultTemplateBuilder = new SearchHandlerResultTemplateBuilder();
+
+        // implements the Module the IModuleWidgetRegistration interface?
+        if (!typeof(IModuleSearchRegistration).IsAssignableFrom(typeof(T)))
+            return;
+
+        // call the RegisterWidgets method in the module
+        MethodInfo? method = typeof(T).GetMethod(
+            nameof(IModuleSearchRegistration.RegisterSearch),
+            BindingFlags.Public | BindingFlags.Static
+        );
+        method?.Invoke(null, [searchHandlerResultTemplateBuilder, configuration]);
+
+        ISearchHandlerResultTemplateAccessor accessor = (ISearchHandlerResultTemplateAccessor)searchHandlerResultTemplateBuilder;
+        Dictionary<string, Type> searchHandlerResultTemplates = accessor.GetSearchHandlerResultTemplates();
+
+        _registeredSearchHandlerResultTemplates = _registeredSearchHandlerResultTemplates.Concat(searchHandlerResultTemplates)
+            .ToDictionary(kv => kv.Key, kv => kv.Value);
     }
 
     private void CreateStartMenuItems<T>(IStartMenuBuilder startMenuBuilder,
@@ -97,4 +129,15 @@ public class ModuleBuilder(
     }
 
     public IWidgetBuilder GetWidgetBuilder(string moduleId) => _registeredWidgets[moduleId];
+
+    public void GenerateSearchHandlerResultTemplateRegistration()
+    {
+        Dictionary<string, Type> searchHandlerResultTemplates = GetSearchHandlerResultTemplates();
+        foreach (KeyValuePair<string, Type> searchHandlerResultTemplate in searchHandlerResultTemplates)
+        {
+            serviceCollection.AddScoped(typeof(ISearchHandlerResultTemplate), searchHandlerResultTemplate.Value);
+            _searchHandlerRegistrations.Add(new SearchHandlerResultTemplateRegistration(searchHandlerResultTemplate.Key,
+                searchHandlerResultTemplate.Value));
+        }
+    }
 }

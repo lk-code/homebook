@@ -32,6 +32,9 @@ public class HomebookTheme : MudTheme
 
             Background = "#F5F5F5",
 
+            OverlayDark = "rgba(0, 0, 0, .25)",
+            OverlayLight = "rgba(0, 0, 0, .25)",
+
             TextPrimary = TextPrimary,
             TextSecondary = TextSecondary,
 

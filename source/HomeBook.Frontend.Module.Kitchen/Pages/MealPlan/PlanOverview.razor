@@ -1,5 +1,6 @@
 @page "/Kitchen/MealPlan"
 
+@using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.Module.Kitchen.Components
 @using HomeBook.Frontend.Module.Kitchen.Enums
@@ -10,6 +11,7 @@
 
 @inject IStringLocalizer<Strings> Loc
 @inject IDialogService DialogService
+@inject IMenuService MenuService
 
 <MudContainer>
 

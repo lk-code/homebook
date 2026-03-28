@@ -47,7 +47,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while getting recipes");
+            logger.LogError(err, "Error while retrieving recipes");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -82,7 +82,40 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while getting recipes");
+            logger.LogError(err, "Error while retrieving recipe");
+            return TypedResults.InternalServerError(err.Message);
+        }
+    }
+
+    /// <summary>
+    /// returns recipe by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="logger"></param>
+    /// <param name="recipesProvider"></param>
+    /// <param name="userProvider"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public static async Task<IResult> HandleGetImagesByRecipeId(Guid id,
+        [FromServices] ILogger<RecipeHandler> logger,
+        [FromServices] IRecipesProvider recipesProvider,
+        [FromServices] IUserProvider userProvider,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            Guid[] imageMediaIds = await recipesProvider.GetImagesByRecipeIdAsync(id,
+                cancellationToken);
+            RecipeImagesResponse response = new(imageMediaIds);
+            return TypedResults.Ok(response);
+        }
+        catch (InvalidCastException)
+        {
+            return TypedResults.NotFound();
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error while retrieving recipe images");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -106,7 +139,7 @@ public class RecipeHandler
         {
             Guid userId = user.GetUserId();
 
-            return await HandleRecipeEditAsync(user.GetUserId(),
+            return await HandleRecipeEditAsync(userId,
                 null,
                 request,
                 recipesProvider,
@@ -140,7 +173,7 @@ public class RecipeHandler
         {
             Guid userId = user.GetUserId();
 
-            return await HandleRecipeEditAsync(user.GetUserId(),
+            return await HandleRecipeEditAsync(userId,
                 id,
                 request,
                 recipesProvider,
@@ -148,7 +181,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while creating recipe");
+            logger.LogError(err, "Error while updating recipe");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -205,7 +238,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while creating recipe");
+            logger.LogError(err, "Error while updating recipe name");
             return TypedResults.InternalServerError(err.Message);
         }
     }
@@ -236,9 +269,7 @@ public class RecipeHandler
         }
         catch (Exception err)
         {
-            logger.LogError(err,
-                "Error while deleting recipe for {Id}",
-                id);
+            logger.LogError(err, "Error while deleting recipe");
             return TypedResults.InternalServerError(err.Message);
         }
     }

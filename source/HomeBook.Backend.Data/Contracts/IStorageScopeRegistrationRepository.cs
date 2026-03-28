@@ -10,6 +10,13 @@ public interface IStorageScopeRegistrationRepository
     /// <summary>
     ///
     /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<List<StorageScopeRegistration>> GetAllAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
     /// <param name="fullScopeName"></param>
     /// <returns></returns>
     Task<StorageScopeRegistration?> GetByFullScopeNameAsync(string fullScopeName,

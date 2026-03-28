@@ -10,7 +10,27 @@ public static class SystemEndpoints
     public static IEndpointRouteBuilder MapSystemEndpoints(this IEndpointRouteBuilder routeBuilder)
     {
         routeBuilder.MapSystemUsersEndpoints()
-            .MapSystemInstanceEndpoints();
+            .MapSystemInstanceEndpoints()
+            .MapSystemStorageEndpoints();
+
+        return routeBuilder;
+    }
+
+    private static IEndpointRouteBuilder MapSystemStorageEndpoints(this IEndpointRouteBuilder routeBuilder)
+    {
+        RouteGroupBuilder group = routeBuilder
+            .MapGroup("/system/storage")
+            .WithDescription("Endpoints for system storage management");
+
+        group.MapGet("/info", SystemHandler.HandleGetSystemStorageInfo)
+            .WithName("GetSystemStorageInfo")
+            .WithTags("System", "System/Storage", "Require Admin")
+            .WithDescription("returns several system informations (Admin only)")
+            .WithMetadata(new RequireAdminAttribute())
+            .Produces<GetSystemStorageInfoResponse>()
+            .Produces<string>(StatusCodes.Status401Unauthorized)
+            .Produces<string>(StatusCodes.Status403Forbidden)
+            .Produces<string>(StatusCodes.Status500InternalServerError);
 
         return routeBuilder;
     }

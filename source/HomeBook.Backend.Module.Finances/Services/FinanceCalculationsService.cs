@@ -1,17 +1,22 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Module.Finances.Contracts;
 using HomeBook.Backend.Module.Finances.Models;
+using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Module.Finances.Services;
 
 /// <inheritdoc/>
-public class FinanceCalculationsService(IDateTimeProvider dateTimeProvider)
+public class FinanceCalculationsService(
+    IDateTimeProvider dateTimeProvider,
+    ILogger<FinanceCalculationsService> logger)
     : IFinanceCalculationsService
 {
     public SavingCalculationResult CalculateSavings(decimal targetAmount,
         DateTime targetDate,
         bool targetSimpleRate = true)
     {
+        logger.LogInformation("Calculating savings projection");
+
         var now = dateTimeProvider.UtcNow;
         var totalMonths = ((targetDate.Year - now.Year) * 12) + targetDate.Month - now.Month;
         if (totalMonths <= 0)
@@ -46,6 +51,8 @@ public class FinanceCalculationsService(IDateTimeProvider dateTimeProvider)
         decimal interestRate,
         bool targetSimpleRate = true)
     {
+        logger.LogInformation("Calculating monthly savings projection");
+
         var now = dateTimeProvider.UtcNow;
         var totalMonths = ((targetDate.Year - now.Year) * 12) + targetDate.Month - now.Month;
         if (totalMonths <= 0)
@@ -96,6 +103,8 @@ public class FinanceCalculationsService(IDateTimeProvider dateTimeProvider)
         decimal interestRate,
         bool targetSimpleRate = true)
     {
+        logger.LogInformation("Calculating yearly savings projection");
+
         var now = dateTimeProvider.UtcNow;
         var totalMonths = ((targetDate.Year - now.Year) * 12) + targetDate.Month - now.Month;
         if (totalMonths <= 0)

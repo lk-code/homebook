@@ -1,12 +1,13 @@
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Setup;
+using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 
 namespace HomeBook.Backend.Data.Mysql;
 
 /// <inheritdoc />
-public class MysqlProbe : IDatabaseProbe
+public class MysqlProbe(ILogger<MysqlProbe> logger) : IDatabaseProbe
 {
     /// <inheritdoc />
     public string ProviderName { get; } = "MYSQL";
@@ -21,6 +22,8 @@ public class MysqlProbe : IDatabaseProbe
     {
         try
         {
+            logger.LogInformation("Checking MySQL connectivity");
+
             string connectionString = $"Server={host};Port={port};Database={databaseName};Uid={username};Pwd={password};Connection Timeout=5;";
 
             await using MySqlConnection connection = new(connectionString);
@@ -34,8 +37,9 @@ public class MysqlProbe : IDatabaseProbe
 
             return isConnected;
         }
-        catch
+        catch (Exception ex)
         {
+            logger.LogError(ex, "MySQL connectivity check failed");
             return false;
         }
     }
