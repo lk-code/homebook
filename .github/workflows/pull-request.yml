@@ -5,13 +5,15 @@ on:
         branches: [ "main" ]
 
 env:
-    DOTNET_VERSION: "10.0.101"
+    DOTNET_VERSION: "10.0"
     FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
     BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
     OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
     CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
     CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
     CLIENT_NAMESPACE: "HomeBook.Client"
+    BACKEND_CSPROJ: "./source/HomeBook.Backend/HomeBook.Backend.csproj"
+    FRONTEND_CSPROJ: "./source/HomeBook.Frontend/HomeBook.Frontend.csproj"
     UNIT_TEST_CSPROJ: "./source/HomeBook.UnitTests/HomeBook.UnitTests.csproj"
     E2E_TEST_CSPROJ: "./source/HomeBook.E2ETests/HomeBook.E2ETests.csproj"
 
@@ -60,7 +62,7 @@ jobs:
                 run: dotnet restore
 
             -   name: .NET Build (Service for Client Generation)
-                run: dotnet build --no-restore
+                run: dotnet build ${{ env.BACKEND_CSPROJ }} --no-restore
 
             -   name: Generate Kiota Client
                 shell: bash
