@@ -67,7 +67,6 @@ public partial class UserPreferenceProvider(
                 PREFERENCE_KEY_WALLPAPER,
                 cancellationToken);
 
-        WallpaperConfiguration? wallpaperConfiguration = null;
         if (userPreference is null)
             return null;
 
