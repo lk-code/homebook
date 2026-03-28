@@ -37,6 +37,7 @@ jobs:
                 uses: actions/setup-dotnet@v4
                 with:
                     dotnet-version: ${{ env.DOTNET_VERSION }}
+                    global-json-file: ./global.json
 
             -   name: Setup Node
                 uses: actions/setup-node@v4
@@ -57,6 +58,12 @@ jobs:
 
             -   name: Install .NET Coverage
                 run: dotnet tool install --global dotnet-coverage
+
+            -   name: Debug SDK
+                run: |
+                    pwd
+                    dotnet --version
+                    dotnet --info
 
             -   name: .NET Restore
                 run: dotnet restore
