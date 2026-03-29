@@ -19,12 +19,4 @@
         <ProjectReference Include="..\HomeBook.Frontend.Abstractions\HomeBook.Frontend.Abstractions.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="Resources\LocalizationStrings.resx">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>LocalizationStrings.resx</DependentUpon>
-        </Compile>
-    </ItemGroup>
-
 </Project>
