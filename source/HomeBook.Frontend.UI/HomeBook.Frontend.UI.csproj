@@ -6,8 +6,6 @@
         <Nullable>enable</Nullable>
         <NeutralLanguage>en</NeutralLanguage>
 
-        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-        <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
 
