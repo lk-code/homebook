@@ -11,8 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Humanizer" Version="3.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
+        <PackageReference Include="Humanizer" Version="3.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -21,10 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Resources\LocalizationStrings.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>LocalizationStrings.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+        <Compile Update="Resources\LocalizationStrings.resx">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>LocalizationStrings.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>
