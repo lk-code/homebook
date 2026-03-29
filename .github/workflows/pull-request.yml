@@ -63,7 +63,7 @@ jobs:
                 run: dotnet restore
 
             -   name: .NET Build (Service for Client Generation)
-                run: dotnet build ${{ env.BACKEND_CSPROJ }} --no-restore
+                run: dotnet build --no-restore
 
             -   name: Generate Kiota Client
                 shell: bash
