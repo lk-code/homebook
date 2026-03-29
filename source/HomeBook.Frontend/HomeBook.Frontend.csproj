@@ -4,7 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <NeutralLanguage>en-US</NeutralLanguage>
+        <NeutralLanguage>en</NeutralLanguage>
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
         <OverrideHtmlAssetPlaceholders>true</OverrideHtmlAssetPlaceholders>
     </PropertyGroup>
@@ -39,14 +39,6 @@
         <ProjectReference Include="..\HomeBook.Frontend.Module.Kitchen\HomeBook.Frontend.Module.Kitchen.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Module.PlatformInfo\HomeBook.Frontend.Module.PlatformInfo.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Services\HomeBook.Frontend.Services.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Compile Update="Properties\Resources.Designer.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>LocalizationStrings.resx</DependentUpon>
-        </Compile>
     </ItemGroup>
 
 </Project>

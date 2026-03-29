@@ -5,7 +5,7 @@ on:
         branches: [ "main" ]
 
 env:
-    DOTNET_VERSION: "10.0.101"
+    DOTNET_VERSION: "10.0"
     FRONTEND_APPSETTINGS_FILE: "./source/HomeBook.Frontend/wwwroot/appsettings.json"
     BACKEND_APPSETTINGS_FILE: "./source/HomeBook.Backend/appsettings.json"
     OPENAPI_FILE: "./source/HomeBook.Backend/HomeBook.Backend.json"
@@ -58,12 +58,6 @@ jobs:
 
             -   name: Install .NET Coverage
                 run: dotnet tool install --global dotnet-coverage
-
-            -   name: Debug SDK
-                run: |
-                    pwd
-                    dotnet --version
-                    dotnet --info
 
             -   name: .NET Restore
                 run: dotnet restore
