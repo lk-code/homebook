@@ -4,7 +4,6 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <NeutralLanguage>en</NeutralLanguage>
 
         <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
@@ -19,18 +18,6 @@
         <ProjectReference Include="..\HomeBook.Frontend.Core\HomeBook.Frontend.Core.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Modules.Abstractions\HomeBook.Frontend.Modules.Abstractions.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.UI\HomeBook.Frontend.UI.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Resources\Strings.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Strings.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="wwwroot\images\" />
     </ItemGroup>
 
 </Project>
