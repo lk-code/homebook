@@ -8,6 +8,7 @@
 
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
 
     <ItemGroup>

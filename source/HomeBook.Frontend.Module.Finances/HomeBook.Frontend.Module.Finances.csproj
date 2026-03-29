@@ -4,10 +4,11 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <NeutralLanguage>en-US</NeutralLanguage>
+        <NeutralLanguage>en</NeutralLanguage>
 
         <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
         <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
 
     <ItemGroup>
