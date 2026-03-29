@@ -35,10 +35,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\HomeBook.Frontend.Core\HomeBook.Frontend.Core.csproj"/>
+        <ProjectReference Include="..\HomeBook.Frontend.Services\HomeBook.Frontend.Services.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Module.Finances\HomeBook.Frontend.Module.Finances.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Module.Kitchen\HomeBook.Frontend.Module.Kitchen.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Module.PlatformInfo\HomeBook.Frontend.Module.PlatformInfo.csproj"/>
-        <ProjectReference Include="..\HomeBook.Frontend.Services\HomeBook.Frontend.Services.csproj"/>
     </ItemGroup>
 
 </Project>
