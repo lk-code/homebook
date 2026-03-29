@@ -26,7 +26,7 @@ public class UserPreferenceRepository(
     }
 
     /// <inheritdoc />
-    public async Task SetPreferenceForUserByKeyAsync(UserPreference entity,
+    public async Task SetPreferenceAsync(UserPreference entity,
         CancellationToken cancellationToken)
     {
         logger.LogInformation("Setting user preference");

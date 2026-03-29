@@ -24,6 +24,6 @@ public interface IUserPreferenceRepository
     /// <param name="entity"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task SetPreferenceForUserByKeyAsync(UserPreference entity,
+    Task SetPreferenceAsync(UserPreference entity,
         CancellationToken cancellationToken);
 }

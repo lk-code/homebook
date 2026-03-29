@@ -15,6 +15,12 @@
                 Color="Color.Secondary">
 
         <MudNavLink Match="NavLinkMatch.All"
+                    Href="/Settings/About"
+                    Icon="@HomeBookIcons.Icons8.LiquidGlassColor.SystemInformation">
+            @Loc[nameof(LocalizationStrings.Settings_NavMenu_About_Text)]
+        </MudNavLink>
+
+        <MudNavLink Match="NavLinkMatch.All"
                     Href="/Settings"
                     Icon="@HomeBookIcons.Icons8.LiquidGlassColor.Gear">
             +General
@@ -23,19 +29,13 @@
         <MudNavLink Match="NavLinkMatch.All"
                     Href="/Settings/Appearance"
                     Icon="@HomeBookIcons.Icons8.LiquidGlassColor.PaintRoller">
-            +Appearance
+            @Loc[nameof(LocalizationStrings.Settings_NavMenu_Appearance_Text)]
         </MudNavLink>
 
         <MudNavLink Match="NavLinkMatch.All"
                     Href="/Settings/Localization"
                     Icon="@HomeBookIcons.Icons8.LiquidGlassColor.Globe">
             @Loc[nameof(LocalizationStrings.Settings_NavMenu_LanguageRegion_Text)]
-        </MudNavLink>
-
-        <MudNavLink Match="NavLinkMatch.All"
-                    Href="/Settings/About"
-                    Icon="@HomeBookIcons.Icons8.LiquidGlassColor.SystemInformation">
-            @Loc[nameof(LocalizationStrings.Settings_NavMenu_About_Text)]
         </MudNavLink>
 
         <MudDivider Class="my-1"/>
@@ -113,7 +113,7 @@
 
         <MudNavLink Match="NavLinkMatch.All"
                     Href="/Settings/Feedback"
-                    Icon="@HomeBookIcons.Icons8.LiquidGlassColor.Communication">
+                    Icon="@HomeBookIcons.Icons8.LiquidGlassColor.FAQ">
             @Loc[nameof(LocalizationStrings.Settings_NavMenu_Feedback_Text)]
         </MudNavLink>
 

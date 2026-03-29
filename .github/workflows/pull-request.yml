@@ -12,6 +12,8 @@ env:
     CLIENT_CSPROJ: "./source/HomeBook.Client/HomeBook.Client.csproj"
     CLIENT_OUTPUT_DIR: "./source/HomeBook.Client"
     CLIENT_NAMESPACE: "HomeBook.Client"
+    BACKEND_CSPROJ: "./source/HomeBook.Backend/HomeBook.Backend.csproj"
+    FRONTEND_CSPROJ: "./source/HomeBook.Frontend/HomeBook.Frontend.csproj"
     UNIT_TEST_CSPROJ: "./source/HomeBook.UnitTests/HomeBook.UnitTests.csproj"
     E2E_TEST_CSPROJ: "./source/HomeBook.E2ETests/HomeBook.E2ETests.csproj"
 
@@ -35,6 +37,7 @@ jobs:
                 uses: actions/setup-dotnet@v4
                 with:
                     dotnet-version: ${{ env.DOTNET_VERSION }}
+                    global-json-file: ./global.json
 
             -   name: Setup Node
                 uses: actions/setup-node@v4

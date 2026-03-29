@@ -12,7 +12,7 @@ via Docker.
 ![License](https://img.shields.io/github/license/homebook-app/homebook)
 
 [![Version](https://img.shields.io/docker/v/homebookapp/app)](https://hub.docker.com/u/homebookapp)
-[![Docker Pulls](https://img.shields.io/docker/pulls/homebookio/app)](https://hub.docker.com/u/homebookapp)
+[![Docker Pulls](https://img.shields.io/docker/pulls/homebookapp/app)](https://hub.docker.com/u/homebookapp)
 [![Docker Star](https://img.shields.io/docker/stars/homebookapp/app)](https://hub.docker.com/u/homebookapp)
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=lk-code_homebook&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=lk-code_homebook)
@@ -54,7 +54,7 @@ translate via [Weblate](https://hosted.weblate.org/projects/homebook/)
 ```yaml
 services:
   homebook:
-    image: homebookio/app:latest
+    image: homebookapp/app:latest
     container_name: homebook
     restart: unless-stopped
     volumes:

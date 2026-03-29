@@ -4,27 +4,19 @@
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <NeutralLanguage>en-US</NeutralLanguage>
 
-        <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
-        <StaticWebAssetsEnabled>true</StaticWebAssetsEnabled>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <BlazorWebAssemblyLoadAllGlobalizationData>true</BlazorWebAssemblyLoadAllGlobalizationData>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Humanizer" Version="3.0.10" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
+        <PackageReference Include="Humanizer" Version="3.0.10"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\HomeBook.Frontend.Core\HomeBook.Frontend.Core.csproj"/>
         <ProjectReference Include="..\HomeBook.Frontend.Abstractions\HomeBook.Frontend.Abstractions.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\LocalizationStrings.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>LocalizationStrings.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

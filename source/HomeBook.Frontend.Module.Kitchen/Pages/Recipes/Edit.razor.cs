@@ -17,7 +17,6 @@ public partial class Edit : ComponentBase
     public IModule ModuleInstance { get; set; } = default!;
 
     private bool _isUploadingImage = false;
-    private string? _acceptedFileTypes = ".png, .jpg, .jpeg, .webp";
     private bool _isLoading = false;
     private RecipeDetailViewModel? _recipe = null;
     private MudDropContainer<MediaItemViewModel>? _recipeImageDropContainer = null;
