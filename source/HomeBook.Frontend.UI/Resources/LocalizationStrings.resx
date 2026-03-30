@@ -741,7 +741,7 @@
         <value>Usage</value>
     </data>
     <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
-        <value>Media Storage</value>
+        <value>Storage</value>
     </data>
     <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
         <value>Cache</value>

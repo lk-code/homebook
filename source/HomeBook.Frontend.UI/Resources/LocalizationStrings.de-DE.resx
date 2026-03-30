@@ -730,9 +730,9 @@
   <data name="Settings_Storage_UsageChart_Usage_Title" xml:space="preserve">
     <value>Belegung</value>
   </data>
-  <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
-    <value>Medienspeicher</value>
-  </data>
+    <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
+        <value>Speicher</value>
+    </data>
   <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
     <value>Cache</value>
   </data>
