@@ -97,7 +97,8 @@ public partial class Overview : ComponentBase
             foreach (MediaStorageUsageInformation moduleStorage in moduleStorages)
             {
                 moduleSizeBytes += moduleStorage.StorageSizeBytes;
-                moduleSubEntries.Add(new(moduleStorage.ScopeKey,
+                string translatedScope = Loc[moduleStorage.ScopeKey];
+                moduleSubEntries.Add(new(translatedScope,
                     moduleStorage.StorageSizeBytes));
             }
 

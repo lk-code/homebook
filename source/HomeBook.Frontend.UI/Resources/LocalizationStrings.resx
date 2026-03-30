@@ -767,4 +767,10 @@
     <data name="Settings_Appearance_WallpaperArea_Title" xml:space="preserve">
         <value>Wallpaper</value>
     </data>
+    <data name="homebook.core.wallpaper.userwallpaper" xml:space="preserve">
+        <value>Wallpaper</value>
+    </data>
+    <data name="homebook.kitchen.recipeimages" xml:space="preserve">
+        <value>Recipe Images</value>
+    </data>
 </root>
