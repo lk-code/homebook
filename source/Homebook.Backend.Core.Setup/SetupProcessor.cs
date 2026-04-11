@@ -5,6 +5,7 @@ using HomeBook.Backend.Core.DataProvider.Extensions;
 using HomeBook.Backend.Core.Extensions;
 using Homebook.Backend.Core.Setup.Exceptions;
 using Homebook.Backend.Core.Setup.Extensions;
+using Homebook.Backend.Core.Setup.UpdateMigrators;
 using HomeBook.Backend.Data.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -97,9 +98,8 @@ public class SetupProcessor(
         await instanceConfigurationProvider.SetHomeBookInstanceDefaultLocaleAsync(defaultLocale, cancellationToken);
 
         // 5. set wallpaper for admin user
-        // TODO: set the wallpaper for admin user
         IUserPreferenceProvider userPreferenceProvider = serviceProvider.GetRequiredService<IUserPreferenceProvider>();
-        string defaultWallpaperConfiguration = "stawp-Mountains.Light";
+        string defaultWallpaperConfiguration = Update_20260330_01.DEFAULT_WALLPAPER;
         await userPreferenceProvider.SetUserWallpaperAsync(adminUserId,
             defaultWallpaperConfiguration,
             cancellationToken);

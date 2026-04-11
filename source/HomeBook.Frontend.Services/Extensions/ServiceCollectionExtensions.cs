@@ -30,6 +30,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ILicensesService, LicensesService>();
         services.AddSingleton<ILocalizationService, LocalizationService>();
         services.AddSingleton<IMenuService, MenuService>();
+        services.AddSingleton<IWallpaperService, WallpaperService>();
 
         return services;
     }

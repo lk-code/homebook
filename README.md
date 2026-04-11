@@ -168,3 +168,8 @@ services:
 
 we plan to support more languages in the future. For translations, we plan to use a community-driven approach via
 Weblate.
+
+
+## Wallpapers
+
+Foto from Codioful (formerly Gradienta): https://www.pexels.com/de-de/foto/rot-blau-bunt-farbenfroh-7135033/

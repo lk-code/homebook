@@ -6,13 +6,83 @@ using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.Mappings;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Handler;
 
 public class SystemHandler
 {
+    public static async Task<IResult> HandleGetWallpaperByName(string wallpaper,
+        [FromServices] ILogger<StorageFileHandler> logger,
+        [FromServices] IWallpaperProvider wallpaperProvider,
+        [FromServices] IStorageProvider storageProvider,
+        CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(wallpaper))
+            return TypedResults.NotFound();
+
+        string wallpaperFile = Uri.UnescapeDataString(wallpaper);
+        string absoluteFilePath = wallpaperProvider
+            .GetAbsolutFilePathForWallpaper(wallpaperFile);
+
+        // if (string.IsNullOrEmpty(absoluteFilePath))
+        //     return TypedResults.NotFound();
+
+        try
+        {
+            Guid wallpaperScopeId = (await storageProvider
+                .GetScopeIdByFullNameAsync("homebook.core.wallpaper.userwallpaper",
+                    cancellationToken)).Value;
+            byte[] content = await storageProvider.GetFileAllBytesAsync(wallpaperScopeId,
+                absoluteFilePath,
+                cancellationToken);
+
+            var contentTypeProvider = new FileExtensionContentTypeProvider();
+            if (!contentTypeProvider.TryGetContentType(wallpaperFile, out string? contentType))
+                contentType = "application/octet-stream";
+
+            return TypedResults.File(content, contentType);
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error while retrieving media file");
+            return TypedResults.Problem();
+        }
+
+        return null!;
+    }
+
+    public static async Task<IResult> HandleGetSystemWallpapers([FromServices] ILogger<SystemHandler> logger,
+        [FromServices] IWallpaperProvider wallpaperProvider,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            // get system wallpapers
+            IReadOnlyCollection<SystemWallpaperDto> systemWallpapersItems =
+                await wallpaperProvider.GetSystemWallpapersAsync(cancellationToken);
+            List<StaticWallpaperEntry> systemWallpapers = systemWallpapersItems
+                .Select(x => x.ToResponse())
+                .ToList();
+
+            // get uploaded wallpapers
+            IReadOnlyCollection<MediaItemWallpaperDto> uploadedWallpaperItems =
+                await wallpaperProvider.GetUploadedWallpapersAsync(cancellationToken);
+            List<MediaWallpaperEntry> uploadedWallpapers = uploadedWallpaperItems
+                .Select(x => new MediaWallpaperEntry(x.MediaItemId))
+                .ToList();
+
+            return TypedResults.Ok(new GetSystemWallpapersResponse(systemWallpapers,
+                uploadedWallpapers));
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error while retrieving available wallpapers");
+            return TypedResults.InternalServerError(err.Message);
+        }
+    }
+
     public static async Task<IResult> HandleGetSystemStorageInfo(
         [FromServices] ISystemStorageService systemStorageService,
         [FromServices] ILogger<SystemHandler> logger,

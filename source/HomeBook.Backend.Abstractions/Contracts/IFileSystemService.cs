@@ -1,3 +1,4 @@
+using HomeBook.Backend.Abstractions.Enums;
 using HomeBook.Backend.Abstractions.Models;
 
 namespace HomeBook.Backend.Abstractions.Contracts;
@@ -79,4 +80,22 @@ public interface IFileSystemService
     /// <returns></returns>
     Task<List<FileInformation>> GetFilesInDirectoryAsync(string storagePath,
         CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="folder"></param>
+    /// <returns></returns>
+    string GetFolderPath(SpecialFolder folder);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="sourceFilePath"></param>
+    /// <param name="targetFilePath"></param>
+    /// <param name="overwrite"></param>
+    /// <returns></returns>
+    void CopyFile(string sourceFilePath,
+        string targetFilePath,
+        bool overwrite);
 }

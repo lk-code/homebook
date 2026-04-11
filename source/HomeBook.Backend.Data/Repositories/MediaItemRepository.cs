@@ -98,4 +98,18 @@ public class MediaItemRepository(
 
         return entity;
     }
+
+    /// <inheritdoc/>
+    public async Task<MediaItem[]> GetAllInScopeAsync(Guid scopeId,
+        CancellationToken cancellationToken)
+    {
+        logger.LogDebug("Retrieving all media items in storage scope");
+
+        await using AppDbContext dbContext = await factory.CreateDbContextAsync(cancellationToken);
+        MediaItem[] entities = await dbContext.MediaItems
+            .Where(m => m.StorageScopeId == scopeId)
+            .ToArrayAsync(cancellationToken);
+
+        return entities;
+    }
 }

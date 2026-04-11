@@ -17,7 +17,7 @@ public class StorageScopeHandler
 
         try
         {
-            Guid? scopeId = await storageProvider.GetScopeIdByFullName(name, cancellationToken);
+            Guid? scopeId = await storageProvider.GetScopeIdByFullNameAsync(name, cancellationToken);
 
             if (scopeId == null)
                 return TypedResults.NotFound("Scope not found");

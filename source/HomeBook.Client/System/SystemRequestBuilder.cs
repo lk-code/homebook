@@ -3,6 +3,7 @@
 using HomeBook.Client.System.Instance;
 using HomeBook.Client.System.Storage;
 using HomeBook.Client.System.Users;
+using HomeBook.Client.System.Wallpaper;
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using System.Collections.Generic;
@@ -31,6 +32,11 @@ namespace HomeBook.Client.System
         public global::HomeBook.Client.System.Users.UsersRequestBuilder Users
         {
             get => new global::HomeBook.Client.System.Users.UsersRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The wallpaper property</summary>
+        public global::HomeBook.Client.System.Wallpaper.WallpaperRequestBuilder Wallpaper
+        {
+            get => new global::HomeBook.Client.System.Wallpaper.WallpaperRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::HomeBook.Client.System.SystemRequestBuilder"/> and sets the default values.

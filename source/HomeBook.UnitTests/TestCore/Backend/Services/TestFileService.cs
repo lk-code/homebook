@@ -1,6 +1,8 @@
 using System.Text;
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Enums;
 using HomeBook.Backend.Abstractions.Models;
+using HomeBook.Backend.EnvironmentHandler;
 using HomeBook.Backend.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -27,6 +29,7 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
     public string TempDirectory { get; } = NativeFileService.TempDirectory;
     public string UpdateDirectory { get; } = NativeFileService.UpdateDirectory;
     public string StorageDirectory { get; } = NativeFileService.StorageDirectory;
+    public string ExecutableDirectory { get; } = "/test/homebook";
 
     public bool FileExists(string path)
     {
@@ -109,6 +112,20 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
         await Task.CompletedTask;
 
         return [];
+    }
+
+    public string GetFolderPath(SpecialFolder folder)
+    {
+        NativeFileService nativeFileService = new(NullLogger<NativeFileService>.Instance);
+        string path = nativeFileService.GetFolderPath(folder);
+        string testPath = path.Replace(PathHandler.DataDirectory, "/test/lib/homebook");
+
+        return testPath;
+    }
+
+    public void CopyFile(string sourceFilePath, string targetFilePath, bool overwrite)
+    {
+
     }
 
     // Additional methods for managing the virtual file system

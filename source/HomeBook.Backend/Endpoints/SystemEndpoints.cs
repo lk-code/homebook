@@ -1,7 +1,7 @@
 using HomeBook.Backend.Attributes;
+using HomeBook.Backend.Core.Modules.OpenApi;
 using HomeBook.Backend.Handler;
 using HomeBook.Backend.Responses;
-using HomeBook.Backend.Middleware;
 
 namespace HomeBook.Backend.Endpoints;
 
@@ -12,6 +12,39 @@ public static class SystemEndpoints
         routeBuilder.MapSystemUsersEndpoints()
             .MapSystemInstanceEndpoints()
             .MapSystemStorageEndpoints();
+
+        return routeBuilder;
+    }
+
+    public static IEndpointRouteBuilder MapSystemWallpaperEndpoints(this IEndpointRouteBuilder routeBuilder)
+    {
+        RouteGroupBuilder group = routeBuilder
+            .MapGroup("/system/wallpaper")
+            .WithDescription("Endpoints for system wallpaper management");
+
+        group.MapGet("/", SystemHandler.HandleGetSystemWallpapers)
+            .WithName("GetSystemWallpapers")
+            .WithTags("System", "System/Wallpaper")
+            .WithDescription(new Description(
+                "Returns all available wallpapers",
+                "HTTP 200: Wallpapers were found",
+                "HTTP 401: User is not authorized",
+                "HTTP 500: Unknown error while retrieving wallpapers"))
+            .RequireAuthorization()
+            .Produces<GetSystemWallpapersResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces<string>(StatusCodes.Status500InternalServerError);
+
+        // GET - get file as asset
+        group.MapGet("/{wallpaper}", SystemHandler.HandleGetWallpaperByName)
+            .WithName("GetWallpaperByName")
+            .WithTags("System", "System/Wallpaper")
+            .WithDescription(new Description("get the wallpaper as assets content",
+                "HTTP 200: File content returned successfully",
+                "HTTP 404: File not found"))
+            .Produces(StatusCodes.Status200OK, contentType: "application/octet-stream")
+            .Produces(StatusCodes.Status404NotFound)
+            .CacheOutput(x => x.Expire(TimeSpan.FromHours(1)));
 
         return routeBuilder;
     }

@@ -18,7 +18,7 @@ public partial class UserPreferenceProvider(
     private static readonly string PREFERENCE_KEY_LOCALE = "LOCALE";
     private static readonly string PREFERENCE_KEY_WALLPAPER = "WALLPAPER";
 
-    [GeneratedRegex("^[a-z0-9]{5}-.+$")]
+    [GeneratedRegex(@"^\{[a-z0-9]{5}\}-\{.+\}$")]
     private static partial Regex WallpaperPreferenceValidationRegex();
 
     /// <inheritdoc />
@@ -70,9 +70,9 @@ public partial class UserPreferenceProvider(
         if (userPreference is null)
             return null;
 
-        string[] parts = userPreference.Value.Split("-", 2);
-        string type = parts[0];
-        string key = parts[1];
+        string[] parts = userPreference.Value.Split("}-{", 2);
+        string type = parts[0].TrimStart('{');
+        string key = parts[1].TrimEnd('}');
         return new WallpaperConfiguration(type, key);
     }
 
@@ -86,28 +86,23 @@ public partial class UserPreferenceProvider(
             userId,
             wallpaperConfiguration);
 
-        // verify that the string is in this format
+        // verify that the string is in this format: {type}-{key}
         bool isValid = WallpaperPreferenceValidationRegex().IsMatch(wallpaperConfiguration);
         if (!isValid)
             throw new InvalidPreferenceException(
                 "Invalid wallpaper configuration format. Expected format: {type}-{key} where type is a 5 character lowercase alphanumeric string.");
 
-        string[] parts = wallpaperConfiguration.Split('-', 2);
-
-        if (parts.Length != 2)
-            throw new InvalidPreferenceException(
-                "Invalid wallpaper configuration format. Expected format: {type}-{key}");
-
-        string type = parts[0];
-        string key = parts[1];
+        string[] parts = wallpaperConfiguration.Split("}-{", 2);
+        string type = parts[0].TrimStart('{');
+        string key = parts[1].TrimEnd('}');
 
         string[] validTypes =
         [
-            // dynamic wallpaper
+            // dynamic wallpaper        => {dynwp}-{WallpaperName:string}
             "dynwp",
-            // static wallpaper
+            // static wallpaper         => {stawp}-{FilePath:string}
             "stawp",
-            // user uploaded wallpaper
+            // user uploaded wallpaper  => {usrwp}-{MediaId:Guid}
             "usrwp"
         ];
         if (!validTypes.Contains(type)
@@ -115,7 +110,7 @@ public partial class UserPreferenceProvider(
             throw new InvalidPreferenceException(
                 "Invalid wallpaper configuration. Type must be one of: dynwp, stawp, usrwp and key must not be empty.");
 
-        string wallpaperConfigValue = $"{type}-{key}";
+        string wallpaperConfigValue = $"{{{type}}}-{{{key}}}";
         UserPreference userPreference = new()
         {
             UserId = userId,

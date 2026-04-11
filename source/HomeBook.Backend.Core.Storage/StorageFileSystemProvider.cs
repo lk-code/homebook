@@ -61,7 +61,7 @@ public class StorageFileSystemProvider(
     }
 
     /// <inheritdoc/>
-    public async Task<Guid?> GetScopeIdByFullName(string fullScopeName,
+    public async Task<Guid?> GetScopeIdByFullNameAsync(string fullScopeName,
         CancellationToken cancellationToken)
     {
         logger.LogDebug("Retrieving storage scope identifier");
@@ -190,5 +190,16 @@ public class StorageFileSystemProvider(
             cancellationToken);
 
         return mediaItemId;
+    }
+
+    /// <inheritdoc/>
+    public async Task<Guid[]> GetAllInScopeAsync(Guid scopeId,
+        CancellationToken cancellationToken)
+    {
+        MediaItem[] mediaItems = await mediaItemRepository.GetAllInScopeAsync(scopeId,
+            cancellationToken);
+
+        return mediaItems.Select(mediaItem => mediaItem.Id)
+            .ToArray();
     }
 }

@@ -1,7 +1,7 @@
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Enums;
 using HomeBook.Backend.Abstractions.Models;
 using HomeBook.Backend.EnvironmentHandler;
-using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Services;
 
@@ -15,6 +15,7 @@ public class NativeFileService(ILogger<NativeFileService> logger) : IApplication
     public string TempDirectory { get; } = PathHandler.TempDirectory;
     public string UpdateDirectory { get; } = PathHandler.UpdateDirectory;
     public string StorageDirectory { get; } = PathHandler.StorageDirectory;
+    public string ExecutableDirectory { get; } = AppContext.BaseDirectory;
 
     /// <inheritdoc />
     public bool FileExists(string path)
@@ -80,5 +81,23 @@ public class NativeFileService(ILogger<NativeFileService> logger) : IApplication
             .ToList();
 
         return Task.FromResult(files);
+    }
+
+    /// <inheritdoc />
+    public string GetFolderPath(SpecialFolder folder)
+    {
+        return folder switch
+        {
+            SpecialFolder.Wallpaper => $"{DataDirectory}/wallpaper",
+            _ => throw new ArgumentOutOfRangeException(nameof(folder), folder, null)
+        };
+    }
+
+    /// <inheritdoc />
+    public void CopyFile(string sourceFilePath,
+        string targetFilePath,
+        bool overwrite)
+    {
+        File.Copy(sourceFilePath, targetFilePath, overwrite);
     }
 }
