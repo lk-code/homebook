@@ -741,7 +741,7 @@
         <value>Usage</value>
     </data>
     <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
-        <value>Media Storage</value>
+        <value>Storage</value>
     </data>
     <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
         <value>Cache</value>
@@ -766,5 +766,11 @@
     </data>
     <data name="Settings_Appearance_WallpaperArea_Title" xml:space="preserve">
         <value>Wallpaper</value>
+    </data>
+    <data name="homebook.core.wallpaper.userwallpaper" xml:space="preserve">
+        <value>Wallpaper</value>
+    </data>
+    <data name="homebook.kitchen.recipeimages" xml:space="preserve">
+        <value>Recipe Images</value>
     </data>
 </root>

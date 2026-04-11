@@ -30,10 +30,13 @@ public class UpdateProcessor(
             IDatabaseMigrator databaseMigrator = databaseMigratorFactory.CreateMigrator(databaseType);
             await databaseMigrator.MigrateAsync(cancellationToken);
 
-            // 3. execute all available updates
+            // 3. copy setup files
+            await setupInstanceManager.CopySetupFilesAsync(cancellationToken);
+
+            // 4. execute all available updates
             await updateManager.ExecuteAvailableUpdateAsync(cancellationToken);
 
-            // 4. write current version to file
+            // 5. write current version to file
             await setupInstanceManager.CreateHomebookInstanceAsync(cancellationToken);
 
             logger.LogInformation("Finish update process...");

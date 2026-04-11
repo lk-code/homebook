@@ -37,4 +37,11 @@ public interface ISetupInstanceManager
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<string?> GetLatestUpdateVersionAsync(CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task CopySetupFilesAsync(CancellationToken cancellationToken);
 }

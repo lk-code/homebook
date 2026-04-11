@@ -100,15 +100,16 @@ public static class ServiceCollectionExtensions
     {
         // Register the file service
         services.AddScoped<ISystemStorageService, SystemStorageService>();
-        services.AddSingleton<IDeveloperProvider, DeveloperProvider>();
-        services.AddSingleton<IDevelopmentConfigProvider, DevelopmentConfigProvider>();
         services.AddSingleton<IApplicationPathProvider, NativeFileService>();
         services.AddSingleton<IFileSystemService, NativeFileService>();
-        services.AddBackendDatabaseMigrators(configuration, instanceStatus);
-        services.AddSingleton<IDatabaseMigratorFactory, DatabaseMigratorFactory>();
 
         // Register other services as needed
         services.AddSingleton<IRuntimeConfigurationProvider, RuntimeConfigurationProvider>();
+        services.AddSingleton<IDeveloperProvider, DeveloperProvider>();
+        services.AddSingleton<IDevelopmentConfigProvider, DevelopmentConfigProvider>();
+
+        services.AddBackendDatabaseMigrators(configuration, instanceStatus);
+        services.AddSingleton<IDatabaseMigratorFactory, DatabaseMigratorFactory>();
 
         return services;
     }
@@ -179,6 +180,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserProvider, UserProvider>();
         services.AddScoped<IInstanceConfigurationProvider, InstanceConfigurationProvider>();
         services.AddScoped<IUserPreferenceProvider, UserPreferenceProvider>();
+        services.AddScoped<IWallpaperProvider, WallpaperProvider>();
 
         return services;
     }

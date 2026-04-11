@@ -47,5 +47,21 @@ public interface IMediaItemRepository
     Task DeleteMediaItemAsync(Guid id,
         CancellationToken cancellationToken = default);
 
-    Task<string?> GetFilenameByIdAsync(Guid mediaItemId, CancellationToken cancellationToken);
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="mediaItemId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<string?> GetFilenameByIdAsync(Guid mediaItemId,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="scopeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<MediaItem[]> GetAllInScopeAsync(Guid scopeId,
+        CancellationToken cancellationToken);
 }

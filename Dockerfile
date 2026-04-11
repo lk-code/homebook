@@ -47,11 +47,13 @@ RUN addgroup --gid $APP_UID appgroup \
 
 # create working directory for homebook
 RUN mkdir -p /var/lib/homebook
-# copy setup files
-COPY ./files/wallpaper/Mountains.Dark@1x.webp /var/lib/homebook/setup/wallpaper/Mountains.Dark@1x.webp
-COPY ./files/wallpaper/Mountains.Dark@1x.webp /var/lib/homebook/setup/wallpaper/Mountains.Dark@1x.webp
-COPY ./files/wallpaper/Mountains.Light@1x.webp /var/lib/homebook/setup/wallpaper/Mountains.Light@1x.webp
-COPY ./files/wallpaper/Mountains.Light@3x.webp /var/lib/homebook/setup/wallpaper/Mountains.Light@3x.webp
+# copy needed files
+COPY ./files/wallpaper/Mountains/theme.json /opt/homebook/setup/wallpaper/Mountains.theme/theme.json
+COPY ./files/wallpaper/Mountains/Mountains.Dark@1x.webp /opt/homebook/setup/wallpaper/Mountains.theme/Mountains.Dark@1x.webp
+COPY ./files/wallpaper/Mountains/Mountains.Dark@3x.webp /opt/homebook/setup/wallpaper/Mountains.theme/Mountains.Dark@3x.webp
+COPY ./files/wallpaper/Mountains/Mountains.Light@1x.webp /opt/homebook/setup/wallpaper/Mountains.theme/Mountains.Light@1x.webp
+COPY ./files/wallpaper/Mountains/Mountains.Light@3x.webp /opt/homebook/setup/wallpaper/Mountains.theme/.themeMountains.Light@3x.webp
+COPY ./files/wallpaper/flickering.jpg /opt/homebook/setup/wallpaper/flickering.jpg
 # set permissions for homebook directory
 RUN chown -R $APP_UID /var/lib/homebook
 RUN chmod -R 770 /var/lib/homebook

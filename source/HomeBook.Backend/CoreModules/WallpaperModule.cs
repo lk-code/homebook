@@ -5,7 +5,7 @@ namespace HomeBook.Backend.CoreModules;
 public class WallpaperModule : IModule,
     IBackendModuleStorageRegistrar
 {
-    public string Name { get; } = "HomeBook Modules";
+    public string Name { get; } = "HomeBook";
     public string Description { get; } = "Provides core functionality for HomeBook wallpaper management";
     public string Key { get; } = "homebook.core.wallpaper";
     public string Author { get; } = "HomeBook";

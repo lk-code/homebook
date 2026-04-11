@@ -86,7 +86,7 @@ public class RecipesProvider(
         {
             string moduleKey = module.Key;
             string scopeName = "RecipeImages";
-            Guid? recipeImagesStorageScopeId = await storageProvider.GetScopeIdByFullName($"{moduleKey}.{scopeName}",
+            Guid? recipeImagesStorageScopeId = await storageProvider.GetScopeIdByFullNameAsync($"{moduleKey}.{scopeName}",
                 cancellationToken);
 
             foreach (Guid mediaIdToDelete in mediaIdsToDelete)

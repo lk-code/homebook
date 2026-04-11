@@ -150,7 +150,7 @@ public static class ModuleExtensions
             }
             else
             {
-                scopeId = (await storageProvider.GetScopeIdByFullName(fullScopeName,
+                scopeId = (await storageProvider.GetScopeIdByFullNameAsync(fullScopeName,
                     cancellationToken))!.Value;
             }
 

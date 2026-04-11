@@ -1,6 +1,9 @@
 using HomeBook.Backend.Abstractions;
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Enums;
+using HomeBook.Backend.Abstractions.Models;
 using Homebook.Backend.Core.Setup;
+using HomeBook.UnitTests.TestCore.Backend.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
@@ -442,7 +445,9 @@ public class SetupInstanceManagerTests
 
         // Assert
         await _fileSystemService.Received(1)
-            .FileWriteAllTextAsync(expectedFilePath, expectedTrimmedVersion, _cancellationToken);
+            .FileWriteAllTextAsync(expectedFilePath,
+                expectedTrimmedVersion,
+                _cancellationToken);
     }
 
     [Test]
@@ -459,6 +464,57 @@ public class SetupInstanceManagerTests
         await _instance.CreateHomebookInstanceAsync(_cancellationToken);
 
         // Assert
-        await _fileSystemService.Received(1).FileWriteAllTextAsync(expectedFilePath, string.Empty, _cancellationToken);
+        await _fileSystemService.Received(1)
+            .FileWriteAllTextAsync(expectedFilePath,
+                string.Empty,
+                _cancellationToken);
+    }
+
+    [Test]
+    public async Task CopySetupFilesAsync_WithSimpleWallpaperPathFiles_Return()
+    {
+        // Arrange
+        _applicationPathProvider.ExecutableDirectory.Returns("/test/opt/homebook");
+        string setupDirectory = Path.Combine(_applicationPathProvider.ExecutableDirectory, "setup");
+        _fileSystemService.GetFilesInDirectoryAsync(setupDirectory, Arg.Any<CancellationToken>())
+            .Returns([
+                new FileInformation($"{setupDirectory}/wallpaper/bg001.jpg", 1024),
+            ]);
+        var testFileSystemService = new TestFileService();
+        _fileSystemService.GetFolderPath(Arg.Any<SpecialFolder>())
+            .Returns(testFileSystemService.GetFolderPath(SpecialFolder.Wallpaper));
+
+        // Act
+        await _instance.CopySetupFilesAsync(_cancellationToken);
+
+        // Assert
+        _fileSystemService.Received(1)
+            .CopyFile("/test/opt/homebook/setup/wallpaper/bg001.jpg",
+                "/test/lib/homebook/wallpaper/bg001.jpg",
+                true);
+    }
+
+    [Test]
+    public async Task CopySetupFilesAsync_WithWallpaperThemePath_Return()
+    {
+        // Arrange
+        _applicationPathProvider.ExecutableDirectory.Returns("/test/opt/homebook");
+        string setupDirectory = Path.Combine(_applicationPathProvider.ExecutableDirectory, "setup");
+        _fileSystemService.GetFilesInDirectoryAsync(setupDirectory, Arg.Any<CancellationToken>())
+            .Returns([
+                new FileInformation($"{setupDirectory}/wallpaper/theme01/bg001.jpg", 1024),
+            ]);
+        var testFileSystemService = new TestFileService();
+        _fileSystemService.GetFolderPath(Arg.Any<SpecialFolder>())
+            .Returns(testFileSystemService.GetFolderPath(SpecialFolder.Wallpaper));
+
+        // Act
+        await _instance.CopySetupFilesAsync(_cancellationToken);
+
+        // Assert
+        _fileSystemService.Received(1)
+            .CopyFile("/test/opt/homebook/setup/wallpaper/theme01/bg001.jpg",
+                "/test/lib/homebook/wallpaper/theme01/bg001.jpg",
+                true);
     }
 }

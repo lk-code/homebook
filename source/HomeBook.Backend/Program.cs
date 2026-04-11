@@ -143,7 +143,8 @@ switch (instanceStatus)
             .MapSearchEndpoints()
             .MapStorageFileEndpoints()
             .MapStorageScopeEndpoints()
-            .MapMediaEndpoints();
+            .MapMediaEndpoints()
+            .MapSystemWallpaperEndpoints();
         break;
 }
 

@@ -1,4 +1,6 @@
 using HomeBook.Backend.Abstractions.Contracts;
+using HomeBook.Backend.Abstractions.Enums;
+using HomeBook.Backend.Abstractions.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -16,6 +18,7 @@ public class SetupInstanceManager(
     /// <inheritdoc />
     public void CreateRequiredDirectories()
     {
+        // 1. create system directories
         string[] requiredDirectories =
         [
             applicationPathProvider.ConfigurationPath,
@@ -33,6 +36,17 @@ public class SetupInstanceManager(
                 continue;
 
             logger.LogInformation("Creating required directory at {Directory}", dir);
+            fileSystemService.CreateDirectory(dir);
+        }
+
+        // 2. create data special folders behind /data
+        foreach (SpecialFolder specialFolder in Enum.GetValues<SpecialFolder>())
+        {
+            string dir = fileSystemService.GetFolderPath(specialFolder);
+            if (fileSystemService.DirectoryExists(dir))
+                continue;
+
+            logger.LogInformation("Creating required special folder directory at {Directory}", dir);
             fileSystemService.CreateDirectory(dir);
         }
     }
@@ -99,5 +113,40 @@ public class SetupInstanceManager(
             cancellationToken);
 
         return installedInstanceVersion;
+    }
+
+    public async Task CopySetupFilesAsync(CancellationToken cancellationToken)
+    {
+        Dictionary<string, SpecialFolder> mapping = new()
+        {
+            { "wallpaper", SpecialFolder.Wallpaper }
+            // more mappings here
+        };
+
+        string setupDirectory = Path.Combine(applicationPathProvider.ExecutableDirectory, "setup");
+        List<FileInformation> setupFiles = await fileSystemService.GetFilesInDirectoryAsync(
+            setupDirectory,
+            cancellationToken);
+        foreach (FileInformation setupFile in setupFiles)
+        {
+            string relativeFilePath = setupFile.FilePath.Replace(setupDirectory, string.Empty)
+                .TrimStart(Path.DirectorySeparatorChar);
+
+            string[] directoryPathParts = relativeFilePath
+                .Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
+
+            if (!mapping.TryGetValue(directoryPathParts[0], out SpecialFolder folder))
+                continue;
+
+            string mappedDirectoryPath = fileSystemService.GetFolderPath(folder);
+            string relativeSubDirectory = Path.Combine(directoryPathParts.Skip(1).ToArray());
+
+            string sourceFilePath = setupFile.FilePath;
+            string targetFilePath = Path.Combine(mappedDirectoryPath, relativeSubDirectory);
+
+            fileSystemService.CopyFile(sourceFilePath,
+                targetFilePath,
+                true);
+        }
     }
 }

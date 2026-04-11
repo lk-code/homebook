@@ -1,0 +1,10 @@
+{
+    "light": [
+        "Mountains.Light@1x.webp",
+        "Mountains.Light@3x.webp"
+    ],
+    "dark": [
+        "Mountains.Dark@1x.webp",
+        "Mountains.Dark@3x.webp"
+    ]
+}

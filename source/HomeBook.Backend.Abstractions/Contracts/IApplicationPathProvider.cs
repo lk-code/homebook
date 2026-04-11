@@ -10,4 +10,5 @@ public interface IApplicationPathProvider
     string TempDirectory { get; }
     string UpdateDirectory { get; }
     string StorageDirectory { get; }
+    string ExecutableDirectory { get; }
 }

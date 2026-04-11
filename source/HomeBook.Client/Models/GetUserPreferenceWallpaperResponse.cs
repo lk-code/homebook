@@ -22,13 +22,13 @@ namespace HomeBook.Client.Models
 #else
         public string Type { get; set; }
 #endif
-        /// <summary>The wallpaperKey property</summary>
+        /// <summary>The wallpaper property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? WallpaperKey { get; set; }
+        public string? Wallpaper { get; set; }
 #nullable restore
 #else
-        public string WallpaperKey { get; set; }
+        public string Wallpaper { get; set; }
 #endif
         /// <summary>
         /// Instantiates a new <see cref="global::HomeBook.Client.Models.GetUserPreferenceWallpaperResponse"/> and sets the default values.
@@ -56,7 +56,7 @@ namespace HomeBook.Client.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "type", n => { Type = n.GetStringValue(); } },
-                { "wallpaperKey", n => { WallpaperKey = n.GetStringValue(); } },
+                { "wallpaper", n => { Wallpaper = n.GetStringValue(); } },
             };
         }
         /// <summary>
@@ -67,7 +67,7 @@ namespace HomeBook.Client.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("type", Type);
-            writer.WriteStringValue("wallpaperKey", WallpaperKey);
+            writer.WriteStringValue("wallpaper", Wallpaper);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

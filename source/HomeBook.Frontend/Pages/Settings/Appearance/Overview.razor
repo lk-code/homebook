@@ -1,5 +1,6 @@
 @page "/Settings/Appearance"
 
+@using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Contracts
 @using HomeBook.Frontend.Core.Icons
 @using HomeBook.Frontend.Modules.Abstractions
@@ -10,6 +11,7 @@
 @inject IInternalFileStorageRegistration FileStorageRegistration
 @inject IMediaService MediaService
 @inject IFileStorageService FileStorageService
+@inject IWallpaperService WallpaperService
 
 <MudContainer>
 
@@ -71,14 +73,14 @@
                          Class="mb-5"
                          Justify="Justify.FlexStart">
 
-                    @foreach (string thumbUrl in _dynamicWallpaperThumbImageUrls)
+                    @foreach (var wp in _dynamicWallpaperThumbImageUrls)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
-                                          Src="@thumbUrl"/>
+                                          Src="@wp"/>
                             </MudButton>
                         </MudItem>
                     }
@@ -101,14 +103,14 @@
                          Class="mb-5"
                          Justify="Justify.FlexStart">
 
-                    @foreach (string thumbUrl in _staticWallpaperThumbImageUrls)
+                    @foreach (var wp in _staticWallpaperThumbImageUrls)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
-                                          Src="@thumbUrl"/>
+                                          Src="@wp.AbsoluteUri!.ToString()"/>
                             </MudButton>
                         </MudItem>
                     }
@@ -130,14 +132,14 @@
                 <MudGrid Spacing="3"
                          Justify="Justify.FlexStart">
 
-                    @foreach (string thumbUrl in _lastOwnWallpaperThumbImageUrls)
+                    @foreach (var wp in _uploadedWallpaperThumbImageUrls)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
-                                          Src="@thumbUrl"/>
+                                          Src="@wp.AbsoluteUri!.ToString()"/>
                             </MudButton>
                         </MudItem>
                     }

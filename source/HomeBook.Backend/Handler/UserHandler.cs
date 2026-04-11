@@ -101,6 +101,8 @@ public class UserHandler
             if (wallpaperConfig is null)
                 return TypedResults.NotFound();
 
+            // TODO: if user uploaded image, then return mediaId, if static wallpaper, return the link to the image, if dynamic wallpaper, return the name of the wallpaper
+
             return TypedResults.Ok(new GetUserPreferenceWallpaperResponse(wallpaperConfig.Type,
                 wallpaperConfig.WallpaperKey));
         }
@@ -112,7 +114,7 @@ public class UserHandler
     }
 
     /// <summary>
-    /// updates the user preference for locale
+    /// Updates the user preference for wallpaper.
     /// </summary>
     /// <param name="user"></param>
     /// <param name="logger"></param>
@@ -123,22 +125,22 @@ public class UserHandler
     public static async Task<IResult> HandleUpdateUserPreferenceForWallpaper(ClaimsPrincipal user,
         [FromServices] ILogger<UserHandler> logger,
         [FromServices] IUserPreferenceProvider userPreferenceProvider,
-        [FromBody] UpdateUserPreferenceLocaleRequest request,
+        [FromBody] UpdateUserPreferenceWallpaperRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
             Guid userId = user.GetUserId();
 
-            await userPreferenceProvider.SetUserPreferredLocaleAsync(userId,
-                request.Locale,
+            await userPreferenceProvider.SetUserWallpaperAsync(userId,
+                request.WallpaperConfiguration,
                 cancellationToken);
 
             return TypedResults.Ok();
         }
         catch (Exception err)
         {
-            logger.LogError(err, "Error while updating user locale preference");
+            logger.LogError(err, "Error while updating user wallpaper preference");
             return TypedResults.InternalServerError(err.Message);
         }
     }

@@ -30,6 +30,6 @@ public static class MediaEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
-        return group;
+        return routeBuilder;
     }
 }

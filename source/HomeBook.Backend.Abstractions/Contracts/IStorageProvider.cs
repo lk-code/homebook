@@ -45,7 +45,7 @@ public interface IStorageProvider
     /// <param name="fullScopeName"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Guid?> GetScopeIdByFullName(string fullScopeName,
+    Task<Guid?> GetScopeIdByFullNameAsync(string fullScopeName,
         CancellationToken cancellationToken);
 
     /// <summary>
@@ -105,5 +105,14 @@ public interface IStorageProvider
     Task<Guid> WriteFileAllTextAsync(Guid scopeId,
         string originalFilename,
         string content,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="scopeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<Guid[]> GetAllInScopeAsync(Guid scopeId,
         CancellationToken cancellationToken);
 }
