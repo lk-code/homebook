@@ -48,6 +48,7 @@ RUN addgroup --gid $APP_UID appgroup \
 # create working directory for homebook
 RUN mkdir -p /var/lib/homebook
 # copy needed files
+RUN mkdir -p /opt/homebook/setup/wallpaper/Mountains.theme/
 COPY ./files/wallpaper/Mountains/theme.json /opt/homebook/setup/wallpaper/Mountains.theme/theme.json
 COPY ./files/wallpaper/Mountains/Mountains.Dark@1x.webp /opt/homebook/setup/wallpaper/Mountains.theme/Mountains.Dark@1x.webp
 COPY ./files/wallpaper/Mountains/Mountains.Dark@3x.webp /opt/homebook/setup/wallpaper/Mountains.theme/Mountains.Dark@3x.webp
