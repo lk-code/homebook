@@ -114,6 +114,14 @@ public class TestFileService : IApplicationPathProvider, IFileSystemService
         return [];
     }
 
+    public async Task<List<FileInformation>> GetAllInDirectoryAsync(string storagePath,
+        CancellationToken cancellationToken)
+    {
+        await Task.CompletedTask;
+
+        return [];
+    }
+
     public string GetFolderPath(SpecialFolder folder)
     {
         NativeFileService nativeFileService = new(NullLogger<NativeFileService>.Instance);
