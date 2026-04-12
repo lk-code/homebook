@@ -43,6 +43,8 @@ public class WallpaperProvider(
         "11pm"
     };
 
+    private static readonly List<string> AllowedWallpaperExtension = [".webp", ".jpg", ".jpeg", ".png", ".theme"];
+
     public static readonly Dictionary<string, string> WallpaperFiles = new()
     {
         {
@@ -55,8 +57,19 @@ public class WallpaperProvider(
 
     public string GetAbsolutFilePathForWallpaper(string wallpaper)
     {
-        string wallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.Wallpaper);
-        string absoluteWallpaperPath = Path.Combine(wallpaperDirectory, wallpaper);
+        string wallpaperDirectory = "";
+        if (wallpaper.StartsWith("[mnt]"))
+        {
+            wallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper);
+        }
+        else if (wallpaper.StartsWith("[img]"))
+        {
+            wallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.ImageWallpaper);
+        }
+
+        string absoluteWallpaperPath = Path.Combine(wallpaperDirectory, wallpaper
+            .Replace("[mnt]", "")
+            .Replace("[img]", ""));
         return absoluteWallpaperPath;
     }
 
@@ -64,25 +77,75 @@ public class WallpaperProvider(
     public async Task<IReadOnlyCollection<SystemWallpaperDto>> GetSystemWallpapersAsync(
         CancellationToken cancellationToken = default)
     {
-        string wallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.Wallpaper);
-        List<SystemWallpaperDto> systemWallpapers = new();
-        foreach (var wallpaperFile in WallpaperFiles)
-        {
-            string absoluteWallpaperPath = Path.Combine(wallpaperDirectory, wallpaperFile.Value);
+        string mountedWallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper);
+        string imageWallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.ImageWallpaper);
 
-            if (fileSystemService.FileExists(absoluteWallpaperPath))
+        List<FileInformation> mountedWallpaperFiles = new();
+        List<FileInformation> imageWallpaperFiles = new();
+
+        try
+        {
+            mountedWallpaperFiles = (await fileSystemService
+                    .GetAllInDirectoryAsync(mountedWallpaperDirectory,
+                        cancellationToken))
+                .Where(e => Path.GetDirectoryName(e.FilePath) == mountedWallpaperDirectory)
+                .Where(e => AllowedWallpaperExtension.Contains(Path.GetExtension(e.FilePath).ToLowerInvariant()))
+                .Select(x => new FileInformation(x.FilePath.Replace(mountedWallpaperDirectory, "").TrimStart('/'),
+                    x.SizeBytes,
+                    x.IsDirectory))
+                .ToList();
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error while loading mounted wallpapers");
+        }
+
+        try
+        {
+            imageWallpaperFiles = (await fileSystemService
+                    .GetAllInDirectoryAsync(imageWallpaperDirectory,
+                        cancellationToken))
+                .Where(e => Path.GetDirectoryName(e.FilePath) == imageWallpaperDirectory)
+                .Where(e => AllowedWallpaperExtension.Contains(Path.GetExtension(e.FilePath).ToLowerInvariant()))
+                .Select(x => new FileInformation(x.FilePath.Replace(imageWallpaperDirectory, "").TrimStart('/'),
+                    x.SizeBytes,
+                    x.IsDirectory))
+                .ToList();
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error while loading image wallpapers");
+        }
+
+        List<string> allWallpaperFiles = mountedWallpaperFiles.Select(x => $"[mnt]{x.FilePath}")
+            .Concat(imageWallpaperFiles.Select(x => $"[img]{x.FilePath}"))
+            .ToList();
+        List<SystemWallpaperDto> systemWallpapers = new();
+        foreach (string wallpaperFile in allWallpaperFiles)
+        {
+            string wallpaperPath = "";
+
+            if (wallpaperFile.StartsWith("[mnt]"))
+            {
+                wallpaperPath = Path.Combine(mountedWallpaperDirectory, wallpaperFile.Replace("[mnt]", ""));
+            }
+            else if (wallpaperFile.StartsWith("[img]"))
+            {
+                wallpaperPath = Path.Combine(imageWallpaperDirectory, wallpaperFile.Replace("[img]", ""));
+            }
+
+            if (fileSystemService.FileExists(wallpaperPath))
             {
                 // is path a file => its the wallpaper file
 
-                systemWallpapers.Add(new SystemWallpaperDto(wallpaperFile.Key,
-                    wallpaperFile.Value));
+                systemWallpapers.Add(new SystemWallpaperDto(wallpaperFile));
                 continue;
             }
-            else if (fileSystemService.DirectoryExists(absoluteWallpaperPath))
+            else if (fileSystemService.DirectoryExists(wallpaperPath))
             {
                 // is path a directory => its a wallpaper set which contains multiple wallpaper
 
-                string wallpaperIndexFilePath = Path.Combine(absoluteWallpaperPath, "theme.json");
+                string wallpaperIndexFilePath = Path.Combine(wallpaperPath, "theme.json");
 
                 try
                 {
@@ -100,12 +163,11 @@ public class WallpaperProvider(
                         .ToDictionary(
                             prop => prop.Key,
                             prop => prop.Value!.AsArray()
-                                .Select(x => Path.Combine(wallpaperFile.Value, x.GetValue<string>()))
+                                .Select(x => Path.Combine(wallpaperFile, x.GetValue<string>()))
                                 .ToList()
                         );
 
-                    systemWallpapers.Add(new SystemWallpaperDto(wallpaperFile.Key,
-                        wallpaperFile.Value,
+                    systemWallpapers.Add(new SystemWallpaperDto(wallpaperFile,
                         result));
                 }
                 catch (Exception err)

@@ -54,8 +54,7 @@ public partial class Overview : ComponentBase
                 {
                     case WallpaperType.Static:
                     {
-                        _staticWallpaperThumbImageUrls.Add(new StaticWallpaperViewModel(wp.Key,
-                            wp.Url));
+                        _staticWallpaperThumbImageUrls.Add(new StaticWallpaperViewModel(wp.Url));
                     }
                         break;
                     case WallpaperType.Uploaded:

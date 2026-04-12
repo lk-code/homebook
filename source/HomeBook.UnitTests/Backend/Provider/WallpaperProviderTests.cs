@@ -45,7 +45,7 @@ public class WallpaperProviderTests
     public async Task GetSystemWallpapersAsync_Return()
     {
         // Arrange
-        string wallpaperDirectory = _fileSystemService.GetFolderPath(SpecialFolder.Wallpaper);
+        string wallpaperDirectory = _fileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper);
         foreach (var registeredWallpaper in WallpaperProvider.WallpaperFiles)
         {
             if (!(Path.GetExtension(registeredWallpaper.Value).Equals(".theme", StringComparison.OrdinalIgnoreCase)))

@@ -6,7 +6,6 @@ namespace HomeBook.Backend.Mappings;
 public static class WallpaperMapping
 {
     public static StaticWallpaperEntry ToResponse(this SystemWallpaperDto dto) =>
-        new(dto.Key,
-            dto.Path,
+        new(dto.Path,
             dto.Configuration);
 }

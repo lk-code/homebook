@@ -5,7 +5,6 @@ public record GetSystemWallpapersResponse(
     List<MediaWallpaperEntry> UploadedWallpapers);
 
 public record StaticWallpaperEntry(
-    string Name,
     string FilePath,
     Dictionary<string, List<string>>? Configuration);
 

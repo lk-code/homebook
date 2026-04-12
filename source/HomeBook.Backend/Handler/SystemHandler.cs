@@ -22,7 +22,7 @@ public class SystemHandler
         if (string.IsNullOrWhiteSpace(wallpaper))
             return TypedResults.NotFound();
 
-        string wallpaperFile = Uri.UnescapeDataString(wallpaper);
+        string wallpaperFile = Uri.UnescapeDataString(wallpaper).Replace("%2E", ".");
         string absoluteFilePath = wallpaperProvider
             .GetAbsolutFilePathForWallpaper(wallpaperFile);
 
