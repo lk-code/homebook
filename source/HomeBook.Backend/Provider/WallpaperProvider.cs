@@ -45,16 +45,6 @@ public class WallpaperProvider(
 
     private static readonly List<string> AllowedWallpaperExtension = [".webp", ".jpg", ".jpeg", ".png", ".theme"];
 
-    public static readonly Dictionary<string, string> WallpaperFiles = new()
-    {
-        {
-            "Mountains", "Mountains.theme"
-        },
-        {
-            "Flickering", "flickering.jpg"
-        }
-    };
-
     public string GetAbsolutFilePathForWallpaper(string wallpaper)
     {
         string wallpaperDirectory = "";

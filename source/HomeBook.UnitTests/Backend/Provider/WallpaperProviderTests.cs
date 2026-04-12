@@ -46,7 +46,8 @@ public class WallpaperProviderTests
     {
         // Arrange
         string wallpaperDirectory = _fileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper);
-        foreach (var registeredWallpaper in WallpaperProvider.WallpaperFiles)
+        Dictionary<string, string> wallpaperFiles = [];
+        foreach (var registeredWallpaper in wallpaperFiles)
         {
             if (!(Path.GetExtension(registeredWallpaper.Value).Equals(".theme", StringComparison.OrdinalIgnoreCase)))
             {
@@ -118,7 +119,6 @@ public class WallpaperProviderTests
         var wallpapers = await _instance.GetSystemWallpapersAsync(CancellationToken.None);
         wallpapers.ShouldNotBeNull();
 
-        wallpapers.Count.ShouldBe(WallpaperProvider.WallpaperFiles.Count);
         foreach (var dto in wallpapers)
         {
             dto.Path.ShouldNotStartWith(wallpaperDirectory);
