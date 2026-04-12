@@ -45,9 +45,13 @@ RUN apt-get update && \
 RUN addgroup --gid $APP_UID appgroup \
     && adduser --uid $APP_UID --gid $APP_UID --disabled-password --gecos "" appuser
 
-# create working directory for homebook
+# 1. create working directory for homebook
 RUN mkdir -p /var/lib/homebook
-# copy needed files
+
+# 2. copy needed files
+# 2.1. create setup directory and files
+RUN mkdir -p /opt/homebook/setup
+# 2.2. create wallpaper directory and files
 RUN mkdir -p /opt/homebook/wallpaper/Mountains.theme
 COPY ./files/wallpaper/Mountains/theme.json /opt/homebook/wallpaper/Mountains.theme/theme.json
 COPY ./files/wallpaper/Mountains/Mountains.Dark@1x.webp /opt/homebook/wallpaper/Mountains.theme/Mountains.Dark@1x.webp
@@ -55,7 +59,8 @@ COPY ./files/wallpaper/Mountains/Mountains.Dark@3x.webp /opt/homebook/wallpaper/
 COPY ./files/wallpaper/Mountains/Mountains.Light@1x.webp /opt/homebook/wallpaper/Mountains.theme/Mountains.Light@1x.webp
 COPY ./files/wallpaper/Mountains/Mountains.Light@3x.webp /opt/homebook/wallpaper/Mountains.theme/Mountains.Light@3x.webp
 COPY ./files/wallpaper/flickering.jpg /opt/homebook/wallpaper/flickering.jpg
-# set permissions for homebook directory
+
+# 3. set permissions for homebook directory
 RUN chown -R $APP_UID /var/lib/homebook
 RUN chmod -R 770 /var/lib/homebook
 
