@@ -119,7 +119,9 @@ public class SetupInstanceManager(
     {
         Dictionary<string, SpecialFolder> mapping = new()
         {
-            { "wallpaper", SpecialFolder.Wallpaper }
+            {
+                "wallpaper", SpecialFolder.Wallpaper
+            }
             // more mappings here
         };
 
@@ -144,9 +146,19 @@ public class SetupInstanceManager(
             string sourceFilePath = setupFile.FilePath;
             string targetFilePath = Path.Combine(mappedDirectoryPath, relativeSubDirectory);
 
-            fileSystemService.CopyFile(sourceFilePath,
-                targetFilePath,
-                true);
+            try
+            {
+                fileSystemService.CopyFile(sourceFilePath,
+                    targetFilePath,
+                    true);
+            }
+            catch (Exception err)
+            {
+                logger.LogError(err,
+                    "Error copying setup file from {SourceFilePath} to {TargetFilePath}",
+                    sourceFilePath,
+                    targetFilePath);
+            }
         }
     }
 }
