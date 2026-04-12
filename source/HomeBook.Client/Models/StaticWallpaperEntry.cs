@@ -30,14 +30,6 @@ namespace HomeBook.Client.Models
 #else
         public string FilePath { get; set; }
 #endif
-        /// <summary>The name property</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Name { get; set; }
-#nullable restore
-#else
-        public string Name { get; set; }
-#endif
         /// <summary>
         /// Instantiates a new <see cref="global::HomeBook.Client.Models.StaticWallpaperEntry"/> and sets the default values.
         /// </summary>
@@ -65,7 +57,6 @@ namespace HomeBook.Client.Models
             {
                 { "configuration", n => { Configuration = n.GetObjectValue<global::HomeBook.Client.Models.StaticWallpaperEntry_configuration>(global::HomeBook.Client.Models.StaticWallpaperEntry_configuration.CreateFromDiscriminatorValue); } },
                 { "filePath", n => { FilePath = n.GetStringValue(); } },
-                { "name", n => { Name = n.GetStringValue(); } },
             };
         }
         /// <summary>
@@ -77,7 +68,6 @@ namespace HomeBook.Client.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteObjectValue<global::HomeBook.Client.Models.StaticWallpaperEntry_configuration>("configuration", Configuration);
             writer.WriteStringValue("filePath", FilePath);
-            writer.WriteStringValue("name", Name);
             writer.WriteAdditionalData(AdditionalData);
         }
     }

@@ -482,7 +482,7 @@ public class SetupInstanceManagerTests
             ]);
         var testFileSystemService = new TestFileService();
         _fileSystemService.GetFolderPath(Arg.Any<SpecialFolder>())
-            .Returns(testFileSystemService.GetFolderPath(SpecialFolder.Wallpaper));
+            .Returns(testFileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper));
 
         // Act
         await _instance.CopySetupFilesAsync(_cancellationToken);
@@ -506,7 +506,7 @@ public class SetupInstanceManagerTests
             ]);
         var testFileSystemService = new TestFileService();
         _fileSystemService.GetFolderPath(Arg.Any<SpecialFolder>())
-            .Returns(testFileSystemService.GetFolderPath(SpecialFolder.Wallpaper));
+            .Returns(testFileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper));
 
         // Act
         await _instance.CopySetupFilesAsync(_cancellationToken);

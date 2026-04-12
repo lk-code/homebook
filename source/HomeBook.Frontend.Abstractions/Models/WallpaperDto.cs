@@ -1,6 +1,5 @@
 namespace HomeBook.Frontend.Abstractions.Models;
 
-public record WallpaperDto(string? Key,
-    WallpaperType Type,
+public record WallpaperDto(WallpaperType Type,
     Guid? MediaId,
     Uri? Url);

@@ -30,10 +30,10 @@ public class WallpaperService(
             if (staticWallpaper.Configuration is null
                 && !string.IsNullOrEmpty(staticWallpaper.FilePath))
             {
-                wallpapers.Add(new WallpaperDto(staticWallpaper.Name,
-                    WallpaperType.Static,
+                string wallpaperFile = Uri.EscapeDataString(staticWallpaper.FilePath).Replace(".", "%2E");
+                wallpapers.Add(new WallpaperDto(WallpaperType.Static,
                     null,
-                    appUriProvider.GetAbsoluteUri($"{wallpaperEndpoint}/{Uri.EscapeDataString(staticWallpaper.FilePath)}")));
+                    appUriProvider.GetAbsoluteUri($"{wallpaperEndpoint}/{wallpaperFile}")));
                 continue;
             }
 
@@ -50,16 +50,14 @@ public class WallpaperService(
 
             UntypedNode wallpaperNode = configWallpaper.GetValue().First();
             string wallpaper = (wallpaperNode as UntypedString).GetValue();
-            wallpapers.Add(new WallpaperDto(staticWallpaper.Name,
-                WallpaperType.Static,
+            wallpapers.Add(new WallpaperDto(WallpaperType.Static,
                 null,
                 appUriProvider.GetAbsoluteUri($"{wallpaperEndpoint}/{Uri.EscapeDataString(wallpaper)}")));
         }
 
         // uploaded wallpapers
         wallpapers.AddRange((response.UploadedWallpapers ?? []).Select(wp =>
-            new WallpaperDto(null,
-                WallpaperType.Uploaded,
+            new WallpaperDto(WallpaperType.Uploaded,
                 wp.MediaId,
                 null)));
 

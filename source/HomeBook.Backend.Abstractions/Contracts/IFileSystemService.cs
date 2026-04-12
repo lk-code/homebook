@@ -84,6 +84,15 @@ public interface IFileSystemService
     /// <summary>
     ///
     /// </summary>
+    /// <param name="storagePath"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<List<FileInformation>> GetAllInDirectoryAsync(string storagePath,
+        CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
     /// <param name="folder"></param>
     /// <returns></returns>
     string GetFolderPath(SpecialFolder folder);

@@ -120,7 +120,8 @@ public class SetupInstanceManager(
         Dictionary<string, SpecialFolder> mapping = new()
         {
             {
-                "wallpaper", SpecialFolder.Wallpaper
+                //    /setup/wallpaper/* => /data/wallpaper
+                "wallpaper", SpecialFolder.MountedWallpaper
             }
             // more mappings here
         };

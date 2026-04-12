@@ -84,11 +84,31 @@ public class NativeFileService(ILogger<NativeFileService> logger) : IApplication
     }
 
     /// <inheritdoc />
+    public Task<List<FileInformation>> GetAllInDirectoryAsync(string storagePath,
+        CancellationToken cancellationToken)
+    {
+        logger.LogInformation("Retrieving all entries in directory");
+
+        List<FileInformation> entries = Directory
+            .EnumerateFileSystemEntries(storagePath, "*", SearchOption.AllDirectories)
+            .Select(path =>
+            {
+                bool isDirectory = Directory.Exists(path);
+                long size = isDirectory ? 0 : new FileInfo(path).Length;
+                return new FileInformation(path, size, isDirectory);
+            })
+            .ToList();
+
+        return Task.FromResult(entries);
+    }
+
+    /// <inheritdoc />
     public string GetFolderPath(SpecialFolder folder)
     {
         return folder switch
         {
-            SpecialFolder.Wallpaper => $"{DataDirectory}/wallpaper",
+            SpecialFolder.MountedWallpaper => $"{DataDirectory}/wallpaper",
+            SpecialFolder.ImageWallpaper => $"{ExecutableDirectory}/wallpaper",
             _ => throw new ArgumentOutOfRangeException(nameof(folder), folder, null)
         };
     }
