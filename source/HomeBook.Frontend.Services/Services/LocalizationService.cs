@@ -70,18 +70,18 @@ public class LocalizationService(
             navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true);
     }
 
-    private void OnAuthenticationStateChanged(bool isAuthenticated)
+    private async Task OnAuthenticationStateChanged(bool isAuthenticated,
+        CancellationToken cancellationToken)
     {
         if (!isAuthenticated)
-            Task.Run(() => SetCultureAsync(_defaultLocale, true));
+            await SetCultureAsync(_defaultLocale, true, cancellationToken);
         else
-            Task.Run(() => LoadCultureForUserAsync(true));
+            await LoadCultureForUserAsync(true, cancellationToken);
     }
 
-    private async Task LoadCultureForUserAsync(bool forceReload = true)
+    private async Task LoadCultureForUserAsync(bool forceReload = true,
+        CancellationToken cancellationToken = default)
     {
-        CancellationToken cancellationToken = CancellationToken.None;
-
         if (!await authenticationService.IsAuthenticatedAsync(cancellationToken))
             return;
 

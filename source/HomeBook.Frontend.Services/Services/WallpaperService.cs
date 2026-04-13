@@ -8,12 +8,10 @@ namespace HomeBook.Frontend.Services.Services;
 
 public class WallpaperService(
     IAuthenticationService authenticationService,
-    BackendClient backendClient,
-    IAppUriProvider appUriProvider) : IWallpaperService
+    BackendClient backendClient) : IWallpaperService
 {
     public async Task<List<WallpaperDto>> GetAllWallpapersAsync(CancellationToken cancellationToken)
     {
-        string wallpaperEndpoint = "/system/wallpaper";
         string? token = await authenticationService.GetTokenAsync(cancellationToken);
 
         GetSystemWallpapersResponse? response = await backendClient.System.Wallpaper.GetAsync(x =>
@@ -30,10 +28,10 @@ public class WallpaperService(
             if (staticWallpaper.Configuration is null
                 && !string.IsNullOrEmpty(staticWallpaper.FilePath))
             {
-                string wallpaperFile = Uri.EscapeDataString(staticWallpaper.FilePath).Replace(".", "%2E");
                 wallpapers.Add(new WallpaperDto(WallpaperType.Static,
                     null,
-                    appUriProvider.GetAbsoluteUri($"{wallpaperEndpoint}/{wallpaperFile}")));
+                    staticWallpaper.FilePath,
+                    staticWallpaper.FilePath));
                 continue;
             }
 
@@ -49,16 +47,18 @@ public class WallpaperService(
                 continue;
 
             UntypedNode wallpaperNode = configWallpaper.GetValue().First();
-            string wallpaper = (wallpaperNode as UntypedString).GetValue();
+            string wallpaperFileVaue = (wallpaperNode as UntypedString).GetValue();
             wallpapers.Add(new WallpaperDto(WallpaperType.Static,
                 null,
-                appUriProvider.GetAbsoluteUri($"{wallpaperEndpoint}/{Uri.EscapeDataString(wallpaper)}")));
+                wallpaperFileVaue,
+                staticWallpaper.FilePath));
         }
 
         // uploaded wallpapers
         wallpapers.AddRange((response.UploadedWallpapers ?? []).Select(wp =>
             new WallpaperDto(WallpaperType.Uploaded,
                 wp.MediaId,
+                null,
                 null)));
 
         return wallpapers;

@@ -14,6 +14,14 @@ namespace HomeBook.Client.Models
     {
         /// <summary>Stores additional data not described in the OpenAPI description found when deserializing. Can be used for serialization as well.</summary>
         public IDictionary<string, object> AdditionalData { get; set; }
+        /// <summary>The config property</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Config { get; set; }
+#nullable restore
+#else
+        public string Config { get; set; }
+#endif
         /// <summary>The type property</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -55,6 +63,7 @@ namespace HomeBook.Client.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "config", n => { Config = n.GetStringValue(); } },
                 { "type", n => { Type = n.GetStringValue(); } },
                 { "wallpaper", n => { Wallpaper = n.GetStringValue(); } },
             };
@@ -66,6 +75,7 @@ namespace HomeBook.Client.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("config", Config);
             writer.WriteStringValue("type", Type);
             writer.WriteStringValue("wallpaper", Wallpaper);
             writer.WriteAdditionalData(AdditionalData);

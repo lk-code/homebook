@@ -42,6 +42,7 @@ public partial class Overview : ComponentBase
     private async Task LoadWallpapersAsync(CancellationToken cancellationToken)
     {
         List<WallpaperDto> wallpapers = await WallpaperService.GetAllWallpapersAsync(cancellationToken);
+        string wallpaperEndpoint = "/system/wallpaper";
 
         _uploadedWallpaperThumbImageUrls.Clear();
         _staticWallpaperThumbImageUrls.Clear();
@@ -54,7 +55,12 @@ public partial class Overview : ComponentBase
                 {
                     case WallpaperType.Static:
                     {
-                        _staticWallpaperThumbImageUrls.Add(new StaticWallpaperViewModel(wp.Url));
+                        string escapedWallpaperName = Uri.EscapeDataString(wp.StaticWallpaper)
+                            .Replace(".", "%2E");
+                        Uri absoluteWallpaperUri = AppUriProvider
+                            .GetAbsoluteUri($"{wallpaperEndpoint}/{escapedWallpaperName}");
+                        _staticWallpaperThumbImageUrls.Add(new StaticWallpaperViewModel(wp.StaticWallpaperName,
+                            absoluteWallpaperUri));
                     }
                         break;
                     case WallpaperType.Uploaded:
@@ -111,6 +117,7 @@ public partial class Overview : ComponentBase
             await AddUserWallpaperToGalleryAsync(mediaItemId, cancellationToken);
 
             // TODO: set mediaId as current wallpaper
+            await SetAsWallpaperAsync(mediaItemId);
 
             StateHasChanged();
         }
@@ -127,8 +134,42 @@ public partial class Overview : ComponentBase
     private async Task AddUserWallpaperToGalleryAsync(Guid mediaItemId,
         CancellationToken cancellationToken)
     {
-        // TODO: 1. add mediaId to user wallpapers via backend clientk
+        Uri? absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaItemId,
+            cancellationToken);
+        _uploadedWallpaperThumbImageUrls.Add(new MediaItemViewModel(mediaItemId,
+            absoluteUri,
+            0));
 
-        // TODO: 2. reload user wallpapers from backend
+        StateHasChanged();
+    }
+
+    private async Task SetAsWallpaperAsync(StaticWallpaperViewModel wp)
+    {
+        // set static wallpaper
+
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        await UserPreferencesProvider.SetStaticWallpaperAsync(wp.Wallpaper,
+            cancellationToken);
+    }
+
+    private async Task SetAsWallpaperAsync(Guid mediaId)
+    {
+        // set own uploaded wallpaper
+
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        await UserPreferencesProvider.SetUploadedWallpaperAsync(mediaId,
+            cancellationToken);
+    }
+
+    private async Task SetAsWallpaperAsync(string wp)
+    {
+        // set dynamic wallpaper
+
+        CancellationToken cancellationToken = CancellationToken.None;
+
+        await UserPreferencesProvider.SetDynamicWallpaperAsync(wp,
+            cancellationToken);
     }
 }

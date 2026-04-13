@@ -44,7 +44,7 @@ public class SystemHandler
             var contentTypeProvider = new FileExtensionContentTypeProvider();
             if (!contentTypeProvider.TryGetContentType(wallpaperFile, out string? contentType))
                 contentType = "application/octet-stream";
-            
+
             logger.LogInformation("Determined content type for wallpaper {Wallpaper}: {ContentType}", wallpaper, contentType);
 
             return TypedResults.File(content, contentType);

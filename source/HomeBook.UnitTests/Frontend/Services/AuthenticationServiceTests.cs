@@ -79,7 +79,7 @@ public class AuthenticationServiceTests
                 Username = username
             });
         var eventTriggered = false;
-        _instance.AuthenticationStateChanged += isAuthenticated =>
+        _instance.AuthenticationStateChanged += async (isAuthenticated, token) =>
         {
             isAuthenticated.ShouldBeTrue();
             eventTriggered = true;
@@ -121,7 +121,7 @@ public class AuthenticationServiceTests
                 Arg.Any<CancellationToken>())
             .Returns((LoginResponse)null!);
         var eventTriggered = false;
-        _instance.AuthenticationStateChanged += isAuthenticated =>
+        _instance.AuthenticationStateChanged += async (isAuthenticated, token) =>
         {
             isAuthenticated.ShouldBeTrue();
             eventTriggered = true;
@@ -158,7 +158,7 @@ public class AuthenticationServiceTests
                 Arg.Any<CancellationToken>())
             .ThrowsAsync(new ApiException("Bad Request").WithStatusCode(400));
         var eventTriggered = false;
-        _instance.AuthenticationStateChanged += isAuthenticated =>
+        _instance.AuthenticationStateChanged += async (isAuthenticated, token) =>
         {
             isAuthenticated.ShouldBeTrue();
             eventTriggered = true;
@@ -195,7 +195,7 @@ public class AuthenticationServiceTests
                 Arg.Any<CancellationToken>())
             .ThrowsAsync(new ApiException("Unauthorized").WithStatusCode(401));
         var eventTriggered = false;
-        _instance.AuthenticationStateChanged += isAuthenticated =>
+        _instance.AuthenticationStateChanged += async (isAuthenticated, token) =>
         {
             isAuthenticated.ShouldBeTrue();
             eventTriggered = true;
@@ -232,7 +232,7 @@ public class AuthenticationServiceTests
                 Arg.Any<CancellationToken>())
             .ThrowsAsync(new ApiException("Internal Server Error").WithStatusCode(500));
         var eventTriggered = false;
-        _instance.AuthenticationStateChanged += isAuthenticated =>
+        _instance.AuthenticationStateChanged += async (isAuthenticated, token) =>
         {
             isAuthenticated.ShouldBeTrue();
             eventTriggered = true;
@@ -301,7 +301,7 @@ public class AuthenticationServiceTests
 
         // act
         var eventTriggered = false;
-        _instance.AuthenticationStateChanged += isAuthenticated =>
+        _instance.AuthenticationStateChanged += async (isAuthenticated, token) =>
         {
             isAuthenticated.ShouldBeFalse();
             eventTriggered = true;

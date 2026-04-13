@@ -72,8 +72,10 @@ public partial class UserPreferenceProvider(
 
         string[] parts = userPreference.Value.Split("}-{", 2);
         string type = parts[0].TrimStart('{');
-        string key = parts[1].TrimEnd('}');
-        return new WallpaperConfiguration(type, key);
+        string value = parts[1].TrimEnd('}');
+        return new WallpaperConfiguration(userPreference.Value,
+            type,
+            value);
     }
 
     /// <inheritdoc />

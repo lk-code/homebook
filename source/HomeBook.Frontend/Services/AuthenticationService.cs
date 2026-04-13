@@ -22,7 +22,7 @@ public class AuthenticationService(
     private const string EXPIRES_AT_KEY = "expiresAt";
 
     /// <inheritdoc />
-    public event Action<bool>? AuthenticationStateChanged;
+    public event AsyncPreferenceChangedHandler<bool>? AuthenticationStateChanged;
 
     /// <inheritdoc />
     public async Task<bool> LoginAsync(string username,
@@ -60,7 +60,7 @@ public class AuthenticationService(
                 response.ExpiresAt!.Value.DateTime.ToString("O"));
 
             // Notify authentication state changed
-            AuthenticationStateChanged?.Invoke(true);
+            await InvokeAsync(AuthenticationStateChanged, true, cancellationToken);
 
             return true;
         }
@@ -117,7 +117,7 @@ public class AuthenticationService(
             logger.LogInformation("User logged out successfully");
 
             // Notify authentication state changed
-            AuthenticationStateChanged?.Invoke(false);
+            await InvokeAsync(AuthenticationStateChanged, false, cancellationToken);
         }
     }
 
@@ -236,5 +236,21 @@ public class AuthenticationService(
         bool isUserAdmin = await IsCurrentUserAdminAsync(cancellationToken);
         if (!isUserAdmin)
             throw new UnauthorizedAccessException("User is not authorized to access system information.");
+    }
+
+    private static Task InvokeAsync<T>(AsyncPreferenceChangedHandler<T>? eventHandler,
+        T value,
+        CancellationToken cancellationToken)
+    {
+        if (eventHandler is null)
+            return Task.CompletedTask;
+
+        Delegate[] delegates = eventHandler.GetInvocationList();
+        Task[] tasks = new Task[delegates.Length];
+
+        for (int i = 0; i < delegates.Length; i++)
+            tasks[i] = ((AsyncPreferenceChangedHandler<T>)delegates[i]).Invoke(value, cancellationToken);
+
+        return Task.WhenAll(tasks);
     }
 }

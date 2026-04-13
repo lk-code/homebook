@@ -2,12 +2,15 @@
 @using HomeBook.Frontend.Abstractions.Enums
 @using HomeBook.Frontend.Abstractions.Models
 @using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Module.Kitchen.ViewModels
+@using HomeBook.Frontend.Modules.Abstractions
 @using HomeBook.Frontend.Themes
 @using HomeBook.Frontend.UI.Resources
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.Extensions.Localization
 
 @inherits LayoutComponentBase
+@implements IDisposable
 
 @inject IStringLocalizer<LocalizationStrings> Loc
 @inject IAuthenticationService AuthenticationService
@@ -15,6 +18,9 @@
 @inject ISnackbar Snackbar
 @inject IJsLocalStorageProvider JsLocalStorageProvider
 @inject IMenuService MenuService
+@inject IUserPreferencesProvider UserPreferencesProvider
+@inject IAppUriProvider AppUriProvider
+@inject IMediaService MediaService
 
 @* Required *@
 <MudThemeProvider @bind-IsDarkMode="@_isThemeDarkMode"
@@ -27,9 +33,30 @@
 @* Needed for snackbars *@
 <MudSnackbarProvider/>
 
-<div class="ui-wallpaper"
-     style="background-image: url('/img/bg/Mountains.Light@1x.webp'); ">
-</div>
+@if (_wallpaperType is not null)
+{
+    @switch (_wallpaperType)
+    {
+        case WallpaperType.Static:
+        {
+            <div class="ui-wallpaper"
+                 style="background-image: url('@_wallpaperUri'); ">
+            </div>
+        }
+            break;
+        case WallpaperType.Dynamic:
+        {
+        }
+            break;
+        case WallpaperType.Uploaded:
+        {
+            <div class="ui-wallpaper"
+                 style="background-image: url('@_wallpaperUri'); ">
+            </div>
+        }
+            break;
+    }
+}
 
 <MudLayout>
 
@@ -206,6 +233,8 @@
     private string? _homebookInstanceName = null;
     private bool _hasContextMenuItems = false;
     private MenuItem[] _contextMenuItems = [];
+    private WallpaperType? _wallpaperType = null;
+    private Uri? _wallpaperUri = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -214,7 +243,78 @@
         _homebookInstanceName = await JsLocalStorageProvider.GetItemAsync(JsLocalStorageKeys.HomeBookInstanceName,
             cancellationToken);
 
+        UserPreferencesProvider.WallpaperChanged += OnWallpaperChanged;
+        AuthenticationService.AuthenticationStateChanged += AuthenticationServiceOnAuthenticationStateChanged;
+
+        if (await AuthenticationService.IsAuthenticatedAsync(cancellationToken))
+        {
+            await LoadWallpaperAsync(cancellationToken);
+        }
+
         await base.OnInitializedAsync();
+    }
+
+    private async Task AuthenticationServiceOnAuthenticationStateChanged(bool isAuthenticated,
+        CancellationToken cancellationToken)
+    {
+        if (isAuthenticated)
+        {
+            await LoadWallpaperAsync(cancellationToken);
+        }
+    }
+
+    private async Task OnWallpaperChanged(WallpaperConfiguration wpConfig,
+        CancellationToken cancellationToken)
+    {
+        await RenderWallpaperAsync(wpConfig,
+            cancellationToken);
+    }
+
+    private async Task LoadWallpaperAsync(CancellationToken cancellationToken)
+    {
+        WallpaperConfiguration? wpConfig = await UserPreferencesProvider.GetWallpaperAsync(cancellationToken);
+        if (wpConfig is null)
+            return;
+
+        await RenderWallpaperAsync(wpConfig, cancellationToken);
+    }
+
+    private async Task RenderWallpaperAsync(WallpaperConfiguration wpConfig,
+        CancellationToken cancellationToken)
+    {
+        if (cancellationToken.IsCancellationRequested)
+            return;
+
+        string wallpaperEndpoint = "/system/wallpaper";
+        _wallpaperType = wpConfig.Type;
+
+        switch (wpConfig.Type)
+        {
+            case WallpaperType.Static:
+            {
+                string escapedWallpaperName = Uri.EscapeDataString(wpConfig.StaticWallpaperUrl)
+                    .Replace(".", "%2E");
+                Uri absoluteWallpaperUri = AppUriProvider
+                    .GetAbsoluteUri($"{wallpaperEndpoint}/{escapedWallpaperName}");
+
+                _wallpaperUri = absoluteWallpaperUri;
+            }
+                break;
+            case WallpaperType.Dynamic:
+            {
+            }
+                break;
+            case WallpaperType.Uploaded:
+            {
+                Guid mediaId = wpConfig.MediaId!.Value;
+                Uri? absoluteUri = await MediaService.GetUrlForMediaItemAsync(mediaId,
+                    cancellationToken);
+                _wallpaperUri = absoluteUri;
+            }
+                break;
+        }
+
+        await InvokeAsync(StateHasChanged);
     }
 
     private async Task HandleLogoutAsync()
@@ -247,6 +347,12 @@
         _hasContextMenuItems = _contextMenuItems.Length > 0;
 
         StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        MenuService.OnMenuItemsChanged -= MenuServiceOnOnMenuItemsChanged;
+        UserPreferencesProvider.WallpaperChanged -= OnWallpaperChanged;
     }
 
 }

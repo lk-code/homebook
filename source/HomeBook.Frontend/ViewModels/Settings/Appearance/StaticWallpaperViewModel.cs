@@ -1,6 +1,7 @@
 namespace HomeBook.Frontend.ViewModels.Settings.Appearance;
 
-public class StaticWallpaperViewModel(Uri? absoluteUri)
+public class StaticWallpaperViewModel(string? wallpaper, Uri? absoluteUri)
 {
-    public Uri? AbsoluteUri { get; set; } = absoluteUri;
+    public string? Wallpaper { get; } = wallpaper;
+    public Uri? AbsoluteUri { get; } = absoluteUri;
 }
