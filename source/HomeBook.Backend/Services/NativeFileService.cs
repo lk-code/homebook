@@ -108,7 +108,7 @@ public class NativeFileService(ILogger<NativeFileService> logger) : IApplication
         return folder switch
         {
             SpecialFolder.MountedWallpaper => $"{DataDirectory}/wallpaper",
-            SpecialFolder.ImageWallpaper => $"{ExecutableDirectory}/wallpaper",
+            SpecialFolder.ImageWallpaper => $"{ExecutableDirectory}wallpaper",
             _ => throw new ArgumentOutOfRangeException(nameof(folder), folder, null)
         };
     }
