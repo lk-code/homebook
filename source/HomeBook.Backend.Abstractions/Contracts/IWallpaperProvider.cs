@@ -29,4 +29,12 @@ public interface IWallpaperProvider
     /// <returns></returns>
     Task<IReadOnlyCollection<MediaItemWallpaperDto>> GetUploadedWallpapersAsync(CancellationToken cancellationToken =
         default);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="wallpaperFile"></param>
+    /// <returns></returns>
+    Task<Dictionary<string, List<string>>?> GetWallpaperConfigurationAsync(string wallpaperFile,
+        CancellationToken cancellationToken = default);
 }

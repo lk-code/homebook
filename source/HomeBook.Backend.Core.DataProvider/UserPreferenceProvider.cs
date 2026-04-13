@@ -13,7 +13,8 @@ namespace HomeBook.Backend.Core.DataProvider;
 public partial class UserPreferenceProvider(
     ILogger<UserPreferenceProvider> logger,
     IUserPreferenceRepository userPreferenceRepository,
-    IValidator<UserPreference> userPreferenceValidator) : IUserPreferenceProvider
+    IValidator<UserPreference> userPreferenceValidator,
+    IWallpaperProvider wallpaperProvider) : IUserPreferenceProvider
 {
     private static readonly string PREFERENCE_KEY_LOCALE = "LOCALE";
     private static readonly string PREFERENCE_KEY_WALLPAPER = "WALLPAPER";
@@ -73,7 +74,12 @@ public partial class UserPreferenceProvider(
         string[] parts = userPreference.Value.Split("}-{", 2);
         string type = parts[0].TrimStart('{');
         string value = parts[1].TrimEnd('}');
+
+        Dictionary<string, List<string>>? wpConfig = await wallpaperProvider
+            .GetWallpaperConfigurationAsync(value, cancellationToken);
+
         return new WallpaperConfiguration(userPreference.Value,
+            wpConfig,
             type,
             value);
     }

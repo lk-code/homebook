@@ -1,3 +1,4 @@
+using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models.UserPreferences;
 using HomeBook.Backend.Core.DataProvider;
 using HomeBook.Backend.Core.DataProvider.Exceptions;
@@ -15,6 +16,7 @@ public class UserPreferenceProviderTests
     private CancellationToken _cancellationToken;
     private ILogger<UserPreferenceProvider> _logger;
     private IUserPreferenceRepository _userPreferenceRepository;
+    private IWallpaperProvider _wallpaperProvider;
     private UserPreferenceProvider _instance;
 
     [SetUp]
@@ -33,10 +35,12 @@ public class UserPreferenceProviderTests
         });
         _logger = factory.CreateLogger<UserPreferenceProvider>();
         _userPreferenceRepository = Substitute.For<IUserPreferenceRepository>();
+        _wallpaperProvider = Substitute.For<IWallpaperProvider>();
         _instance = new UserPreferenceProvider(
             _logger,
             _userPreferenceRepository,
-            new UserPreferenceValidator());
+            new UserPreferenceValidator(),
+            _wallpaperProvider);
     }
 
     #region GetUserPreferredLocaleAsync

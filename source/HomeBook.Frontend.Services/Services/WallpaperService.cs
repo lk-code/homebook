@@ -2,7 +2,7 @@ using HomeBook.Client;
 using HomeBook.Client.Models;
 using HomeBook.Frontend.Abstractions.Contracts;
 using HomeBook.Frontend.Abstractions.Models;
-using Microsoft.Kiota.Abstractions.Serialization;
+using HomeBook.Frontend.Services.Mappings;
 
 namespace HomeBook.Frontend.Services.Services;
 
@@ -40,17 +40,11 @@ public class WallpaperService(
                 || !configuration.AdditionalData.Any())
                 continue;
 
-            UntypedArray? configWallpaper = configuration.AdditionalData.First().Value as UntypedArray;
-            if (configWallpaper is null
-                || !configWallpaper.GetValue().Any()
-               )
-                continue;
-
-            UntypedNode wallpaperNode = configWallpaper.GetValue().First();
-            string wallpaperFileVaue = (wallpaperNode as UntypedString).GetValue();
+            Dictionary<string, List<string>>? wpConfig = configuration.AdditionalData.MapToDictionary();
+            string firstWallpaperImage = wpConfig.First().Value.First();
             wallpapers.Add(new WallpaperDto(WallpaperType.Static,
                 null,
-                wallpaperFileVaue,
+                firstWallpaperImage,
                 staticWallpaper.FilePath));
         }
 

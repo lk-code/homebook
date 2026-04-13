@@ -266,8 +266,7 @@
     private async Task OnWallpaperChanged(WallpaperConfiguration wpConfig,
         CancellationToken cancellationToken)
     {
-        await RenderWallpaperAsync(wpConfig,
-            cancellationToken);
+        await LoadWallpaperAsync(cancellationToken);
     }
 
     private async Task LoadWallpaperAsync(CancellationToken cancellationToken)
@@ -292,12 +291,30 @@
         {
             case WallpaperType.Static:
             {
-                string escapedWallpaperName = Uri.EscapeDataString(wpConfig.StaticWallpaperUrl)
-                    .Replace(".", "%2E");
-                Uri absoluteWallpaperUri = AppUriProvider
-                    .GetAbsoluteUri($"{wallpaperEndpoint}/{escapedWallpaperName}");
+                if (wpConfig.ThemeConfiguration is null)
+                {
+                    // is not a theme
+                    string escapedWallpaperName = Uri.EscapeDataString(wpConfig.StaticWallpaperUrl)
+                        .Replace(".", "%2E");
+                    Uri absoluteWallpaperUri = AppUriProvider
+                        .GetAbsoluteUri($"{wallpaperEndpoint}/{escapedWallpaperName}");
 
-                _wallpaperUri = absoluteWallpaperUri;
+                    _wallpaperUri = absoluteWallpaperUri;
+                }
+                else
+                {
+                    // wallpaper has theme configuration
+
+                    // TODO: add config support like light, dark, etc.
+
+                    string wallpaperImage = wpConfig.ThemeConfiguration.First().Value.First();
+                    string escapedWallpaperName = Uri.EscapeDataString(wallpaperImage)
+                        .Replace(".", "%2E");
+                    Uri absoluteWallpaperUri = AppUriProvider
+                        .GetAbsoluteUri($"{wallpaperEndpoint}/{escapedWallpaperName}");
+
+                    _wallpaperUri = absoluteWallpaperUri;
+                }
             }
                 break;
             case WallpaperType.Dynamic:

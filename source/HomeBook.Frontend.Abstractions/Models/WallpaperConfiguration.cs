@@ -6,11 +6,13 @@ public class WallpaperConfiguration(
     WallpaperType type,
     Guid? mediaId,
     string? staticWallpaperUrl,
-    string? dynamicWallpaperName)
+    string? dynamicWallpaperName,
+    Dictionary<string, List<string>>? themeConfiguration = null)
 {
     public WallpaperType Type { get; } = type;
     public Guid? MediaId { get; } = mediaId;
     public string? StaticWallpaperUrl { get; } = staticWallpaperUrl;
+    public Dictionary<string, List<string>>? ThemeConfiguration { get; set; } = themeConfiguration;
     public string? DynamicWallpaperName { get; } = dynamicWallpaperName;
 
     public static WallpaperConfiguration Parse(string config)

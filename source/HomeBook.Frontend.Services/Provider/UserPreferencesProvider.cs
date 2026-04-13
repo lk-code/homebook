@@ -2,6 +2,7 @@ using HomeBook.Client;
 using HomeBook.Client.Models;
 using HomeBook.Frontend.Abstractions.Contracts;
 using HomeBook.Frontend.Abstractions.Models;
+using HomeBook.Frontend.Services.Mappings;
 
 namespace HomeBook.Frontend.Services.Provider;
 
@@ -60,7 +61,12 @@ public class UserPreferencesProvider(
         if (string.IsNullOrEmpty(response?.Wallpaper))
             return null;
 
-        WallpaperConfiguration conf = WallpaperConfiguration.Parse(response.Config);
+        WallpaperConfiguration conf = WallpaperConfiguration.Parse(response.Key);
+
+        if (response.Configuration is not null
+            && response.Configuration.AdditionalData.Any())
+            conf.ThemeConfiguration = response.Configuration.AdditionalData.MapToDictionary();
+
         return conf;
     }
 
