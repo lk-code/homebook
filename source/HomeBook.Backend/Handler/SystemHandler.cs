@@ -19,12 +19,15 @@ public class SystemHandler
         [FromServices] IStorageProvider storageProvider,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Getting wallpaper storage information for {Wallpaper}", wallpaper);
+
         if (string.IsNullOrWhiteSpace(wallpaper))
             return TypedResults.NotFound();
 
         string wallpaperFile = Uri.UnescapeDataString(wallpaper).Replace("%2E", ".");
         string absoluteFilePath = wallpaperProvider
             .GetAbsolutFilePathForWallpaper(wallpaperFile);
+        logger.LogInformation("Resolved absolute file path for wallpaper: {AbsoluteFilePath}", absoluteFilePath);
 
         // if (string.IsNullOrEmpty(absoluteFilePath))
         //     return TypedResults.NotFound();
@@ -41,6 +44,8 @@ public class SystemHandler
             var contentTypeProvider = new FileExtensionContentTypeProvider();
             if (!contentTypeProvider.TryGetContentType(wallpaperFile, out string? contentType))
                 contentType = "application/octet-stream";
+            
+            logger.LogInformation("Determined content type for wallpaper {Wallpaper}: {ContentType}", wallpaper, contentType);
 
             return TypedResults.File(content, contentType);
         }
