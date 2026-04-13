@@ -87,7 +87,7 @@ public class NativeFileService(ILogger<NativeFileService> logger) : IApplication
     public Task<List<FileInformation>> GetAllInDirectoryAsync(string storagePath,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Retrieving all entries in directory");
+        logger.LogInformation($"Retrieving all entries in directory {storagePath}");
 
         List<FileInformation> entries = Directory
             .EnumerateFileSystemEntries(storagePath, "*", SearchOption.AllDirectories)

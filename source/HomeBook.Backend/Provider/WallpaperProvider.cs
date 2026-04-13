@@ -75,6 +75,7 @@ public class WallpaperProvider(
 
         try
         {
+            logger.LogInformation("Loading wallpapers from mounted");
             mountedWallpaperFiles = (await fileSystemService
                     .GetAllInDirectoryAsync(mountedWallpaperDirectory,
                         cancellationToken))
@@ -92,6 +93,7 @@ public class WallpaperProvider(
 
         try
         {
+            logger.LogInformation("Loading wallpapers from image");
             imageWallpaperFiles = (await fileSystemService
                     .GetAllInDirectoryAsync(imageWallpaperDirectory,
                         cancellationToken))
@@ -127,6 +129,7 @@ public class WallpaperProvider(
             if (fileSystemService.FileExists(wallpaperPath))
             {
                 // is path a file => its the wallpaper file
+                logger.LogInformation("Found wallpaper file at {0} as image", wallpaperPath);
 
                 systemWallpapers.Add(new SystemWallpaperDto(wallpaperFile));
                 continue;
@@ -134,6 +137,7 @@ public class WallpaperProvider(
             else if (fileSystemService.DirectoryExists(wallpaperPath))
             {
                 // is path a directory => its a wallpaper set which contains multiple wallpaper
+                logger.LogInformation("Found wallpaper file at {0} as theme", wallpaperPath);
 
                 string wallpaperIndexFilePath = Path.Combine(wallpaperPath, "theme.json");
 
