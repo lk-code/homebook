@@ -1,6 +1,5 @@
 using HomeBook.Backend.Abstractions.Contracts;
 using HomeBook.Backend.Abstractions.Models.UserManagement;
-using HomeBook.Backend.Abstractions.Models.UserPreferences;
 using Microsoft.Extensions.Logging;
 
 namespace Homebook.Backend.Core.Setup.UpdateMigrators;
@@ -23,10 +22,10 @@ public class Update_20260330_01(
         IEnumerable<UserInfo> users = await userProvider.GetAllAsync(cancellationToken);
         foreach (UserInfo userInfo in users)
         {
-            WallpaperConfiguration? wallpaperConfiguration = await userPreferenceProvider
-                .GetUserWallpaperAsync(userInfo.Id,
+            bool hasUserWallpaperPreference = await userPreferenceProvider
+                .HasUserWallpaperAsync(userInfo.Id,
                     cancellationToken);
-            if (wallpaperConfiguration is not null)
+            if (hasUserWallpaperPreference)
                 continue;
 
             await userPreferenceProvider.SetUserWallpaperAsync(userInfo.Id,

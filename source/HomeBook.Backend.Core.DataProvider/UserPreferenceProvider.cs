@@ -5,6 +5,7 @@ using HomeBook.Backend.Abstractions.Models.UserPreferences;
 using HomeBook.Backend.Core.DataProvider.Exceptions;
 using HomeBook.Backend.Data.Contracts;
 using HomeBook.Backend.Data.Entities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace HomeBook.Backend.Core.DataProvider;
@@ -14,7 +15,7 @@ public partial class UserPreferenceProvider(
     ILogger<UserPreferenceProvider> logger,
     IUserPreferenceRepository userPreferenceRepository,
     IValidator<UserPreference> userPreferenceValidator,
-    IWallpaperProvider wallpaperProvider) : IUserPreferenceProvider
+    IServiceProvider serviceProvider) : IUserPreferenceProvider
 {
     private static readonly string PREFERENCE_KEY_LOCALE = "LOCALE";
     private static readonly string PREFERENCE_KEY_WALLPAPER = "WALLPAPER";
@@ -75,6 +76,7 @@ public partial class UserPreferenceProvider(
         string type = parts[0].TrimStart('{');
         string value = parts[1].TrimEnd('}');
 
+        IWallpaperProvider wallpaperProvider = serviceProvider.GetService<IWallpaperProvider>()!;
         Dictionary<string, List<string>>? wpConfig = await wallpaperProvider
             .GetWallpaperConfigurationAsync(value, cancellationToken);
 
@@ -130,5 +132,19 @@ public partial class UserPreferenceProvider(
 
         await userPreferenceRepository.SetPreferenceAsync(userPreference,
             cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> HasUserWallpaperAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        UserPreference? userPreference = await userPreferenceRepository
+            .GetPreferenceForUserByKeyAsync(userId,
+                PREFERENCE_KEY_WALLPAPER,
+                cancellationToken);
+
+        if (userPreference is null)
+            return false;
+
+        return true;
     }
 }

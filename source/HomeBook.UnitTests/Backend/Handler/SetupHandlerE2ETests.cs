@@ -22,6 +22,7 @@ using HomeBook.Backend.Extensions;
 using HomeBook.UnitTests.TestCore.Helper;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.DependencyInjection;
+using NSubstitute;
 
 namespace HomeBook.UnitTests.Backend.Handler;
 
@@ -91,10 +92,12 @@ public class SetupHandlerE2ETests
             .AddInMemoryCollection(initialConfigJson);
 
         IConfigurationRoot configuration = builder.Build();
+        var wallpaperProvider = Substitute.For<IWallpaperProvider>();
         IServiceProvider serviceProvider = new ServiceCollection()
             .AddLogging()
             .AddSingleton<IConfiguration>(configuration)
             .AddSingleton(configuration)
+            .AddSingleton(wallpaperProvider)
             .AddKeyedSingleton<IDatabaseMigrator, DatabaseMigrator>("SQLITE")
             .AddBackendSetup(configuration, InstanceStatus.SETUP)
             .BuildServiceProvider();
