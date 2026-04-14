@@ -10,7 +10,7 @@ public interface IAuthenticationService
     /// <summary>
     /// event triggered when the authentication state changes (e.g., login or logout).
     /// </summary>
-    event Action<bool>? AuthenticationStateChanged;
+    event AsyncPreferenceChangedHandler<bool>? AuthenticationStateChanged;
 
     /// <summary>
     /// logs in a user with the provided username and password.

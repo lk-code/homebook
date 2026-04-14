@@ -50,7 +50,8 @@ public class CustomAuthenticationStateProvider : AuthenticationStateProvider, ID
         NotifyAuthenticationStateChanged(Task.FromResult(authState));
     }
 
-    private void OnAuthenticationStateChanged(bool isAuthenticated)
+    private async Task OnAuthenticationStateChanged(bool isAuthenticated,
+        CancellationToken cancellationToken)
     {
         if (isAuthenticated)
         {

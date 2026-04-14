@@ -40,4 +40,12 @@ public interface IUserPreferenceProvider
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task SetUserWallpaperAsync(Guid userId, string wallpaperConfiguration, CancellationToken cancellationToken);
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<bool> HasUserWallpaperAsync(Guid userId, CancellationToken cancellationToken);
 }

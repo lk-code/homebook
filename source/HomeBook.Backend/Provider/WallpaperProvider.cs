@@ -57,9 +57,10 @@ public class WallpaperProvider(
             wallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.ImageWallpaper);
         }
 
-        string absoluteWallpaperPath = Path.Combine(wallpaperDirectory, wallpaper
-            .Replace("[mnt]", "")
-            .Replace("[img]", ""));
+        string absoluteWallpaperPath = Path.Combine(wallpaperDirectory,
+            wallpaper
+                .Replace("[mnt]", "")
+                .Replace("[img]", ""));
         return absoluteWallpaperPath;
     }
 
@@ -192,5 +193,61 @@ public class WallpaperProvider(
 
         return mediaItemIds.Select(id => new MediaItemWallpaperDto(id))
             .ToArray();
+    }
+
+    /// <inheritdoc/>
+    public async Task<Dictionary<string, List<string>>?> GetWallpaperConfigurationAsync(string wallpaperFile,
+        CancellationToken cancellationToken = default)
+    {
+        string mountedWallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.MountedWallpaper);
+        string imageWallpaperDirectory = fileSystemService.GetFolderPath(SpecialFolder.ImageWallpaper);
+        string wallpaperPath = "";
+
+        if (wallpaperFile.StartsWith("[mnt]"))
+        {
+            wallpaperPath = Path.Combine(mountedWallpaperDirectory, wallpaperFile.Replace("[mnt]", ""));
+        }
+        else if (wallpaperFile.StartsWith("[img]"))
+        {
+            wallpaperPath = Path.Combine(imageWallpaperDirectory, wallpaperFile.Replace("[img]", ""));
+        }
+
+        // its not a theme directory
+        if (!fileSystemService.DirectoryExists(wallpaperPath))
+            return null;
+
+        // is path a directory => its a wallpaper set which contains multiple wallpaper
+        logger.LogInformation("Found wallpaper file at {wallpaperPath} as theme", wallpaperPath);
+
+        string wallpaperIndexFilePath = Path.Combine(wallpaperPath, "theme.json");
+
+        try
+        {
+            string content = await fileSystemService
+                .FileReadAllTextAsync(wallpaperIndexFilePath,
+                    cancellationToken);
+            JsonObject? jsonObj = JsonNode.Parse(content)
+                ?.AsObject();
+
+            if (jsonObj is null)
+                return null;
+
+            Dictionary<string, List<string>> result = jsonObj
+                .Where(prop => ValidWallpaperConfigKeys.Contains(prop.Key))
+                .ToDictionary(
+                    prop => prop.Key,
+                    prop => prop.Value!.AsArray()
+                        .Select(x => Path.Combine(wallpaperFile, x.GetValue<string>()))
+                        .ToList()
+                );
+
+            return result;
+        }
+        catch (Exception err)
+        {
+            logger.LogError(err, "Error reading wallpaper index file at {0}", wallpaperIndexFilePath);
+        }
+
+        return null;
     }
 }

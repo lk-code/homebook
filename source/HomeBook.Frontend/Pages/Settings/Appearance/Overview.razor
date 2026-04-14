@@ -12,6 +12,8 @@
 @inject IMediaService MediaService
 @inject IFileStorageService FileStorageService
 @inject IWallpaperService WallpaperService
+@inject IUserPreferencesProvider UserPreferencesProvider
+@inject IAppUriProvider AppUriProvider
 
 <MudContainer>
 
@@ -77,6 +79,7 @@
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
+                                       OnClick="@(() => SetAsWallpaperAsync(wp))"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
@@ -107,6 +110,7 @@
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
+                                       OnClick="@(() => SetAsWallpaperAsync(wp))"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
@@ -136,6 +140,7 @@
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
+                                       OnClick="@(() => SetAsWallpaperAsync(wp.Id))"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"

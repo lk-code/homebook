@@ -103,7 +103,10 @@ public class UserHandler
 
             // TODO: if user uploaded image, then return mediaId, if static wallpaper, return the link to the image, if dynamic wallpaper, return the name of the wallpaper
 
-            return TypedResults.Ok(new GetUserPreferenceWallpaperResponse(wallpaperConfig.Type,
+            return TypedResults.Ok(new GetUserPreferenceWallpaperResponse(
+                wallpaperConfig.Key,
+                wallpaperConfig.Configuration,
+                wallpaperConfig.Type,
                 wallpaperConfig.WallpaperKey));
         }
         catch (Exception err)

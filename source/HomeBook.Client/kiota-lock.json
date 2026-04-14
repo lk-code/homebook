@@ -1,8 +1,8 @@
 {
-  "descriptionHash": "F8CCDDADA5C2AA305DC6F31A6AEED26981E3C73D4B9D3EBD34A54D8325191EE95C1685000A3062CB591471157F6FFFD41D3B0C7901A593F98D3E6F3FC83CF0CD",
+  "descriptionHash": "3FD0ACF4E42999751927A12493F7F9A872792E33BF426388C17A8AAD41CF83E0D10D0EEE389CF24D181C2B3A6AA71A7ECE9D75D5D91F8DF7F3D8015B59A1B43D",
   "descriptionLocation": "../HomeBook.Backend/HomeBook.Backend.json",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.31.0",
+  "kiotaVersion": "1.31.1",
   "clientClassName": "BackendClient",
   "typeAccessModifier": "Public",
   "clientNamespaceName": "HomeBook.Client",
