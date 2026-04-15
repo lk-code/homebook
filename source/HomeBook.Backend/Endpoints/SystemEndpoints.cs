@@ -36,7 +36,7 @@ public static class SystemEndpoints
             .Produces<string>(StatusCodes.Status500InternalServerError);
 
         // GET - get file as asset
-        group.MapGet("/{wallpaper}", SystemHandler.HandleGetWallpaperByName)
+        group.MapGet("/{**wallpaper}", SystemHandler.HandleGetWallpaperByName)
             .WithName("GetWallpaperByName")
             .WithTags("System", "System/Wallpaper")
             .WithDescription(new Description("get the wallpaper as assets content",
