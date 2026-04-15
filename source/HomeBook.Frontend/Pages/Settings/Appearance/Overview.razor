@@ -75,15 +75,15 @@
                          Class="mb-5"
                          Justify="Justify.FlexStart">
 
-                    @foreach (var wp in _dynamicWallpaperThumbImageUrls)
+                    @foreach (var wp in _dynamicWallpapers)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
-                                       OnClick="@(() => SetAsWallpaperAsync(wp))"
+                                       OnClick="@(() => SetAsWallpaperAsync(wp.Key))"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
-                                          Src="@wp"/>
+                                          Src="@wp.Value"/>
                             </MudButton>
                         </MudItem>
                     }

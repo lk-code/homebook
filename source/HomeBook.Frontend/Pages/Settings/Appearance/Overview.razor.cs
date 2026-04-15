@@ -12,18 +12,24 @@ public partial class Overview : ComponentBase
     private bool _isUploadingImage = false;
     private InputFile _fileInput;
 
-    private List<string> _dynamicWallpaperThumbImageUrls =
-    [
-        "https://data.mactechnews.de/367704.jpg",
-        "https://static.wikia.nocookie.net/windowswallpaper/images/0/0a/Windows_7_-_img0.jpg/revision/latest?cb=20250210043334",
-        "https://cdn.wallpapersafari.com/71/97/x7lcOr.jpg",
-        "https://data.mactechnews.de/367704.jpg",
-        "https://static.wikia.nocookie.net/windowswallpaper/images/0/0a/Windows_7_-_img0.jpg/revision/latest?cb=20250210043334",
-        "https://cdn.wallpapersafari.com/71/97/x7lcOr.jpg",
-        "https://data.mactechnews.de/367704.jpg",
-        "https://static.wikia.nocookie.net/windowswallpaper/images/0/0a/Windows_7_-_img0.jpg/revision/latest?cb=20250210043334",
-        "https://cdn.wallpapersafari.com/71/97/x7lcOr.jpg"
-    ];
+    private const string dynamicWallpaperThumbPath = "/img/dynwallpaper_thumbs";
+
+    // wallpaper key <-> thumb image
+    private Dictionary<string, string> _dynamicWallpapers = new()
+    {
+        {
+            // 01
+            "ocean_waves", dynamicWallpaperThumbPath + "/ocean_waves.png"
+        },
+        {
+            // 38
+            "ember_lines", dynamicWallpaperThumbPath + "/ember_lines.png"
+        },
+        {
+            // 47
+            "tide_cells", dynamicWallpaperThumbPath + "/tide_cells.png"
+        }
+    };
 
     private readonly List<StaticWallpaperViewModel> _staticWallpaperThumbImageUrls = [];
     private readonly List<MediaItemViewModel> _uploadedWallpaperThumbImageUrls = [];
