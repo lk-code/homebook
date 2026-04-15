@@ -10,6 +10,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <EmbeddedResource Update="Resources\LocalizationStrings.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>LocalizationStrings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
         <PackageReference Include="Humanizer" Version="3.0.10"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5"/>
     </ItemGroup>

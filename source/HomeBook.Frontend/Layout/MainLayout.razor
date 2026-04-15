@@ -45,6 +45,8 @@
             break;
         case WallpaperType.Dynamic:
         {
+            <iframe class="ui-wallpaper"
+                    src="@_dynamicWallpaperUri"/>
         }
             break;
         case WallpaperType.Uploaded:
@@ -234,6 +236,7 @@
     private MenuItem[] _contextMenuItems = [];
     private WallpaperType? _wallpaperType = null;
     private Uri? _wallpaperUri = null;
+    private string? _dynamicWallpaperUri = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -318,6 +321,7 @@
                 break;
             case WallpaperType.Dynamic:
             {
+                _dynamicWallpaperUri = $"/wallpaper/{wpConfig.DynamicWallpaperName}/index.html";
             }
                 break;
             case WallpaperType.Uploaded:

@@ -3,8 +3,10 @@
 @using HomeBook.Frontend.Abstractions.Contracts
 @using HomeBook.Frontend.Contracts
 @using HomeBook.Frontend.Core.Icons
+@using HomeBook.Frontend.Module.Kitchen.ViewModels
 @using HomeBook.Frontend.Modules.Abstractions
 @using HomeBook.Frontend.UI.Resources
+@using HomeBook.Frontend.ViewModels.Settings.Appearance
 @using Microsoft.Extensions.Localization
 
 @inject IStringLocalizer<LocalizationStrings> Loc
@@ -43,7 +45,6 @@
 
                         <MudText Typo="Typo.h5"
                                  Color="Color.Primary">
-                            +Darstellung
                             @Loc[nameof(LocalizationStrings.Settings_Appearance_WallpaperArea_Title)]
                         </MudText>
 
@@ -51,8 +52,7 @@
 
                     <MudText Typo="Typo.caption"
                              Color="Color.Primary">
-                        +Das ist eine Beschreibung
-                        @Loc[nameof(LocalizationStrings.Settings_Appearance_WallpaperArea_Title)]
+                        @Loc[nameof(LocalizationStrings.Settings_Appearance_WallpaperArea_Description)]
                     </MudText>
 
                 </MudStack>
@@ -67,23 +67,23 @@
                              Class="mr-2"/>
                     <MudText Typo="Typo.h6"
                              Color="Color.Primary">
-                        +Dynamic Wallpaper
+                        @Loc[nameof(LocalizationStrings.Settings_Appearance_DynamicWallpaperArea_Title)]
                     </MudText>
                 </MudStack>
 
-                <MudGrid Spacing="3"
+                <MudGrid Spacing="2"
                          Class="mb-5"
                          Justify="Justify.FlexStart">
 
-                    @foreach (var wp in _dynamicWallpaperThumbImageUrls)
+                    @foreach (var wp in _dynamicWallpapers)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
-                                       OnClick="@(() => SetAsWallpaperAsync(wp))"
+                                       OnClick="@(() => SetAsWallpaperAsync(wp.Key))"
                                        Class="pa-0">
                                 <MudImage Width="208" Height="140"
                                           ObjectFit="ObjectFit.Cover"
-                                          Src="@wp"/>
+                                          Src="@wp.Value"/>
                             </MudButton>
                         </MudItem>
                     }
@@ -98,15 +98,15 @@
                              Class="mr-2"/>
                     <MudText Typo="Typo.h6"
                              Color="Color.Primary">
-                        +Wallpaper
+                        @Loc[nameof(LocalizationStrings.Settings_Appearance_StaticWallpaperArea_Title)]
                     </MudText>
                 </MudStack>
 
-                <MudGrid Spacing="3"
+                <MudGrid Spacing="2"
                          Class="mb-5"
                          Justify="Justify.FlexStart">
 
-                    @foreach (var wp in _staticWallpaperThumbImageUrls)
+                    @foreach (StaticWallpaperViewModel wp in _staticWallpaperThumbImageUrls)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
@@ -129,14 +129,14 @@
                              Class="mr-2"/>
                     <MudText Typo="Typo.h6"
                              Color="Color.Primary">
-                        +Eigene
+                        @Loc[nameof(LocalizationStrings.Settings_Appearance_UploadedWallpaperArea_Title)]
                     </MudText>
                 </MudStack>
 
-                <MudGrid Spacing="3"
+                <MudGrid Spacing="2"
                          Justify="Justify.FlexStart">
 
-                    @foreach (var wp in _uploadedWallpaperThumbImageUrls)
+                    @foreach (MediaItemViewModel wp in _uploadedWallpaperThumbImageUrls)
                     {
                         <MudItem>
                             <MudButton Variant="Variant.Text"
