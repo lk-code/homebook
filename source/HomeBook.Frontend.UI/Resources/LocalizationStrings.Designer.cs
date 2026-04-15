@@ -1532,5 +1532,41 @@ namespace HomeBook.Frontend.UI.Resources {
                 return ResourceManager.GetString("Settings_Appearance_WallpaperArea_Title", resourceCulture);
             }
         }
+        
+        public static string homebook_core_wallpaper_userwallpaper {
+            get {
+                return ResourceManager.GetString("homebook.core.wallpaper.userwallpaper", resourceCulture);
+            }
+        }
+        
+        public static string homebook_kitchen_recipeimages {
+            get {
+                return ResourceManager.GetString("homebook.kitchen.recipeimages", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Appearance_StaticWallpaperArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Appearance_StaticWallpaperArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Appearance_UploadedWallpaperArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Appearance_UploadedWallpaperArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Appearance_DynamicWallpaperArea_Title {
+            get {
+                return ResourceManager.GetString("Settings_Appearance_DynamicWallpaperArea_Title", resourceCulture);
+            }
+        }
+        
+        public static string Settings_Appearance_WallpaperArea_Description {
+            get {
+                return ResourceManager.GetString("Settings_Appearance_WallpaperArea_Description", resourceCulture);
+            }
+        }
     }
 }

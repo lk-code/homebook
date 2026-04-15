@@ -11,16 +11,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5" />
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.5" />
+        <EmbeddedResource Update="Resources\Strings.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\HomeBook.Client\HomeBook.Client.csproj" />
-        <ProjectReference Include="..\HomeBook.Frontend.Core\HomeBook.Frontend.Core.csproj"/>
-        <ProjectReference Include="..\HomeBook.Frontend.Modules.Abstractions\HomeBook.Frontend.Modules.Abstractions.csproj"/>
-        <ProjectReference Include="..\HomeBook.Frontend.UI\HomeBook.Frontend.UI.csproj" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.5"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\HomeBook.Client\HomeBook.Client.csproj"/>
+        <ProjectReference Include="..\HomeBook.Frontend.Core\HomeBook.Frontend.Core.csproj"/>
+        <ProjectReference Include="..\HomeBook.Frontend.Modules.Abstractions\HomeBook.Frontend.Modules.Abstractions.csproj"/>
+        <ProjectReference Include="..\HomeBook.Frontend.UI\HomeBook.Frontend.UI.csproj"/>
+    </ItemGroup>
 
 </Project>

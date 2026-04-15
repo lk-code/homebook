@@ -755,12 +755,24 @@
         <value>Darstellung</value>
     </data>
     <data name="Settings_Appearance_WallpaperArea_Title" xml:space="preserve">
-        <value>Hintergrund</value>
+        <value>Darstellung</value>
     </data>
     <data name="homebook.core.wallpaper.userwallpaper" xml:space="preserve">
         <value>Hintergrundbilder</value>
     </data>
     <data name="homebook.kitchen.recipeimages" xml:space="preserve">
         <value>Rezeptbilder</value>
+    </data>
+    <data name="Settings_Appearance_WallpaperArea_Description" xml:space="preserve">
+        <value>Passe die HomeBook Optik nach deinen Wünschen an</value>
+    </data>
+    <data name="Settings_Appearance_DynamicWallpaperArea_Title" xml:space="preserve">
+        <value>Dynamische Hintergrundbilder</value>
+    </data>
+    <data name="Settings_Appearance_UploadedWallpaperArea_Title" xml:space="preserve">
+        <value>Eigene Hintergrundbilder</value>
+    </data>
+    <data name="Settings_Appearance_StaticWallpaperArea_Title" xml:space="preserve">
+        <value>Hintergrundbilder</value>
     </data>
 </root>
