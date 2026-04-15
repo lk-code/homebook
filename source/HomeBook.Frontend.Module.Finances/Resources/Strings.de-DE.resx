@@ -128,4 +128,7 @@
     <data name="AddSavingGoalSummary_Payments_Name" xml:space="preserve">
         <value>Einzahlungen</value>
     </data>
+    <data name="Savings_Edit_Title" xml:space="preserve">
+        <value>Titel speichern</value>
+    </data>
 </root>

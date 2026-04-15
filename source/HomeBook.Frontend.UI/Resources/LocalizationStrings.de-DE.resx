@@ -775,4 +775,7 @@
     <data name="Settings_Appearance_StaticWallpaperArea_Title" xml:space="preserve">
         <value>Hintergrundbilder</value>
     </data>
+    <data name="Settings_About_ExternalLink_GitHubProject_Href" xml:space="preserve">
+        <value>https://github.com/homebook-app</value>
+    </data>
 </root>
