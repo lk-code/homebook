@@ -141,7 +141,7 @@ public class StorageFileSystemProvider(
         if (scopeId == Guid.Empty)
             throw new ArgumentException("Scope ID cannot be empty", nameof(scopeId));
 
-        logger.LogInformation("Writing binary file to storage scope");
+        logger.LogInformation("Writing binary file to storage scope for '{originalFilename}'", originalFilename);
 
         string fileExt = Path.GetExtension(originalFilename);
         string internalFileName = $"{Guid.NewGuid()}{fileExt}";
@@ -153,7 +153,11 @@ public class StorageFileSystemProvider(
             internalFileName,
             cancellationToken);
         if (mediaItem is not null)
+        {
+            logger.LogWarning(
+                "A media item with the same filename already exists in the database. Deleting existing media item");
             await mediaItemRepository.DeleteMediaItemAsync(mediaItem!.Id, cancellationToken);
+        }
 
         Guid mediaItemId = await mediaItemRepository.AddMediaItemAsync(scopeId,
             internalFileName,
