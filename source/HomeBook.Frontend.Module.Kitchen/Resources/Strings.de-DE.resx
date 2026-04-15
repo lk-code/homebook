@@ -128,4 +128,7 @@
     <data name="RecipeEditSteps_StepDescription_Placeholder" xml:space="preserve">
         <value>Was passiert in diesem Schritt?</value>
     </data>
+    <data name="RecipeEditSteps_StepTimerTitle_Content" xml:space="preserve">
+        <value>Timer für diesen Schritt</value>
+    </data>
 </root>

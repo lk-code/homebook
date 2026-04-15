@@ -99,7 +99,7 @@
 
 :root {
   --hb-startmenu-background-icon-size: 140px;
-  --hb-startmenu-background-icon-opacity: 0.075;
+  --hb-startmenu-background-icon-opacity: 0.25;
   --hb-startmenu-container-background: transparent;
 }
 
