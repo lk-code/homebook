@@ -18,6 +18,13 @@ EnvironmentLoader.LoadEnvFile(developmentEnvFile);
 #endif
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+// Limit max request body size to the configured value (Upload:MaxFileSizeBytes)
+builder.WebHost.ConfigureKestrel((context, options) =>
+{
+    long maxFileSizeBytes = context.Configuration.GetValue<long>("Upload:MaxFileSizeBytes", 20971520);
+    options.Limits.MaxRequestBodySize = maxFileSizeBytes;
+});
 builder.Configuration.Sources.Clear();
 builder.Configuration
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

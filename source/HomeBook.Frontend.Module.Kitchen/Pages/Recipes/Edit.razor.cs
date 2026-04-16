@@ -4,6 +4,7 @@ using HomeBook.Frontend.Module.Kitchen.ViewModels;
 using HomeBook.Frontend.Modules.Abstractions;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Configuration;
 using MudBlazor;
 
 namespace HomeBook.Frontend.Module.Kitchen.Pages.Recipes;
@@ -15,6 +16,9 @@ public partial class Edit : ComponentBase
 
     [Inject(Key = "HomeBook.Frontend.Module.Kitchen.Module")]
     public IModule ModuleInstance { get; set; } = default!;
+
+    [Inject]
+    public IConfiguration Configuration { get; set; } = default!;
 
     private bool _isUploadingImage = false;
     private bool _isLoading = false;
@@ -229,7 +233,7 @@ public partial class Edit : ComponentBase
             IReadOnlyList<IBrowserFile> files = args.GetMultipleFiles(10);
             foreach (IBrowserFile file in files)
             {
-                using var stream = file.OpenReadStream((50 * 1024 * 1024));
+                using var stream = file.OpenReadStream(Configuration.GetValue<long>("Upload:MaxFileSizeBytes", 20971520));
                 using var ms = new MemoryStream();
 
                 await stream.CopyToAsync(ms);

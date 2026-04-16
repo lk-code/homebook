@@ -3,11 +3,15 @@ using HomeBook.Frontend.Module.Kitchen.ViewModels;
 using HomeBook.Frontend.ViewModels.Settings.Appearance;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.Extensions.Configuration;
 
 namespace HomeBook.Frontend.Pages.Settings.Appearance;
 
 public partial class Overview : ComponentBase
 {
+    [Inject]
+    public IConfiguration Configuration { get; set; } = default!;
+
     private const string wallpaperModuleKey = "homebook.core.wallpaper";
     private bool _isUploadingImage = false;
     private InputFile _fileInput;
@@ -109,7 +113,7 @@ public partial class Overview : ComponentBase
                 return;
 
             IBrowserFile file = args.File;
-            using Stream stream = file.OpenReadStream((50 * 1024 * 1024));
+            using Stream stream = file.OpenReadStream(Configuration.GetValue<long>("Upload:MaxFileSizeBytes", 20971520));
             using MemoryStream ms = new();
 
             await stream.CopyToAsync(ms);
