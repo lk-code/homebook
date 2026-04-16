@@ -59,7 +59,7 @@ public partial class Edit : ComponentBase
             if (recipeDto is null)
             {
                 // recipe not found
-                Snackbar.Add("+Recipe could not be found.", Severity.Error);
+                DisplayMessageService.ShowError("Recipe could not be found.");
                 NavigationManager.NavigateTo("/Kitchen/Recipes");
                 return;
             }
@@ -68,9 +68,10 @@ public partial class Edit : ComponentBase
             await LoadRecipeImagesAsync(recipeDto.ImageMediaItems,
                 cancellationToken);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // TODO: display error
+            // Display error to the user via the central message service
+            DisplayMessageService.ShowError("Recipe could not be loaded. " + ex.Message);
         }
         finally
         {
@@ -84,13 +85,13 @@ public partial class Edit : ComponentBase
         try
         {
             await RecipeService.DeleteRecipeAsync(RecipeId);
-            Snackbar.Add("+Recipe deleted successfully.", Severity.Success);
+            DisplayMessageService.ShowSuccess("Recipe deleted successfully.");
 
             NavigationManager.NavigateTo("/Kitchen/Recipes");
         }
         catch (Exception err)
         {
-            Snackbar.Add("+Recipe could not be deleted. " + err.Message, Severity.Error);
+            DisplayMessageService.ShowError("Recipe could not be deleted. " + err.Message);
         }
     }
 
@@ -149,8 +150,7 @@ public partial class Edit : ComponentBase
         }
         catch (Exception err)
         {
-            Snackbar.Add("+Recipe name could not be updated. " + err.Message,
-                Severity.Error);
+            DisplayMessageService.ShowError("Recipe name could not be updated. " + err.Message);
         }
         finally
         {
@@ -246,8 +246,10 @@ public partial class Edit : ComponentBase
             RefreshRecipeImageDropContainer();
             StateHasChanged();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            // Display upload error to the user via the central message service
+            DisplayMessageService.ShowError("Image upload failed. " + ex.Message);
         }
         finally
         {

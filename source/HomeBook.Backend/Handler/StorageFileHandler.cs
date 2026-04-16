@@ -87,11 +87,17 @@ public class StorageFileHandler
         CancellationToken cancellationToken)
     {
         if (request.ScopeId == Guid.Empty)
+        {
+            logger.LogError("ScopeId is empty");
             return TypedResults.UnprocessableEntity("scope id is empty");
+        }
 
         bool isScopeRegistered = await storageProvider.IsScopeRegisteredAsync(request.ScopeId, cancellationToken);
         if (!isScopeRegistered)
+        {
+            logger.LogError("No scope was found for this ScopeId");
             return TypedResults.UnprocessableEntity();
+        }
 
         try
         {

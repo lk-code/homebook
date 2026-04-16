@@ -31,9 +31,16 @@ builder.Services.AddScoped(sp =>
     };
 });
 
-builder.Services.AddMudServices(x =>
+builder.Services.AddMudServices(config =>
 {
-    x.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomRight;
+    config.SnackbarConfiguration.PositionClass = MudBlazor.Defaults.Classes.Position.TopRight;
+    config.SnackbarConfiguration.ShowCloseIcon = true;
+    config.SnackbarConfiguration.NewestOnTop = true;
+    config.SnackbarConfiguration.SnackbarVariant = MudBlazor.Variant.Filled;
+
+    config.SnackbarConfiguration.VisibleStateDuration = 10000;
+    config.SnackbarConfiguration.HideTransitionDuration = 500;
+    config.SnackbarConfiguration.ShowTransitionDuration = 500;
 });
 builder.Services.AddFrontendUiServices(builder.Configuration)
     .AddFrontendServices(builder.Configuration)
