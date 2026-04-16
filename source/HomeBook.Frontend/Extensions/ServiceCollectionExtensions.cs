@@ -32,6 +32,8 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IWidgetFactory, WidgetFactory>();
 
+        services.AddScoped<IDisplayMessageService, DisplayMessageService>();
+
         return services;
     }
 

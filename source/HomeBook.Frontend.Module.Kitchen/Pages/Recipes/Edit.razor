@@ -10,9 +10,11 @@
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.Extensions.Localization
 
+@using HomeBook.Frontend.Abstractions.Contracts
+
 @inject IRecipeService RecipeService
 @inject NavigationManager NavigationManager
-@inject ISnackbar Snackbar
+@inject IDisplayMessageService DisplayMessageService
 @inject IStringLocalizer<Strings> Loc
 @inject IFileStorageService FileStorageService
 @inject IFileStorageRegistration FileStorageRegistration
