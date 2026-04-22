@@ -1,0 +1,823 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AppTitle" xml:space="preserve">
+    <value>HomeBook</value>
+  </data>
+  <data name="UISetupStepper_BackendConnectionSetupStep_Title" xml:space="preserve">
+    <value>Проверить сервер</value>
+  </data>
+  <data name="UISetupStepper_LicenseAgreementSetupStep_Title" xml:space="preserve">
+    <value>Лицензии</value>
+  </data>
+  <data name="UISetupStepper_DatabaseConfigurationSetupStep_Title" xml:space="preserve">
+    <value>База данных</value>
+  </data>
+  <data name="UISetupStepper_DatabaseMigrationSetupStep_Title" xml:space="preserve">
+    <value>Установка</value>
+  </data>
+  <data name="UISetupStepper_AdminUserSetupStep_Title" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="UISetupStepper_ConfigurationSetupStep_Title" xml:space="preserve">
+    <value>Конфигурация</value>
+  </data>
+  <data name="Setup_Title" xml:space="preserve">
+    <value>Настройка HomeBook</value>
+  </data>
+  <data name="Setup_CardActions_Server" xml:space="preserve">
+    <value>Сервер</value>
+  </data>
+  <data name="Setup_CardActions_Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="UISetupStepper_SetupProcessSetupStep_Title" xml:space="preserve">
+    <value>Настройка HomeBook</value>
+  </data>
+  <data name="UISetupStepper_UpdateProcessSetupStep_Title" xml:space="preserve">
+    <value>Обновление HomeBook</value>
+  </data>
+  <data name="Account_Login_Title" xml:space="preserve">
+    <value>Вход в HomeBook</value>
+  </data>
+  <data name="AppSlogan" xml:space="preserve">
+    <value>Ваша самостоятельная система управления домом и финансами</value>
+  </data>
+  <data name="AuthorName" xml:space="preserve">
+    <value>lk-code</value>
+  </data>
+  <data name="AuthorLink" xml:space="preserve">
+    <value>https://www.lk-code.dev/</value>
+  </data>
+  <data name="AuthorMadeWithText" xml:space="preserve">
+    <value>сделано с ❤️ от</value>
+  </data>
+  <data name="AccountMenu_Logout" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="AccountMenu_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Logout_SuccessMessage" xml:space="preserve">
+    <value>Выход выполнен успешно!</value>
+  </data>
+  <data name="Logout_ErrorMessage" xml:space="preserve">
+    <value>Ошибка при выходе!</value>
+  </data>
+  <data name="UiLicenseDialog_Close" xml:space="preserve">
+    <value>Закрыть</value>
+  </data>
+  <data name="UiLicenseDialog_AcceptContinue" xml:space="preserve">
+    <value>Принять и продолжить</value>
+  </data>
+  <data name="UiLicenseDialog_Title" xml:space="preserve">
+    <value>Лицензии проекта HomeBook</value>
+  </data>
+  <data name="Settings_About_Version_Text_Template" xml:space="preserve">
+    <value>Версия HomeBook: {0}</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Title" xml:space="preserve">
+    <value>Приложение</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Backend_Text" xml:space="preserve">
+    <value>Бэкенд:</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Database_Text" xml:space="preserve">
+    <value>База данных:</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_UI_Text" xml:space="preserve">
+    <value>UI:</value>
+  </data>
+  <data name="Settings_About_ApplicationArea_Deployment_Text" xml:space="preserve">
+    <value>Тип развертывания:</value>
+  </data>
+  <data name="Settings_About_LicensesArea_Title" xml:space="preserve">
+    <value>Лицензии</value>
+  </data>
+  <data name="Settings_About_LicensesArea_ShowLicenses_Button_Text" xml:space="preserve">
+    <value>Показать лицензии проекта</value>
+  </data>
+  <data name="Settings_About_LicensesArea_Copyright_TextTemplate" xml:space="preserve">
+    <value>&amp;copy;{0} HomeBook. Все права защищены.</value>
+  </data>
+  <data name="Settings_About_ExternalLink_GitHubProject_Href" xml:space="preserve">
+    <value>https://github.com/homebook-app</value>
+  </data>
+  <data name="Settings_About_Error_MessageTemplate" xml:space="preserve">
+    <value>Ошибка загрузки системной информации: {0}</value>
+  </data>
+  <data name="Settings_NavMenu_LanguageRegion_Text" xml:space="preserve">
+    <value>Язык и регион</value>
+  </data>
+  <data name="Settings_NavMenu_About_Text" xml:space="preserve">
+    <value>О HomeBook</value>
+  </data>
+  <data name="Settings_NavMenu_Users_Text" xml:space="preserve">
+    <value>Пользователи</value>
+  </data>
+  <data name="Settings_NavMenu_HomebookConfiguration_Text" xml:space="preserve">
+    <value>Конфигурация HomeBook</value>
+  </data>
+  <data name="Settings_NavMenu_HomebookModules_Text" xml:space="preserve">
+    <value>Модули HomeBook</value>
+  </data>
+  <data name="Settings_NavMenu_DeveloperComponents_Text" xml:space="preserve">
+    <value>Dev UI</value>
+  </data>
+  <data name="Settings_NavMenu_DeveloperIcons_Text" xml:space="preserve">
+    <value>Dev Icons</value>
+  </data>
+  <data name="Settings_NavMenu_Feedback_Text" xml:space="preserve">
+    <value>Обратная связь</value>
+  </data>
+  <data name="Settings_NavMenu_Developer_Text" xml:space="preserve">
+    <value>Разработчик</value>
+  </data>
+  <data name="Settings_Localization_PageTitle" xml:space="preserve">
+    <value>Язык и регион</value>
+  </data>
+  <data name="Settings_Localization_PageCaption" xml:space="preserve">
+    <value>Установите язык и региональные стандарты отображения HomeBook.</value>
+  </data>
+  <data name="Settings_About_PageTitle" xml:space="preserve">
+    <value>О HomeBook</value>
+  </data>
+  <data name="Settings_Localization_DisplayLanguage_Title" xml:space="preserve">
+    <value>Язык интерфейса</value>
+  </data>
+  <data name="Settings_Localization_DisplayLanguage_Caption" xml:space="preserve">
+    <value>Выберите язык пользовательского интерфейса.</value>
+  </data>
+  <data name="Settings_Localization_SaveChanges_Button" xml:space="preserve">
+    <value>Сохранить изменения</value>
+  </data>
+  <data name="Settings_Localization_PreferencesUpdated_Success_Message" xml:space="preserve">
+    <value>Настройки пользователя обновлены</value>
+  </data>
+  <data name="Settings_Localization_PreferencesUpdated_Error_MessageTemplate" xml:space="preserve">
+    <value>Ошибка обновления настроек пользователя: {0}</value>
+  </data>
+  <data name="Settings_Localization_LoadPreferences_Error_MessageTemplate" xml:space="preserve">
+    <value>Ошибка загрузки настроек пользователя: {0}</value>
+  </data>
+  <data name="Setup_Licenses_Title" xml:space="preserve">
+    <value>Лицензии проекта</value>
+  </data>
+  <data name="Setup_Licenses_AlreadyAccepted_Text" xml:space="preserve">
+    <value>Лицензии уже приняты (их можно просмотреть позже).</value>
+  </data>
+  <data name="Setup_Licenses_Retry_Button_Text" xml:space="preserve">
+    <value>Повторить</value>
+  </data>
+  <data name="Setup_Licenses_ShowLicenses_Button_Text" xml:space="preserve">
+    <value>Показать лицензии</value>
+  </data>
+  <data name="Setup_Licenses_AcceptContinue_Button_Text" xml:space="preserve">
+    <value>Принять и продолжить</value>
+  </data>
+  <data name="Setup_Licenses_LoadingError_MessageTemplate" xml:space="preserve">
+    <value>Неизвестная ошибка сервера при загрузке лицензий: {0}</value>
+  </data>
+  <data name="Setup_BackendConnection_Title" xml:space="preserve">
+    <value>Проверить соединение с сервером</value>
+  </data>
+  <data name="Setup_BackendConnection_ServerFound_Text" xml:space="preserve">
+    <value>Сервер найден и готов.</value>
+  </data>
+  <data name="Setup_BackendConnection_Retry_Button_Text" xml:space="preserve">
+    <value>Повторить</value>
+  </data>
+  <data name="Setup_BackendConnectionFailed_Message" xml:space="preserve">
+    <value>Не удаётся подключиться к серверу. Убедитесь, что сервер запущен и настроен правильно, затем попробуйте снова.</value>
+  </data>
+  <data name="Setup_BackendConnection_CheckError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка проверки соединения с сервером: {0}</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_VersionError_Message" xml:space="preserve">
+    <value>Сервер вернул неверную версию.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_VersionMatchError_Message" xml:space="preserve">
+    <value>Версия сервера не соответствует версии приложения. Обновите HomeBook.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_SetupInProgressError_Message" xml:space="preserve">
+    <value>Установка HomeBook уже выполняется. Дождитесь завершения или сбросьте установку.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_UnknownError_Message" xml:space="preserve">
+    <value>Неизвестная ошибка сервера при проверке требований. Проверьте логи сервера.</value>
+  </data>
+  <data name="Setup_BackendConnection_Check_UnknownError_MessageTemplate" xml:space="preserve">
+    <value>Неизвестная ошибка сервера при проверке требований: {0}</value>
+  </data>
+  <data name="Setup_Database_Title" xml:space="preserve">
+    <value>Конфигурация базы данных</value>
+  </data>
+  <data name="Setup_Database_Provider_MessageTemplate" xml:space="preserve">
+    <value>База данных распознана как {0} и доступна.</value>
+  </data>
+  <data name="Setup_Database_Form_Host_Label" xml:space="preserve">
+    <value>Хост</value>
+  </data>
+  <data name="Setup_Database_Form_Port_Label" xml:space="preserve">
+    <value>Порт</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseName_Label" xml:space="preserve">
+    <value>Имя базы данных</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseUsername_Label" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Setup_Database_Form_DatabasePassword_Label" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Setup_Database_TestConnection_Button" xml:space="preserve">
+    <value>Сохранить и проверить соединение</value>
+  </data>
+  <data name="Setup_Database_Form_Host_HelperText" xml:space="preserve">
+    <value>Введите имя хоста или IP-адрес сервера базы данных и порт</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseName_HelperText" xml:space="preserve">
+    <value>Введите имя базы данных</value>
+  </data>
+  <data name="Setup_Database_Form_DatabaseUsername_HelperText" xml:space="preserve">
+    <value>Введите имя пользователя для доступа к базе данных</value>
+  </data>
+  <data name="Setup_Database_Form_DatabasePassword_HelperText" xml:space="preserve">
+    <value>Введите пароль для доступа к базе данных</value>
+  </data>
+  <data name="Setup_Database_UnknownError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка подключения к базе данных: {0}</value>
+  </data>
+  <data name="Setup_Database_Check_NotAvailableOrSupportedError_Message" xml:space="preserve">
+    <value>Не удаётся подключиться к базе данных. Убедитесь, что сервер запущен и настроен правильно, затем попробуйте снова.</value>
+  </data>
+  <data name="Setup_Database_Check_UnknownError_Message" xml:space="preserve">
+    <value>Неизвестная ошибка проверки подключения к базе данных.</value>
+  </data>
+  <data name="Setup_Database_Check_NotAvailableError_Message" xml:space="preserve">
+    <value>База данных недоступна.</value>
+  </data>
+  <data name="Setup_AdminUser_Title" xml:space="preserve">
+    <value>Администратор HomeBook</value>
+  </data>
+  <data name="Setup_AdminUser_ConfigurationFound_Text" xml:space="preserve">
+    <value>Конфигурация пользователя найдена.</value>
+  </data>
+  <data name="Setup_AdminUser_ConfigurationSaved_Text" xml:space="preserve">
+    <value>Конфигурация пользователя сохранена успешно.</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Username_Label" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Username_HelperText" xml:space="preserve">
+    <value>Введите имя пользователя для учётной записи администратора HomeBook</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Password_Label" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Setup_AdminUser_Form_Password_HelperText" xml:space="preserve">
+    <value>Введите надёжный пароль для учётной записи</value>
+  </data>
+  <data name="Setup_AdminUser_Save_Button_Text" xml:space="preserve">
+    <value>Сохранить пользователя</value>
+  </data>
+  <data name="Setup_Configuration_Title" xml:space="preserve">
+    <value>Конфигурация HomeBook</value>
+  </data>
+  <data name="Setup_Configuration_ConfigurationFound_Title" xml:space="preserve">
+    <value>HomeBook предварительно настроен.</value>
+  </data>
+  <data name="Setup_Configuration_ConfigurationSaved_Title" xml:space="preserve">
+    <value>Конфигурация HomeBook сохранена успешно.</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceName_Label" xml:space="preserve">
+    <value>Имя экземпляра HomeBook</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceName_HelperText" xml:space="preserve">
+    <value>Дайте вашему экземпляру HomeBook уникальное имя</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceDefaultLocale_Label" xml:space="preserve">
+    <value>Язык HomeBook по умолчанию</value>
+  </data>
+  <data name="Setup_Configuration_Form_InstanceDefaultLocale_HelperText" xml:space="preserve">
+    <value>Выберите язык отображения HomeBook по умолчанию</value>
+  </data>
+  <data name="Setup_Configuration_Save_Button_Text" xml:space="preserve">
+    <value>Сохранить конфигурацию</value>
+  </data>
+  <data name="Setup_Process_Title" xml:space="preserve">
+    <value>Установка HomeBook</value>
+  </data>
+  <data name="Setup_ProcessFinished_Title" xml:space="preserve">
+    <value>Установка HomeBook завершена</value>
+  </data>
+  <data name="Setup_Process_SetupIsPrepared_Message" xml:space="preserve">
+    <value>Установка подготовлена и запускается.</value>
+  </data>
+  <data name="Setup_Process_Retry_Button_Text" xml:space="preserve">
+    <value>Повторить установку</value>
+  </data>
+  <data name="Setup_Process_Finished_Success_Message" xml:space="preserve">
+    <value>Установка выполнена успешно.</value>
+  </data>
+  <data name="Setup_Process_Finished_StartHomeBook_Message" xml:space="preserve">
+    <value>Открыть HomeBook</value>
+  </data>
+  <data name="Setup_Process_Finished_RemoveEnvironmentVariables_Message" xml:space="preserve">
+    <value>Удалите переменные окружения установки из конфигурации Docker.</value>
+  </data>
+  <data name="Setup_Process_ProcessingError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка при установке: {0}</value>
+  </data>
+  <data name="Setup_Process_ProcessingServerRestartError_Message" xml:space="preserve">
+    <value>Сервер не перезапустился корректно после установки. Проверьте логи сервера.</value>
+  </data>
+  <data name="Setup_Process_ProcessingValidationError_Message" xml:space="preserve">
+    <value>Ошибка проверки конфигурации при установке. Проверьте логи сервера.</value>
+  </data>
+  <data name="Setup_Process_ProcessingLicenseError_Message" xml:space="preserve">
+    <value>Лицензии проекта не приняты.</value>
+  </data>
+  <data name="Setup_Process_ProcessingUnknownError_Message" xml:space="preserve">
+    <value>Неизвестная ошибка при установке. Проверьте логи сервера.</value>
+  </data>
+  <data name="Setup_Process_ProcessingUnknownError_MessageTemplate" xml:space="preserve">
+    <value>Неизвестная ошибка при установке: {0}</value>
+  </data>
+  <data name="Update_ProcessFinished_Title" xml:space="preserve">
+    <value>Обновление HomeBook завершено</value>
+  </data>
+  <data name="Update_Process_Title" xml:space="preserve">
+    <value>Обновление HomeBook</value>
+  </data>
+  <data name="Update_Process_UpdateIsPrepared_Message" xml:space="preserve">
+    <value>Обновление подготовлено и запускается.</value>
+  </data>
+  <data name="Update_Process_Finished_Success_Message" xml:space="preserve">
+    <value>Обновление выполнено успешно.</value>
+  </data>
+  <data name="Update_Process_Finished_StartHomeBook_Message" xml:space="preserve">
+    <value>Открыть HomeBook</value>
+  </data>
+  <data name="Update_Process_Retry_Button_Text" xml:space="preserve">
+    <value>Повторить обновление</value>
+  </data>
+  <data name="Update_Process_ProcessingError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка при обновлении: {0}</value>
+  </data>
+  <data name="Update_Process_ProcessingServerRestartError_Message" xml:space="preserve">
+    <value>Сервер не перезапустился корректно после обновления. Проверьте логи сервера.</value>
+  </data>
+  <data name="Update_Process_ProcessingUnknownError_Message" xml:space="preserve">
+    <value>Неизвестная ошибка при обновлении. Проверьте логи сервера.</value>
+  </data>
+  <data name="Update_Process_ProcessingSetupMissingError_Message" xml:space="preserve">
+    <value>Сначала запустите установку HomeBook.</value>
+  </data>
+  <data name="Update_Process_ProcessingUnknownError_MessageTemplate" xml:space="preserve">
+    <value>Неизвестная ошибка при обновлении: {0}</value>
+  </data>
+  <data name="Settings_Instance_PageTitle" xml:space="preserve">
+    <value>Конфигурация HomeBook</value>
+  </data>
+  <data name="Settings_Instance_PageCaption" xml:space="preserve">
+    <value>Управляйте глобальными настройками и функциями вашего экземпляра HomeBook.</value>
+  </data>
+  <data name="Settings_Instance_InstanceName_Title" xml:space="preserve">
+    <value>Имя экземпляра HomeBook</value>
+  </data>
+  <data name="Settings_Instance_InstanceName_Caption" xml:space="preserve">
+    <value>Дайте вашему экземпляру HomeBook уникальное имя</value>
+  </data>
+  <data name="Settings_Instance_InstanceDefaultLocale_Title" xml:space="preserve">
+    <value>Язык HomeBook по умолчанию</value>
+  </data>
+  <data name="Settings_Instance_InstanceDefaultLocale_Caption" xml:space="preserve">
+    <value>Выберите язык отображения HomeBook по умолчанию</value>
+  </data>
+  <data name="Settings_Instance_SaveChanges_Button" xml:space="preserve">
+    <value>Сохранить изменения</value>
+  </data>
+  <data name="Settings_Instance_LoadPreferences_Error_MessageTemplate" xml:space="preserve">
+    <value>Ошибка загрузки настроек HomeBook: {0}</value>
+  </data>
+  <data name="Settings_Instance_PreferencesUpdated_Success_Message" xml:space="preserve">
+    <value>Конфигурация HomeBook обновлена успешно!</value>
+  </data>
+  <data name="Settings_Instance_PreferencesUpdated_Error_MessageTemplate" xml:space="preserve">
+    <value>Ошибка обновления конфигурации HomeBook: {0}</value>
+  </data>
+  <data name="Settings_User_Overview_PageTitle" xml:space="preserve">
+    <value>Управление пользователями</value>
+  </data>
+  <data name="Settings_User_Overview_AddUserButton_Text" xml:space="preserve">
+    <value>Новый пользователь</value>
+  </data>
+  <data name="Settings_User_Overview_Loading_Message" xml:space="preserve">
+    <value>Загрузка пользователей...</value>
+  </data>
+  <data name="Settings_User_Overview_CurrentCount_MessageTemplate" xml:space="preserve">
+    <value>Показаны {0} из {1}</value>
+  </data>
+  <data name="Settings_User_Overview_ItemsPerPageSelect_Label" xml:space="preserve">
+    <value>Пользователей на странице</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Username_TableHeader" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Status_TableHeader" xml:space="preserve">
+    <value>Статус</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Role_TableHeader" xml:space="preserve">
+    <value>Роль</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Created_TableHeader" xml:space="preserve">
+    <value>Создан</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Actions_TableHeader" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_Actions_EditUser_ToolTipText" xml:space="preserve">
+    <value>Редактировать пользователя</value>
+  </data>
+  <data name="Settings_User_Overview_ResultsTable_NoResult_Message" xml:space="preserve">
+    <value>Пользователи не найдены.</value>
+  </data>
+  <data name="Settings_User_Overview_ToggleStatusTooltip_Enable_Text" xml:space="preserve">
+    <value>Включить пользователя</value>
+  </data>
+  <data name="Settings_User_Overview_ToggleStatusTooltip_Disable_Text" xml:space="preserve">
+    <value>Отключить пользователя</value>
+  </data>
+  <data name="Settings_User_Overview_UserStatus_Disabled_Text" xml:space="preserve">
+    <value>Отключён</value>
+  </data>
+  <data name="Settings_User_Overview_UserStatus_Active_Text" xml:space="preserve">
+    <value>Активен</value>
+  </data>
+  <data name="Settings_User_Overview_UserRole_Admin_Text" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="Settings_User_Overview_UserRole_User_Text" xml:space="preserve">
+    <value>Пользователь</value>
+  </data>
+  <data name="Settings_User_Overview_LoadCurrentUserError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка получения текущего пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Overview_LoadAllUsersError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка загрузки всех пользователей: {0}</value>
+  </data>
+  <data name="Settings_User_Overview_OwnUserError_Message" xml:space="preserve">
+    <value>Вы не можете изменить статус своей учётной записи.</value>
+  </data>
+  <data name="Settings_User_Overview_UserEnabled_MessageTemplate" xml:space="preserve">
+    <value>Пользователь «{0}» включён.</value>
+  </data>
+  <data name="Settings_User_Overview_UserDisabled_MessageTemplate" xml:space="preserve">
+    <value>Пользователь «{0}» отключён.</value>
+  </data>
+  <data name="Settings_User_Overview_UserUpdatingError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка обновления пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Add_PageTitle" xml:space="preserve">
+    <value>Добавить нового пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_PageTitle" xml:space="preserve">
+    <value>Редактировать пользователя</value>
+  </data>
+  <data name="Settings_User_Add_Creating_Message" xml:space="preserve">
+    <value>Создание...</value>
+  </data>
+  <data name="Settings_User_Add_CreateButton_Text" xml:space="preserve">
+    <value>Создать пользователя</value>
+  </data>
+  <data name="Settings_User_Add_CancelButton_Text" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Settings_User_Add_AdministratorFlag_Label" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="Settings_User_Add_AdministratorFlag_Caption" xml:space="preserve">
+    <value>Администраторы имеют полный доступ ко всем функциям</value>
+  </data>
+  <data name="Settings_User_Add_Form_Username_Label" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Settings_User_Add_Form_Username_Caption" xml:space="preserve">
+    <value>Введите уникальное имя пользователя</value>
+  </data>
+  <data name="Settings_User_Add_Form_Password_Label" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Settings_User_Add_Form_Password_Caption" xml:space="preserve">
+    <value>Введите надёжный пароль</value>
+  </data>
+  <data name="Settings_User_Add_Form_ConfirmPassword_Label" xml:space="preserve">
+    <value>Подтвердить пароль</value>
+  </data>
+  <data name="Settings_User_Add_Form_ConfirmPassword_Caption" xml:space="preserve">
+    <value>Подтвердите пароль</value>
+  </data>
+  <data name="Settings_PageTitle" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Settings_User_Edit_LoadingUser_Message" xml:space="preserve">
+    <value>Загрузка пользователя...</value>
+  </data>
+  <data name="Settings_User_Edit_UserNotFound_Message" xml:space="preserve">
+    <value>Пользователь не найден!</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Username_Label" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Username_Caption" xml:space="preserve">
+    <value>Введите уникальное имя пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Password_Label" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="Settings_User_Edit_Form_Password_Caption" xml:space="preserve">
+    <value>Введите надёжный пароль</value>
+  </data>
+  <data name="Settings_User_Edit_Form_ConfirmPassword_Label" xml:space="preserve">
+    <value>Подтвердить пароль</value>
+  </data>
+  <data name="Settings_User_Edit_Form_ConfirmPassword_Caption" xml:space="preserve">
+    <value>Подтвердите пароль</value>
+  </data>
+  <data name="Settings_User_Edit_AdministratorFlag_Label" xml:space="preserve">
+    <value>Администратор</value>
+  </data>
+  <data name="Settings_User_Edit_AdministratorFlag_Caption" xml:space="preserve">
+    <value>Администраторы имеют полный доступ ко всем функциям</value>
+  </data>
+  <data name="Settings_User_Edit_CantChangeOwnAdministratorFlag_Caption" xml:space="preserve">
+    <value>Вы не можете изменить свой статус администратора</value>
+  </data>
+  <data name="Settings_User_Edit_CancelButton_Text" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Settings_User_Edit_Saving_Message" xml:space="preserve">
+    <value>Сохранение...</value>
+  </data>
+  <data name="Settings_User_Edit_SaveButton_Text" xml:space="preserve">
+    <value>Сохранить пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_ActionsHeader_Text" xml:space="preserve">
+    <value>Действия</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_EnableDisable_Title" xml:space="preserve">
+    <value>Включить/отключить пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_Title" xml:space="preserve">
+    <value>Удалить пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_EnableDisable_Caption" xml:space="preserve">
+    <value>Включает или отключает доступ пользователя.</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_Caption" xml:space="preserve">
+    <value>Удаляет пользователя навсегда из HomeBook.</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_DeleteButton_Text" xml:space="preserve">
+    <value>Удалить пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_CantDeleteOwnUser_Message" xml:space="preserve">
+    <value>Вы не можете удалить свою учётную запись</value>
+  </data>
+  <data name="Settings_User_Edit_Actions_Delete_CantDisableOwnUser_Message" xml:space="preserve">
+    <value>Вы не можете отключить свою учётную запись</value>
+  </data>
+  <data name="Settings_User_Edit_LoadingUserError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка загрузки текущего пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_GetUserIdError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка получения данных текущего пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_PasswordsDoNotMatchError_Message" xml:space="preserve">
+    <value>Пароли не совпадают</value>
+  </data>
+  <data name="Settings_User_Edit_PasswordTooShortError_MessageTemplate" xml:space="preserve">
+    <value>Пароль должен содержать не менее {0} символов</value>
+  </data>
+  <data name="Settings_User_Edit_UsernameRequiredError_Message" xml:space="preserve">
+    <value>Имя пользователя обязательно</value>
+  </data>
+  <data name="Settings_User_Edit_UsernameLengthError_MessageTemplate" xml:space="preserve">
+    <value>Имя пользователя должно содержать от {0} до {1} символов</value>
+  </data>
+  <data name="Settings_User_Edit_UpdateSuccess_Message" xml:space="preserve">
+    <value>Пользователь обновлён успешно</value>
+  </data>
+  <data name="Settings_User_Edit_NoChanges_Message" xml:space="preserve">
+    <value>Нет изменений для сохранения</value>
+  </data>
+  <data name="Settings_User_Edit_UpdatingError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка обновления пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_UserEnabledSuccess_Message" xml:space="preserve">
+    <value>Пользователь включён</value>
+  </data>
+  <data name="Settings_User_Edit_UserDisabledSuccess_Message" xml:space="preserve">
+    <value>Пользователь отключён</value>
+  </data>
+  <data name="Settings_User_Edit_User_StatusUpdatingError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка обновления статуса пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_User_DeletingError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка удаления пользователя: {0}</value>
+  </data>
+  <data name="Settings_User_Edit_UserDeleteSuccess_Message" xml:space="preserve">
+    <value>Пользователь удалён</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_Title" xml:space="preserve">
+    <value>Удалить пользователя</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_MessageTemplate" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить пользователя «{0}»? Действие нельзя отменить.</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_YesText" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Settings_User_Edit_DeleteUserDialog_CancelText" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Settings_User_Add_PasswordsDoNotMatchError_Message" xml:space="preserve">
+    <value>Пароли не совпадают</value>
+  </data>
+  <data name="Settings_User_Add_PasswordRequiredError_MessageTemplate" xml:space="preserve">
+    <value>Пароль обязателен</value>
+  </data>
+  <data name="Settings_User_Add_UsernameRequiredError_Message" xml:space="preserve">
+    <value>Имя пользователя обязательно</value>
+  </data>
+  <data name="Settings_User_Add_UsernameLengthError_MessageTemplate" xml:space="preserve">
+    <value>Имя пользователя должно содержать от {0} до {1} символов</value>
+  </data>
+  <data name="Settings_User_Add_PasswordTooShortError_MessageTemplate" xml:space="preserve">
+    <value>Пароль должен содержать не менее {0} символов</value>
+  </data>
+  <data name="Settings_User_Add_UserCouldNotCreatedError_MessageTemplate" xml:space="preserve">
+    <value>Пользователь «{0}» не может быть создан</value>
+  </data>
+  <data name="Settings_User_Add_UserCreatedSuccess_MessageTemplate" xml:space="preserve">
+    <value>Пользователь «{0}» создан успешно</value>
+  </data>
+  <data name="Settings_User_Add_CreationUnknownError_MessageTemplate" xml:space="preserve">
+    <value>Ошибка создания пользователя: {0}</value>
+  </data>
+  <data name="Account_Login_SigningInButton_Text" xml:space="preserve">
+    <value>Вход...</value>
+  </data>
+  <data name="Account_Login_SignInButton_Text" xml:space="preserve">
+    <value>Войти</value>
+  </data>
+  <data name="Module_Finances_StartMenuItem_Title" xml:space="preserve">
+    <value>Финансы</value>
+  </data>
+  <data name="Module_Finances_StartMenuItem_Caption" xml:space="preserve">
+    <value>Управляйте доходами, расходами и бюджетами</value>
+  </data>
+  <data name="StartMenuItems_Open_Text" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Home_PageTitle" xml:space="preserve">
+    <value>Домой</value>
+  </data>
+  <data name="Module_KitchenManager_StartMenuItem_Recipes_Title" xml:space="preserve">
+    <value>Рецепты</value>
+  </data>
+  <data name="Module_KitchenManager_StartMenuItem_Pantry_Title" xml:space="preserve">
+    <value>Склад</value>
+  </data>
+  <data name="Module_KitchenManager_StartMenuItem_Recipes_Caption" xml:space="preserve">
+    <value>Ваша личная кулинарная книга</value>
+  </data>
+  <data name="Module_KitchenManager_StartMenuItem_Pantry_Caption" xml:space="preserve">
+    <value>Отслеживайте запасы на кухне</value>
+  </data>
+  <data name="Settings_NavMenu_DeveloperColors_Text" xml:space="preserve">
+    <value>Dev Colors</value>
+  </data>
+  <data name="MainLayout_SearchTextField_Placeholder" xml:space="preserve">
+    <value>Поиск...</value>
+  </data>
+  <data name="Settings_About_ExternalLink_ProjectWebsite_Href" xml:space="preserve">
+    <value>https://homebook-app.github.io/</value>
+  </data>
+  <data name="Settings_NavMenu_HomebookStorage_Text" xml:space="preserve">
+    <value>Хранилище HomeBook</value>
+  </data>
+  <data name="Settings_Storage_StorageInformationsArea_Title" xml:space="preserve">
+    <value>Информация о хранилище</value>
+  </data>
+  <data name="Settings_Storage_UsedSpace_Title" xml:space="preserve">
+    <value>Использовано места</value>
+  </data>
+  <data name="Settings_Storage_UsedSpace_Text" xml:space="preserve">
+    <value>{0} из {1} доступно</value>
+  </data>
+  <data name="Settings_Storage_UsageChart_Usage_Title" xml:space="preserve">
+    <value>Использование</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Media_Title" xml:space="preserve">
+    <value>Хранилище</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Cache_Title" xml:space="preserve">
+    <value>Кэш</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Temp_Title" xml:space="preserve">
+    <value>Временные файлы</value>
+  </data>
+  <data name="Settings_Storage_UsageType_Logs_Title" xml:space="preserve">
+    <value>Логи</value>
+  </data>
+  <data name="Settings_Developer_ConfigurationArea_Title" xml:space="preserve">
+    <value>Конфигурация приложения</value>
+  </data>
+  <data name="Settings_Developer_ConfigurationItemsFrontend_Title" xml:space="preserve">
+    <value>Frontend</value>
+  </data>
+  <data name="Settings_Developer_ConfigurationItemsBackend_Title" xml:space="preserve">
+    <value>Backend</value>
+  </data>
+  <data name="Settings_NavMenu_Appearance_Text" xml:space="preserve">
+    <value>Облик</value>
+  </data>
+  <data name="Settings_Appearance_WallpaperArea_Title" xml:space="preserve">
+    <value>Облик</value>
+  </data>
+  <data name="homebook.core.wallpaper.userwallpaper" xml:space="preserve">
+    <value>Обои</value>
+  </data>
+  <data name="homebook.kitchen.recipeimages" xml:space="preserve">
+    <value>Изображения рецептов</value>
+  </data>
+  <data name="Settings_Appearance_StaticWallpaperArea_Title" xml:space="preserve">
+    <value>Обои</value>
+  </data>
+  <data name="Settings_Appearance_UploadedWallpaperArea_Title" xml:space="preserve">
+    <value>Загруженные обои</value>
+  </data>
+  <data name="Settings_Appearance_DynamicWallpaperArea_Title" xml:space="preserve">
+    <value>Динамические обои</value>
+  </data>
+  <data name="Settings_Appearance_WallpaperArea_Description" xml:space="preserve">
+    <value>Настройте внешний вид HomeBook под свои предпочтения</value>
+  </data>
+</root>
